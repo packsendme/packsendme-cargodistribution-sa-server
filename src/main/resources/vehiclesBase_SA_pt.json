@@ -1,0 +1,97 @@
+[
+	{
+	   	"type":"Pessoal",
+	   	"model":"Bicicleta",
+	   	"axis":"0",
+		"weight_axis":"0",
+	   	"cargoMax":"10.0",
+	   	"pbt":"5.0",
+	   	"lenght":"0.0",
+	   	"category":"CAT_A"
+	},
+	{
+	   	"type":"Pessoal",
+	   	"model":"Caminhando",
+	   	"axis":"0",
+		"weight_axis":"0",
+	   	"cargoMax":"5	.0",
+	   	"pbt":"3.0",
+	   	"lenght":"0.0",
+	   	"category":"CAT_A"
+	},
+
+	{
+	   	"type":"Utilitário",
+	   	"model":"Carro",
+	   	"axis":"2",
+		"weight_axis":"0",
+	   	"cargoMax":"3.0",
+	   	"pbt":"3.500",
+	   	"lenght":"0.0",
+	   	"category":"CAT_B"
+	},
+
+
+
+
+	{
+	   	"model_truck":"CAMINHÃO URBANO",
+	   	"axis_truck":"2",
+		"weight_axis":"0",
+	   	"weightCargoMax":"0.0",
+	   	"pbt_truck":"0.0",
+	   	"maximum_lenght":"0.0",
+	   	"category_vehicle":"CAT_B"
+	   
+	},
+	{
+	   	"model_truck":"CAMINHÃO TOCO",
+	   	"axis_truck":"2",
+	   	"cargoMax_truck":"6.0",
+	   	"weight_axis":"6+10",
+	   	"pbt_truck":"16.0",
+	   	"maximum_lenght":"14.0",
+	   	"category_vehicle":"CAT_B"
+	},
+	
+	{
+		"model_truck":"CAMINHÃO TRUCADO",
+	   	"axis_truck":"3",
+	   	"cargoMax_truck":"17.0",
+	   	"weight_axis":"6+17",
+	   	"pbt_truck":"23.0",
+	   	"maximum_lenght":"14.0",
+	   	"category_vehicle":"CAT_C"
+	},
+	
+	{
+		"model_truck":"CAMINHÃO TRATOR + SEMI REBOQUE",
+	   	"axis_truck":"3",
+	   	"weight_axis":"6+10+10",
+	   	"weightCargoMax":"20.0",
+	   	"pbt_truck":"26.0",
+	   	"maximum_lenght":"",
+	   	"category_vehicle":""
+	},
+	
+	{
+		"model_truck" : "Caminhão + Reboque",
+	   	"axis_truck":"",
+	   	"weight_axis":"",
+	   	"weightCargoMax":"",
+	   	"pbt_truck":"",
+	   	"maximum_lenght":"",
+	   	"category_vehicle":""
+	},
+	
+	{
+		"model_truck" : "Caminhão + Reboque",
+	   	"axis_truck":"",
+	   	"weight_axis":"",
+	   	"weightCargoMax":"",
+	   	"pbt_truck":"",
+	   	"maximum_lenght":"",
+	   	"category_vehicle":""
+	},
+
+]
