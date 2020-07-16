@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
@@ -11,6 +12,7 @@ import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
 import com.packsendme.microservice.manager.roadway.repository.IRoadwayManager_Repository;
 
 @Component
+@ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
 public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
 
 	@Autowired
