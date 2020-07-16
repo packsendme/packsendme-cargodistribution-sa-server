@@ -16,7 +16,7 @@ import com.packsendme.microservice.manager.roadway.repository.RoadwayBusinessRul
 import com.packsendme.roadway.bre.model.businessrule.BusinessRuleRoadwayBRE;
 
 @Service
-@ComponentScan("com.packsendme.microservice.manager.roadway.dao, com.packsendme.microservice.manager.roadway.component")
+@ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
 public class RoadwayManager_Service {
 	
 	@Autowired(required=true)
