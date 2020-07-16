@@ -24,7 +24,7 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
 public class VehicleManager_Service {
 	
-	@Autowired(required=true)
+	//@Autowired(required=true)
 	private VehicleDAO vehicleDAO;
 
 	@Autowired(required=true)
