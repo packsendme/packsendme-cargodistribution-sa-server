@@ -1,6 +1,5 @@
 package com.packsendme.microservice.manager.roadway.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +18,7 @@ import com.packsendme.roadway.bre.model.businessrule.BusinessRuleRoadwayBRE;
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
 public class RoadwayManager_Service {
 	
-	@Autowired(required=true)
 	private RoadwayDAO roadwayBRE_DAO;
-	
-	@Autowired(required=true)
 	private ParseDtoToModel parserObj;
 
 	public ResponseEntity<?> findRoadwayAll() {

@@ -3,7 +3,6 @@ package com.packsendme.microservice.manager.roadway.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +23,8 @@ import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
 public class BodyworkManager_Service {
 	
-	@Autowired(required=true)
 	private BodyworkDAO bodyworkDAO;
-	
-	@Autowired(required=true)
 	private VehicleDAO vehicleDAO;
-	
-	@Autowired(required=true)
 	private ParseDtoToModel parserObj;
 
 	public ResponseEntity<?> findBodyworkAll() {
