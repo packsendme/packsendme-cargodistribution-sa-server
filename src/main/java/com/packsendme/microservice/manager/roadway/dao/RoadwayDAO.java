@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
@@ -11,6 +12,7 @@ import com.packsendme.microservice.manager.roadway.repository.IRoadwayManager_Re
 import com.packsendme.microservice.manager.roadway.repository.RoadwayBusinessRule_Model;
 
 @Component
+@ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
 public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 
 	@Autowired
