@@ -16,7 +16,7 @@ import com.packsendme.microservice.manager.roadway.repository.Category_Model;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
 
 @Service
-@ComponentScan("com.packsendme.microservice.manager.roadway.dao, com.packsendme.microservice.manager.roadway.component")
+@ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
 public class CategoryManager_Service {
 	
 	@Autowired(required=true)
