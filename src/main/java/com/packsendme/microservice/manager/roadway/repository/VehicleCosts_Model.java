@@ -2,11 +2,14 @@ package com.packsendme.microservice.manager.roadway.repository;
 
 import java.io.Serializable;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter 
 @Setter 
+@Document
 public class VehicleCosts_Model implements Serializable {
 	
 	/**
