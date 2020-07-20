@@ -8,19 +8,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.IRoadwayManager_Repository;
-import com.packsendme.microservice.manager.roadway.repository.RoadwayBusinessRule_Model;
+import com.packsendme.microservice.manager.roadway.repository.BusinessRule_Model;
+import com.packsendme.microservice.manager.roadway.repository.IBusinessRuleManager_Repository;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
+public class RoadwayDAO implements IRoadwayDAO<BusinessRule_Model> {
 
 	@Autowired
-	IRoadwayManager_Repository roadwayManager_Rep; 
+	IBusinessRuleManager_Repository roadwayManager_Rep; 
 
 	
 	@Override
-	public RoadwayBusinessRule_Model save(RoadwayBusinessRule_Model entity) {
+	public BusinessRule_Model save(BusinessRule_Model entity) {
 		try {
 			return entity = roadwayManager_Rep.insert(entity);
 		}
@@ -31,9 +31,9 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 	}
 
 	@Override
-	public RoadwayBusinessRule_Model findOne(RoadwayBusinessRule_Model entity) {
+	public BusinessRule_Model findOne(BusinessRule_Model entity) {
 		try {
-			return  null;//entity = roadwayManager_Rep.findRoadwayByCategory(entity.category_name);
+			return  entity = roadwayManager_Rep.findBusinessRuleByCategory(entity.category_name);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
@@ -42,9 +42,9 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 	}
 
 	@Override
-	public List<RoadwayBusinessRule_Model> findAll() {
+	public List<BusinessRule_Model> findAll() {
 		try {
-			List<RoadwayBusinessRule_Model> entityL = new ArrayList<RoadwayBusinessRule_Model>(); 
+			List<BusinessRule_Model> entityL = new ArrayList<BusinessRule_Model>(); 
 			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
@@ -55,7 +55,7 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 	}
 
 	@Override
-	public Boolean remove(RoadwayBusinessRule_Model entity) {
+	public Boolean remove(BusinessRule_Model entity) {
 		try {
 			roadwayManager_Rep.delete(entity);
 			return true; 
@@ -67,9 +67,9 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 	}
 
 	@Override
-	public RoadwayBusinessRule_Model update(RoadwayBusinessRule_Model entity) {
+	public BusinessRule_Model update(BusinessRule_Model entity) {
 		try {
-			RoadwayBusinessRule_Model entityModel = roadwayManager_Rep.save(entity);
+			BusinessRule_Model entityModel = roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {

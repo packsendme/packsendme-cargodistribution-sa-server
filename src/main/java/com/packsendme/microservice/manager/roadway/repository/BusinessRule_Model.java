@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter 
 @Setter
 @Document(collection = "RoadwayBusinessRuleManager")
-public class RoadwayBusinessRule_Model implements Serializable {
+public class BusinessRule_Model implements Serializable {
 	
 	/**
 	 * 
@@ -31,7 +31,7 @@ public class RoadwayBusinessRule_Model implements Serializable {
 	public Map<String,Map<String, VehicleCosts_Model>> vehicleCosts = new HashMap<String, Map<String, VehicleCosts_Model>>();
 	
 	
-	public RoadwayBusinessRule_Model(String rule_name, String category_name, String date_creation, String date_change,
+	public BusinessRule_Model(String rule_name, String category_name, String date_creation, String date_change,
 			String status, List<Vehicle_Model> vehicleInstance,
 			Map<String, Map<String, VehicleCosts_Model>> vehicleCosts) {
 		super();
@@ -45,7 +45,7 @@ public class RoadwayBusinessRule_Model implements Serializable {
 	}
 
 
-	public RoadwayBusinessRule_Model() {
+	public BusinessRule_Model() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

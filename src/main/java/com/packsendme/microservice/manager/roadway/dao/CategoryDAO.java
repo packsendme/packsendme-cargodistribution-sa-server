@@ -9,20 +9,20 @@ import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
 import com.packsendme.microservice.manager.roadway.repository.Category_Model;
-import com.packsendme.microservice.manager.roadway.repository.IRoadwayManager_Repository;
+import com.packsendme.microservice.manager.roadway.repository.ICategoryManager_Repository;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
 public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 
-	/*@Autowired
-	IRoadwayManager_Repository<Category_Model> roadwayManager_Rep; 
-	*/
+	@Autowired
+	ICategoryManager_Repository roadwayManager_Rep; 
+	
 	
 	@Override
 	public Category_Model save(Category_Model entity) {
 		try {
-			return entity = null; //roadwayManager_Rep.insert(entity);
+			return entity = roadwayManager_Rep.insert(entity);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	public List<Category_Model> findAll() {
 		try {
 			List<Category_Model> entityL = new ArrayList<Category_Model>(); 
-			entityL = null; //roadwayManager_Rep.findAll();
+			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
 		catch (MongoClientException e) {
@@ -52,7 +52,7 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	@Override
 	public Boolean remove(Category_Model entity) {
 		try {
-			//roadwayManager_Rep.delete(entity);
+			roadwayManager_Rep.delete(entity);
 			return true; 
 		}
 		catch (Exception e) {
@@ -64,7 +64,7 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	@Override
 	public Category_Model update(Category_Model entity) {
 		try {
-			Category_Model entityModel = null;// roadwayManager_Rep.save(entity);
+			Category_Model entityModel = roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {
