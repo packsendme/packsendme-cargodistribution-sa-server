@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
 import com.packsendme.microservice.manager.roadway.repository.Category_Model;
-import com.packsendme.microservice.manager.roadway.repository.RoadwayBusinessRule_Model;
+import com.packsendme.microservice.manager.roadway.repository.BusinessRule_Model;
 import com.packsendme.microservice.manager.roadway.repository.VehicleCosts_Model;
 import com.packsendme.microservice.manager.roadway.repository.Vehicle_Model;
 import com.packsendme.roadway.bre.model.businessrule.BusinessRuleRoadwayBRE;
@@ -72,7 +72,7 @@ public class ParseDtoToModel {
 	}
 	
 	
-	public RoadwayBusinessRule_Model roadwayBRE_TO_Model(BusinessRuleRoadwayBRE roadwayBRE, RoadwayBusinessRule_Model roadwayModel, String typeOperation) {
+	public BusinessRule_Model roadwayBRE_TO_Model(BusinessRuleRoadwayBRE roadwayBRE, BusinessRule_Model roadwayModel, String typeOperation) {
 		List<Vehicle_Model> vehicleInstanceL = new ArrayList<Vehicle_Model>();
 		List<String> bodyWorkL = new ArrayList<String>();
 		Map<String,Map<String, VehicleCosts_Model>> costsModel = new HashMap<String, Map<String, VehicleCosts_Model>>();		
@@ -82,7 +82,7 @@ public class ParseDtoToModel {
 		Vehicle_Model vehicleModel = new Vehicle_Model();
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			roadwayModel = new RoadwayBusinessRule_Model();
+			roadwayModel = new BusinessRule_Model();
 		}
 
 		roadwayModel.rule_name = roadwayBRE.rule_name;
