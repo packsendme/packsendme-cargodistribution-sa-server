@@ -16,7 +16,7 @@ import com.packsendme.microservice.manager.roadway.repository.RoadwayBusinessRul
 public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 
 	@Autowired
-	IRoadwayManager_Repository<RoadwayBusinessRule_Model> roadwayManager_Rep; 
+	IRoadwayManager_Repository roadwayManager_Rep; 
 
 	
 	@Override
@@ -33,7 +33,7 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayBusinessRule_Model> {
 	@Override
 	public RoadwayBusinessRule_Model findOne(RoadwayBusinessRule_Model entity) {
 		try {
-			return entity = roadwayManager_Rep.findRoadwayByCategory(entity.category_name);
+			return  null;//entity = roadwayManager_Rep.findRoadwayByCategory(entity.category_name);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
