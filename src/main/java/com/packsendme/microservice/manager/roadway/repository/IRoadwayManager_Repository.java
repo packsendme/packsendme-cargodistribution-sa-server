@@ -5,15 +5,15 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IRoadwayManager_Repository<T> extends MongoRepository<T, String>{
+public interface IRoadwayManager_Repository extends MongoRepository<RoadwayBusinessRule_Model, String>{
 
 
-	@Query("{'vehicle' :  {$eq: ?0}}")
+	/*@Query("{'vehicle' :  {$eq: ?0}}")
 	T findVehicleByName(String vehicle);
 	
 	@Query("{'bodyWork' :  {$eq: ?0}}")
 	T findBodyworkByName(String bodyWork);
 	
 	@Query("{'category_name' :  {$eq: ?0}}")
-	T findRoadwayByCategory(String category_name);
+	T findRoadwayByCategory(String category_name);*/
 }
