@@ -35,7 +35,7 @@ public class BodyworkManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 			responseObj = new Response<BodyworkListDTO_Response>(0,HttpExceptionPackSend.CREATED_BODYWORK.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
@@ -50,7 +50,7 @@ public class BodyworkManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 			responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.CREATED_BODYWORK.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
@@ -91,7 +91,7 @@ public class BodyworkManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 			responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
@@ -115,7 +115,7 @@ public class BodyworkManager_Service {
 			}
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 			responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
