@@ -3,6 +3,7 @@ package com.packsendme.microservice.manager.roadway.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,12 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
 public class VehicleManager_Service {
-	
+
+	@Autowired
 	private VehicleDAO vehicleDAO;
+	@Autowired
 	private ParseDtoToModel vehicleParse;
+	@Autowired
 	private CategoryDAO categoryDAO;
 
 	
