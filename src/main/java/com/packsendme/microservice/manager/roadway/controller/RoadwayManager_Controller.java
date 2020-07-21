@@ -24,7 +24,7 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 
 
 @RestController
-@RequestMapping("/manager/roadway")
+@RequestMapping("/roadway/manager")
 public class RoadwayManager_Controller {
 
 	@Autowired
