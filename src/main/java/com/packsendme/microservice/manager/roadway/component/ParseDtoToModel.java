@@ -24,6 +24,10 @@ public class ParseDtoToModel {
 	public Vehicle_Model vehicleDto_TO_Model(VehicleBRE vehicleBRE, Vehicle_Model entity, String typeOperation) {
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			System.out.println(" ++++++++++++++++++++++++++++++++++++ ");
+			System.out.println(" ++++++++++++++++++++++++++++++++++++ "+ RoadwayManagerConstants.ADD_OP_ROADWAY);
+			System.out.println(" ++++++++++++++++++++++++++++++++++++ ");
+
 			entity = new Vehicle_Model();
 		}
 		
