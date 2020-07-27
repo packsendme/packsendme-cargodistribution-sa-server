@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,9 +32,14 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	}
 
 	@Override
-	public Category_Model findOne(Category_Model account) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Category_Model> findOneById(String id) {
+		try {
+			return roadwayManager_Rep.findById(id);
+		}
+		catch (MongoClientException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

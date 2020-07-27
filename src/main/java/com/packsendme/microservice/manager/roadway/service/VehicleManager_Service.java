@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -61,37 +62,38 @@ public class VehicleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> deleteVehicles(VehicleBRE vehicleObj) {
+	public ResponseEntity<?> deleteVehicles(String id, VehicleBRE vehicleObj) {
 		Response<Vehicle_Model> responseObj = null;
 		boolean cat_resave = false;
 		List<Vehicle_Model> newVehicleL = new ArrayList<Vehicle_Model>();
 		Category_Model newCategory = new Category_Model();
-		Vehicle_Model vehicleModel = new Vehicle_Model();
 		try {
-			vehicleModel.vehicle = vehicleObj.vehicle;
-			Vehicle_Model entity = vehicleDAO.findOne(vehicleModel);
-			if(vehicleDAO.remove(entity) == true) {
-				// Find Category relationship with Vehicle will be removed
-				List<Category_Model> categoryL = categoryDAO.findAll();
-				for(Category_Model c : categoryL) {
-					newCategory = c; 
-					for(Vehicle_Model v : c.vehicle_ModelL) {
-						if(!v.vehicle.equals(vehicleObj.vehicle)) {
-							newVehicleL.add(v);
+			Optional<Vehicle_Model> vehicleData = vehicleDAO.findOneById(id);
+			if (vehicleData.isPresent()) {
+				Vehicle_Model vehicleEntity = vehicleData.get();
+				if(vehicleDAO.remove(vehicleEntity) == true) {
+					// Find Category relationship with Vehicle will be removed
+					List<Category_Model> categoryL = categoryDAO.findAll();
+					for(Category_Model c : categoryL) {
+						newCategory = c; 
+						for(Vehicle_Model v : c.vehicle_ModelL) {
+							if(!v.vehicle.equals(vehicleObj.vehicle)) {
+								newVehicleL.add(v);
+							}
+							else {
+								cat_resave = true;
+							}
 						}
-						else {
-							cat_resave = true;
+						if(cat_resave == true) {
+							categoryDAO.remove(newCategory);
+							newCategory.vehicle_ModelL = null;
+							newCategory.vehicle_ModelL = newVehicleL;
+							categoryDAO.save(newCategory);
 						}
-					}
-					if(cat_resave == true) {
-						categoryDAO.remove(newCategory);
-						newCategory.vehicle_ModelL = null;
-						newCategory.vehicle_ModelL = newVehicleL;
-						categoryDAO.save(newCategory);
 					}
 				}
 			}
-			responseObj = new Response<Vehicle_Model>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), entity);
+			responseObj = new Response<Vehicle_Model>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), vehicleData.get());
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
@@ -101,20 +103,19 @@ public class VehicleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateVehicle(VehicleBRE vehicleBRE) {
+	public ResponseEntity<?> updateVehicle(String id, VehicleBRE vehicleBRE) {
 		Response<Vehicle_Model> responseObj = null;
 		try {
-			Vehicle_Model vehicleModel = new Vehicle_Model();
-			vehicleModel.vehicle = vehicleBRE.vehicle;
-			Vehicle_Model entity = vehicleDAO.findOne(vehicleModel);
-			if(entity != null) {
-				entity = vehicleParse.vehicleDto_TO_Model(vehicleBRE, entity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				vehicleDAO.update(entity);
-				responseObj = new Response<Vehicle_Model>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), entity);
+			Optional<Vehicle_Model> vehicleData = vehicleDAO.findOneById(id);
+			if(vehicleData.isPresent()) {
+				Vehicle_Model vehicleEntity = vehicleData.get(); 
+				vehicleEntity = vehicleParse.vehicleDto_TO_Model(vehicleBRE, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				vehicleDAO.update(vehicleEntity);
+				responseObj = new Response<Vehicle_Model>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {
-				responseObj = new Response<Vehicle_Model>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), entity);
+				responseObj = new Response<Vehicle_Model>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}

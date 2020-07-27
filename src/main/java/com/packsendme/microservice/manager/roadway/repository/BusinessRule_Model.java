@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -21,6 +22,8 @@ public class BusinessRule_Model implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	public long _id;
 	public String rule_name;
 	public String category_name;
 	public String date_creation;

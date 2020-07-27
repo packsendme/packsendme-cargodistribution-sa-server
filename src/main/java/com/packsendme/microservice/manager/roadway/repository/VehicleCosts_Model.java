@@ -17,7 +17,6 @@ public class VehicleCosts_Model implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// Fixed based cost (weight, distance...)
 	public Double weight_cost;
 	public Double distance_cost;
 	public Double worktime_cost;

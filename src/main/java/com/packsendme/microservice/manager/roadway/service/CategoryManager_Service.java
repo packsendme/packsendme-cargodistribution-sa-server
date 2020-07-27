@@ -1,5 +1,7 @@
  package com.packsendme.microservice.manager.roadway.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.CategoryDAO;
 import com.packsendme.microservice.manager.roadway.dto.CategoryListDTO_Response;
+import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
 import com.packsendme.microservice.manager.roadway.repository.Category_Model;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
 
@@ -54,14 +57,20 @@ public class CategoryManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> deleteCategory(CategoryBRE categoryBRE) {
+	public ResponseEntity<?> deleteCategory(String id, CategoryBRE categoryBRE) {
 		Response<Category_Model> responseObj = null;
 		try {
-			Category_Model entity = new Category_Model();
-			entity.name_category = categoryBRE.name_category;
-			categoryManagerDAO.remove(entity);
-			responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			Optional<Category_Model> categoryData = categoryManagerDAO.findOneById(id);
+			if(categoryData.isPresent()) {
+				Category_Model categoryEntity = categoryData.get(); 
+				categoryManagerDAO.remove(categoryEntity);
+				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), categoryData.get());
+				return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			}
+			else {
+				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), null);
+				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -70,20 +79,19 @@ public class CategoryManager_Service {
 		}
 	}
 
-	public ResponseEntity<?> updateCategory(CategoryBRE categoryBRE) {
+	public ResponseEntity<?> updateCategory(String id, CategoryBRE categoryBRE) {
 		Response<Category_Model> responseObj = null;
 		try {
-			Category_Model categoryModel = new Category_Model();
-			categoryModel.name_category = categoryBRE.name_category;
-			Category_Model entity = categoryManagerDAO.findOne(categoryModel);
-			if(entity != null) {
-				entity = parserObj.categoryDto_TO_Model(categoryBRE, entity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				categoryManagerDAO.update(entity);
-				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), entity);
+			Optional<Category_Model> categoryData = categoryManagerDAO.findOneById(id);
+			if(categoryData.isPresent()) {
+				Category_Model categoryEntity = categoryData.get(); 
+				categoryEntity = parserObj.categoryDto_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				categoryManagerDAO.update(categoryEntity);
+				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {
-				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), entity);
+				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
