@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -60,39 +61,47 @@ public class BodyworkManager_Service {
 		}
 	}
 
-	public ResponseEntity<?> deleteBodywork(BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> deleteBodywork(String id, BodyworkBRE bodyworkBRE) {
 		Response<BodyWork_Model> responseObj = null;
 		boolean cat_resave = false;
 		List<String> newBodyWorkL = new ArrayList<String>();
-		BodyWork_Model entity = new BodyWork_Model();
 
 		try {
-			entity.bodyWork = bodyworkBRE.bodyWork;
-			entity = bodyworkDAO.findOne(entity);
-			
-			if(bodyworkDAO.remove(entity) == true) {
-				// Find Category relationship with Vehicle will be removed
-				List<Vehicle_Model> vehicleL = vehicleDAO.findAll();
-				for(Vehicle_Model vehicle : vehicleL) {
-					Vehicle_Model newVehicle = vehicle; 
-					for(String bodyWork : vehicle.bodywork_vehicle) {
-						if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
-							newBodyWorkL.add(bodyWork);
+			Optional<BodyWork_Model> bodyWorkData = bodyworkDAO.findOneById(id);
+			if(bodyWorkData.isPresent()) {
+				BodyWork_Model bodyWorkEntity = bodyWorkData.get();
+				if(bodyworkDAO.remove(bodyWorkEntity) == true) {
+					// Find Category relationship with Vehicle will be removed
+					List<Vehicle_Model> vehicleL = vehicleDAO.findAll();
+					for(Vehicle_Model vehicle : vehicleL) {
+						Vehicle_Model newVehicle = vehicle; 
+						for(String bodyWork : vehicle.bodywork_vehicle) {
+							if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
+								newBodyWorkL.add(bodyWork);
+							}
+							else {
+								cat_resave = true;
+							}
 						}
-						else {
-							cat_resave = true;
+						if(cat_resave == true) {
+							vehicleDAO.remove(newVehicle);
+							newVehicle.bodywork_vehicle = null;
+							newVehicle.bodywork_vehicle = newBodyWorkL;
+							vehicleDAO.save(newVehicle);
 						}
-					}
-					if(cat_resave == true) {
-						vehicleDAO.remove(newVehicle);
-						newVehicle.bodywork_vehicle = null;
-						newVehicle.bodywork_vehicle = newBodyWorkL;
-						vehicleDAO.save(newVehicle);
 					}
 				}
+				else {
+					responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), null);
+					return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), bodyWorkData.get());
+				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
-			responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			else {
+				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), bodyWorkData.get());
+				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -101,20 +110,19 @@ public class BodyworkManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateBodywork(BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> updateBodywork(String id, BodyworkBRE bodyworkBRE) {
 		Response<BodyWork_Model> responseObj = null;
 		try {
-			BodyWork_Model bodyworkModel = new BodyWork_Model();
-			bodyworkModel.bodyWork = bodyworkBRE.bodyWork;
-			BodyWork_Model entity = bodyworkDAO.findOne(bodyworkModel);
-			if(entity != null) {
-				entity = parserObj.bodyworkDto_TO_Model(bodyworkBRE, entity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				bodyworkDAO.update(entity);
-				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), entity);
+			Optional<BodyWork_Model> bodyWorkData = bodyworkDAO.findOneById(id);
+			if(bodyWorkData.isPresent()) {
+				BodyWork_Model bodyWorkEntity = bodyWorkData.get();
+				bodyWorkEntity = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				bodyworkDAO.update(bodyWorkEntity);
+				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {
-				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), entity);
+				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}

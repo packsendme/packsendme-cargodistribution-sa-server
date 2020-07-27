@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,9 +32,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
 	}
 
 	@Override
-	public BodyWork_Model findOne(BodyWork_Model entity) {
+	public Optional<BodyWork_Model> findOneById(String id) {
 		try {
-			return entity = roadwayManager_Rep.findBodyworkByName(entity.bodyWork);
+			return roadwayManager_Rep.findById(id);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();

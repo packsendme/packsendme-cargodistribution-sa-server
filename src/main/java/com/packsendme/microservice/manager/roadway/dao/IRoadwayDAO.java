@@ -1,12 +1,13 @@
 package com.packsendme.microservice.manager.roadway.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IRoadwayDAO<T> {
 
 	public T save(T entity);
 
-	public T findOne(T entity);
+	public Optional<T> findOneById(String id);
 	
 	public List<T> findAll();
 	

@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,9 +31,9 @@ public class VehicleDAO implements IRoadwayDAO<Vehicle_Model> {
 	}
 
 	@Override
-	public Vehicle_Model findOne(Vehicle_Model entity) {
+	public Optional<Vehicle_Model> findOneById(String id) {
 		try {
-			return entity = roadwayManager_Rep.findVehicleByName(entity.vehicle);
+			return roadwayManager_Rep.findById(id);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();

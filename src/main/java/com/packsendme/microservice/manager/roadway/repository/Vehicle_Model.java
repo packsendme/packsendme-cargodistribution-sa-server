@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -20,6 +21,8 @@ public class Vehicle_Model implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	public String id;	
 	public String vehicle;
 	public List<String> bodywork_vehicle = new ArrayList<String>();
 	public Double cargo_max;

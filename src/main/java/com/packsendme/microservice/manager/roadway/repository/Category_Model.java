@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +23,8 @@ public class Category_Model implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	public long _id;
 	public String name_category;
 	public List<Vehicle_Model> vehicle_ModelL = new ArrayList<Vehicle_Model>(); 
 	public Double weight_min;
