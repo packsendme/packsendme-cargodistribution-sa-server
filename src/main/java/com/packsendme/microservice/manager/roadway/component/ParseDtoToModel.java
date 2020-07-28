@@ -22,8 +22,8 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 public class ParseDtoToModel {
 
 	public Vehicle_Model vehicleDto_TO_Model(VehicleBRE vehicleBRE, Vehicle_Model entity, String typeOperation) {
-		System.out.println(" ++++++++++++++++++++++++++++++++++++ "+ typeOperation);
-
+		List<String> bodyWorkL = new ArrayList<String>();
+		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new Vehicle_Model();
 		}
@@ -35,9 +35,11 @@ public class ParseDtoToModel {
 		entity.unity_measurement_weight = vehicleBRE.unity_measurement_weight;
 		entity.people = vehicleBRE.people;
 		
-		for(String bodywork : vehicleBRE.bodywork_vehicle) {
-			entity.bodywork_vehicle.add(bodywork); 
+		for(String bodyworkS : vehicleBRE.bodywork_vehicle) {
+			bodyWorkL.add(bodyworkS);
 		}
+		entity.bodywork_vehicle = null;
+		entity.bodywork_vehicle.addAll(bodyWorkL);
 		return entity;
 	}
 	
