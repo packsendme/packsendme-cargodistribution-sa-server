@@ -69,26 +69,29 @@ public class VehicleManager_Service {
 		Category_Model newCategory = new Category_Model();
 		try {
 			Optional<Vehicle_Model> vehicleData = vehicleDAO.findOneById(id);
+			String vehicleName = vehicleData.get().vehicle;
+			
 			if (vehicleData.isPresent()) {
 				Vehicle_Model vehicleEntity = vehicleData.get();
 				if(vehicleDAO.remove(vehicleEntity) == true) {
 					// Find Category relationship with Vehicle will be removed
 					List<Category_Model> categoryL = categoryDAO.findAll();
-					for(Category_Model c : categoryL) {
-						newCategory = c; 
-						for(Vehicle_Model v : c.vehicle_ModelL) {
-							if(!v.vehicle.equals(vehicleObj.vehicle)) {
-								newVehicleL.add(v);
+					if(categoryL != null) {
+						for(Category_Model c : categoryL) {
+							newCategory = c; 
+							for(Vehicle_Model v : c.vehicle_ModelL) {
+								if(!v.vehicle.equals(vehicleName)) {
+									newVehicleL.add(v);
+								}
+								else {
+									cat_resave = true;
+								}
 							}
-							else {
-								cat_resave = true;
+							if(cat_resave == true) {
+								newCategory.vehicle_ModelL = null;
+								newCategory.vehicle_ModelL = newVehicleL;
+								categoryDAO.update(newCategory);
 							}
-						}
-						if(cat_resave == true) {
-							categoryDAO.remove(newCategory);
-							newCategory.vehicle_ModelL = null;
-							newCategory.vehicle_ModelL = newVehicleL;
-							categoryDAO.save(newCategory);
 						}
 					}
 				}
