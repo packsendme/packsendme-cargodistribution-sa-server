@@ -133,10 +133,9 @@ public class BodyworkManager_Service {
 						}
 					}
 					if(cat_resave == true) {
-						vehicleDAO.remove(newVehicle);
 						newVehicle.bodywork_vehicle = null;
 						newVehicle.bodywork_vehicle = newBodyWorkL;
-						vehicleDAO.save(newVehicle);
+						vehicleDAO.update(newVehicle);
 						cat_resave = false;
 					}
 				}
