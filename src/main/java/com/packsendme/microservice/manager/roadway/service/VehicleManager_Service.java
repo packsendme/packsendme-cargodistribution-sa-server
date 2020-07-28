@@ -76,9 +76,20 @@ public class VehicleManager_Service {
 				if(vehicleDAO.remove(vehicleEntity) == true) {
 					// Find Category relationship with Vehicle will be removed
 					List<Category_Model> categoryL = categoryDAO.findAll();
-					if(categoryL != null) {
+					
+					System.out.println("============================");
+					System.out.println(" categoryL "+ categoryL.size());
+					System.out.println("============================");
+					
+					if(categoryL.size() > 0) {
 						for(Category_Model c : categoryL) {
-							newCategory = c; 
+							newCategory = c;
+							
+							System.out.println("============================");
+							System.out.println(" Category_Model ");
+							System.out.println("============================");
+
+							
 							for(Vehicle_Model v : c.vehicle_ModelL) {
 								System.out.println("============================");
 								System.out.println(" vehicleDATA "+ v.vehicle);
