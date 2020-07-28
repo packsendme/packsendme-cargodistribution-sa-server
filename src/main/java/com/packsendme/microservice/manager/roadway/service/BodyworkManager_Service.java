@@ -114,10 +114,12 @@ public class BodyworkManager_Service {
 		Response<BodyWork_Model> responseObj = null;
 		List<String> newBodyWorkL = new ArrayList<String>();
 		boolean cat_resave = false;
+		String bodyworkS = "";
 		try {
 			Optional<BodyWork_Model> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWork_Model bodyWorkEntity = bodyWorkData.get();
+				bodyworkS = bodyWorkEntity.bodyWork;
 				bodyWorkEntity = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				bodyworkDAO.update(bodyWorkEntity);
 				List<Vehicle_Model> vehicleL = vehicleDAO.findAll();
@@ -126,10 +128,10 @@ public class BodyworkManager_Service {
 					for(String bodyWork : vehicle.bodywork_vehicle) {
 						System.out.println(" ========================== " );
 						System.out.println(" bodyWork VEHICLE "+ bodyWork);
-						System.out.println(" bodyWork BODYWORK "+ bodyWorkData.get().bodyWork);
+						System.out.println(" bodyWork BODYWORK "+ bodyworkS);
 						System.out.println(" ========================== " );
 						
-						if(bodyWork.equals(bodyWorkData.get().bodyWork)) {
+						if(bodyWork.equals(bodyworkS)) {
 							cat_resave = true;
 							newBodyWorkL.add(bodyworkBRE.bodyWork);
 						}
