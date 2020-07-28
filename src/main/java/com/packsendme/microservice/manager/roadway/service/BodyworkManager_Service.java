@@ -112,12 +112,32 @@ public class BodyworkManager_Service {
 	
 	public ResponseEntity<?> updateBodywork(String id, BodyworkBRE bodyworkBRE) {
 		Response<BodyWork_Model> responseObj = null;
+		List<String> newBodyWorkL = new ArrayList<String>();
+		boolean cat_resave = false;
 		try {
 			Optional<BodyWork_Model> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWork_Model bodyWorkEntity = bodyWorkData.get();
 				bodyWorkEntity = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				bodyworkDAO.update(bodyWorkEntity);
+				List<Vehicle_Model> vehicleL = vehicleDAO.findAll();
+				for(Vehicle_Model vehicle : vehicleL) {
+					Vehicle_Model newVehicle = vehicle; 
+					for(String bodyWork : vehicle.bodywork_vehicle) {
+						if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
+							newBodyWorkL.add(bodyWork);
+						}
+						else {
+							cat_resave = true;
+						}
+					}
+					if(cat_resave == true) {
+						vehicleDAO.remove(newVehicle);
+						newVehicle.bodywork_vehicle = null;
+						newVehicle.bodywork_vehicle = newBodyWorkL;
+						vehicleDAO.save(newVehicle);
+					}
+				}
 				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
