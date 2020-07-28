@@ -97,13 +97,24 @@ public class VehicleManager_Service {
 								System.out.println("============================");
 
 								if(!v.vehicle.equals(vehicleName)) {
+									System.out.println("============================");
+									System.out.println(" IF "+ v.vehicle);
+									System.out.println("============================");
 									newVehicleL.add(v);
 								}
 								else {
 									cat_resave = true;
+									System.out.println("============================");
+									System.out.println(" ELSE "+ v.vehicle);
+									System.out.println("============================");
+
 								}
 							}
 							if(cat_resave == true) {
+								cat_resave = false;
+								System.out.println("============================");
+								System.out.println(" UPDATE ");
+								System.out.println("============================")
 								newCategory.vehicle_ModelL = null;
 								newCategory.vehicle_ModelL = newVehicleL;
 								categoryDAO.update(newCategory);
