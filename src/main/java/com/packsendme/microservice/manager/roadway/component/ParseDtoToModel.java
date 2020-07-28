@@ -63,6 +63,10 @@ public class ParseDtoToModel {
 		if(operationType.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new BodyWork_Model();
 		}
+		System.out.println(" +++++++++++++++++++++++++++++++++ ");
+		System.out.println(" ------------------ "+ bodyworkBRE.bodyWork);
+		System.out.println(" +++++++++++++++++++++++++++++++++ ");
+
 		entity.bodyWork = bodyworkBRE.bodyWork;
 		entity.bodyWork = bodyworkBRE.type;
 		return entity;
