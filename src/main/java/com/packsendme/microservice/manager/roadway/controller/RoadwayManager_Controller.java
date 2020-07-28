@@ -116,7 +116,7 @@ public class RoadwayManager_Controller {
 	}
 	
 	/***************************************
-	 BODYWORK <--> GET | POST | DELETE 
+	 BODYWORK (RELASHIONSHIP - VEHICLE) <--> GET | POST | DELETE 
 	***************************************/
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
