@@ -68,7 +68,7 @@ public class ParseDtoToModel {
 		System.out.println(" +++++++++++++++++++++++++++++++++ ");
 
 		entity.bodyWork = bodyworkBRE.bodyWork;
-		entity.bodyWork = bodyworkBRE.type;
+		entity.type = bodyworkBRE.type;
 		return entity;
 	}
 	
