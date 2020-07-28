@@ -22,24 +22,15 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 public class ParseDtoToModel {
 
 	public Vehicle_Model vehicleDto_TO_Model(VehicleBRE vehicleBRE, Vehicle_Model entity, String typeOperation) {
-		List<String> bodyWorkL = new ArrayList<String>();
-		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new Vehicle_Model();
 		}
-		
 		entity.vehicle = vehicleBRE.vehicle;
 		entity.bodywork_vehicle = vehicleBRE.bodywork_vehicle;
 		entity.cargo_max = vehicleBRE.cargo_max;
 		entity.axis_total = vehicleBRE.axis_total;
 		entity.unity_measurement_weight = vehicleBRE.unity_measurement_weight;
 		entity.people = vehicleBRE.people;
-		
-		for(String bodyworkS : vehicleBRE.bodywork_vehicle) {
-			bodyWorkL.add(bodyworkS);
-		}
-		entity.bodywork_vehicle = null;
-		entity.bodywork_vehicle.addAll(bodyWorkL);
 		return entity;
 	}
 	
