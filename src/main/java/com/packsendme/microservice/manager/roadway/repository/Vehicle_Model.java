@@ -1,7 +1,6 @@
 package com.packsendme.microservice.manager.roadway.repository;
 
 import java.io.Serializable;
-//import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 
