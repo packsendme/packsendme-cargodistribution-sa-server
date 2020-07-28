@@ -114,7 +114,7 @@ public class VehicleManager_Service {
 								cat_resave = false;
 								System.out.println("============================");
 								System.out.println(" UPDATE ");
-								System.out.println("============================")
+								System.out.println("============================");
 								newCategory.vehicle_ModelL = null;
 								newCategory.vehicle_ModelL = newVehicleL;
 								categoryDAO.update(newCategory);
