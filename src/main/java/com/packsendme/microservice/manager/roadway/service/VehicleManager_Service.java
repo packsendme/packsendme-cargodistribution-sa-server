@@ -80,6 +80,11 @@ public class VehicleManager_Service {
 						for(Category_Model c : categoryL) {
 							newCategory = c; 
 							for(Vehicle_Model v : c.vehicle_ModelL) {
+								System.out.println("============================");
+								System.out.println(" vehicleDATA "+ v.vehicle);
+								System.out.println(" vehicleName "+ vehicleName);
+								System.out.println("============================");
+
 								if(!v.vehicle.equals(vehicleName)) {
 									newVehicleL.add(v);
 								}
