@@ -124,6 +124,11 @@ public class BodyworkManager_Service {
 				for(Vehicle_Model vehicle : vehicleL) {
 					Vehicle_Model newVehicle = vehicle; 
 					for(String bodyWork : vehicle.bodywork_vehicle) {
+						System.out.println(" ========================== " );
+						System.out.println(" bodyWork VEHICLE "+ bodyWork);
+						System.out.println(" bodyWork BODYWORK "+ bodyWorkData.get().bodyWork);
+						System.out.println(" ========================== " );
+						
 						if(bodyWork.equals(bodyWorkData.get().bodyWork)) {
 							cat_resave = true;
 							newBodyWorkL.add(bodyworkBRE.bodyWork);
