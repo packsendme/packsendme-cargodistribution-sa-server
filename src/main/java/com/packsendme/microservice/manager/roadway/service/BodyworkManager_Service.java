@@ -124,11 +124,12 @@ public class BodyworkManager_Service {
 				for(Vehicle_Model vehicle : vehicleL) {
 					Vehicle_Model newVehicle = vehicle; 
 					for(String bodyWork : vehicle.bodywork_vehicle) {
-						if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
-							newBodyWorkL.add(bodyWork);
+						if(bodyWork.equals(bodyWorkData.get().bodyWork)) {
+							cat_resave = true;
+							newBodyWorkL.add(bodyworkBRE.bodyWork);
 						}
 						else {
-							cat_resave = true;
+							newBodyWorkL.add(bodyWork);
 						}
 					}
 					if(cat_resave == true) {
@@ -136,6 +137,7 @@ public class BodyworkManager_Service {
 						newVehicle.bodywork_vehicle = null;
 						newVehicle.bodywork_vehicle = newBodyWorkL;
 						vehicleDAO.save(newVehicle);
+						cat_resave = false;
 					}
 				}
 				responseObj = new Response<BodyWork_Model>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
