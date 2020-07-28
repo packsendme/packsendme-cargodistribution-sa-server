@@ -25,10 +25,6 @@ public class ParseDtoToModel {
 		System.out.println(" ++++++++++++++++++++++++++++++++++++ "+ typeOperation);
 
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			System.out.println(" ++++++++++++++++++++++++++++++++++++ ");
-			System.out.println(" ++++++++++++++++++++++++++++++++++++ "+ RoadwayManagerConstants.ADD_OP_ROADWAY);
-			System.out.println(" ++++++++++++++++++++++++++++++++++++ ");
-
 			entity = new Vehicle_Model();
 		}
 		
@@ -38,7 +34,10 @@ public class ParseDtoToModel {
 		entity.axis_total = vehicleBRE.axis_total;
 		entity.unity_measurement_weight = vehicleBRE.unity_measurement_weight;
 		entity.people = vehicleBRE.people;
-
+		
+		for(String bodywork : vehicleBRE.bodywork_vehicle) {
+			entity.bodywork_vehicle.add(bodywork); 
+		}
 		return entity;
 	}
 	
