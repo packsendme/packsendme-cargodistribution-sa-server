@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Component;
 
-import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
-import com.packsendme.microservice.manager.roadway.repository.Category_Model;
-import com.packsendme.microservice.manager.roadway.repository.BusinessRule_Model;
-import com.packsendme.microservice.manager.roadway.repository.VehicleCosts_Model;
-import com.packsendme.microservice.manager.roadway.repository.Vehicle_Model;
-import com.packsendme.roadway.bre.model.businessrule.BusinessRuleRoadwayBRE;
-import com.packsendme.roadway.bre.model.businessrule.VehicleCostsBRE;
+import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
+import com.packsendme.microservice.manager.roadway.repository.CostsModel;
+import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
+import com.packsendme.roadway.bre.model.businessrule.CostsBRE;
+import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
 import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
@@ -21,9 +22,9 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 @Component
 public class ParseDtoToModel {
 
-	public Vehicle_Model vehicleDto_TO_Model(VehicleBRE vehicleBRE, Vehicle_Model entity, String typeOperation) {
+	public VehicleModel vehicleDto_TO_Model(VehicleBRE vehicleBRE, VehicleModel entity, String typeOperation) {
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			entity = new Vehicle_Model();
+			entity = new VehicleModel();
 		}
 		entity.vehicle = vehicleBRE.vehicle;
 		entity.bodywork_vehicle = vehicleBRE.bodywork_vehicle;
@@ -34,23 +35,23 @@ public class ParseDtoToModel {
 		return entity;
 	}
 	
-	public Category_Model categoryDto_TO_Model(CategoryBRE categoryBRE, Category_Model entity, String typeOperation) {
-		Vehicle_Model vehicleModel = null;
-		List<Vehicle_Model> vehicleModelL = new ArrayList<Vehicle_Model>();
+	public CategoryModel categoryDto_TO_Model(CategoryBRE categoryBRE, CategoryModel entity, String typeOperation) {
+		VehicleModel vehicleModel = null;
+		List<VehicleModel> vehicleModelL = new ArrayList<VehicleModel>();
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			entity = new Category_Model();
+			entity = new CategoryModel();
 		}
 		
-		if(categoryBRE.vehicleL.size() >= 1) {
-			for(VehicleBRE v : categoryBRE.vehicleL) {
-				vehicleModel = new Vehicle_Model(v.vehicle, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people);
+		if(categoryBRE.vehicles.size() >= 1) {
+			for(VehicleBRE v : categoryBRE.vehicles) {
+				vehicleModel = new VehicleModel(v.vehicle, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people);
 				vehicleModelL.add(vehicleModel);
 				vehicleModel = null;
 			}
 		}
 		entity.name_category = categoryBRE.name_category;
-		entity.vehicle_ModelL = vehicleModelL;
+		entity.vehicles = vehicleModelL;
 		entity.weight_min = categoryBRE.weight_min;
 		entity.weight_max = categoryBRE.weight_max;
 		entity.axis_max = categoryBRE.axis_max;
@@ -59,9 +60,9 @@ public class ParseDtoToModel {
 		return entity;
 	}
 	
-	public BodyWork_Model bodyworkDto_TO_Model(BodyworkBRE bodyworkBRE, BodyWork_Model entity, String operationType) {
+	public BodyWorkModel bodyworkDto_TO_Model(BodyworkBRE bodyworkBRE, BodyWorkModel entity, String operationType) {
 		if(operationType.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			entity = new BodyWork_Model();
+			entity = new BodyWorkModel();
 		}
 		System.out.println(" +++++++++++++++++++++++++++++++++ ");
 		System.out.println(" ------------------ "+ bodyworkBRE.bodyWork);
@@ -73,27 +74,37 @@ public class ParseDtoToModel {
 	}
 	
 	
-	public BusinessRule_Model roadwayBRE_TO_Model(BusinessRuleRoadwayBRE roadwayBRE, BusinessRule_Model roadwayModel, String typeOperation) {
-		List<Vehicle_Model> vehicleInstanceL = new ArrayList<Vehicle_Model>();
+	public RoadwayModel roadwayBRE_TO_Model(RoadwayBRE roadwayBRE, RoadwayModel roadwayModel, String typeOperation) {
+
+		List<VehicleModel> vehiclesL = new ArrayList<VehicleModel>();
 		List<String> bodyWorkL = new ArrayList<String>();
-		Map<String,Map<String, VehicleCosts_Model>> costsModel = new HashMap<String, Map<String, VehicleCosts_Model>>();		
-		Map<String,VehicleCosts_Model> vehicleCostsModel = new HashMap<String, VehicleCosts_Model>();
-		Map<String, VehicleCostsBRE> vehiCosts = new HashMap<String, VehicleCostsBRE>();
-		VehicleCosts_Model vehicleCostsObj = new VehicleCosts_Model(); 
-		Vehicle_Model vehicleModel = new Vehicle_Model();
+		//Map<String,Map<String, CostsModel>> costsModel = new HashMap<String, Map<String, CostsModel>>();		
+		Map<String,CostsModel> costs_Map = new HashMap<String, CostsModel>();
+		Map<String,Map<String,CostsModel>> costsModel_Map = new HashMap<String, Map<String,CostsModel>>();
+
+		Map<String, CostsBRE> costsBRE_Map = new HashMap<String, CostsBRE>();
+		
+		CostsModel costsModel = new CostsModel(); 
+		VehicleModel vehicleModel = new VehicleModel();
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			roadwayModel = new BusinessRule_Model();
+			roadwayModel = new RoadwayModel();
 		}
-
 		roadwayModel.rule_name = roadwayBRE.rule_name;
-		roadwayModel.category_name = roadwayBRE.category_name;
 		roadwayModel.date_creation = roadwayBRE.date_creation;
 		roadwayModel.date_change = roadwayBRE.date_change;
 		roadwayModel.status = roadwayBRE.status;
 
-		// Vehicle Instance
-		for(VehicleBRE v : roadwayBRE.vehicleInstance) {
+
+		// CATEGORY - Instances
+		roadwayModel.categoryInstance.name_category = roadwayBRE.categoryInstance.name_category; 
+		roadwayModel.categoryInstance.weight_min = roadwayBRE.categoryInstance.weight_min;
+		roadwayModel.categoryInstance.weight_max = roadwayBRE.categoryInstance.weight_max;
+		roadwayModel.categoryInstance.axis_max = roadwayBRE.categoryInstance.axis_max;
+		roadwayModel.categoryInstance.unity_measurement_weight_min = roadwayBRE.categoryInstance.unity_measurement_weight_min;
+		roadwayModel.categoryInstance.unity_measurement_weight_max = roadwayBRE.categoryInstance.unity_measurement_weight_max;
+
+		for(VehicleBRE v : roadwayBRE.categoryInstance.vehicles) {
 			vehicleModel.vehicle = v.vehicle;
 			vehicleModel.cargo_max = v.cargo_max;
 			vehicleModel.axis_total = v.axis_total;
@@ -104,31 +115,31 @@ public class ParseDtoToModel {
 				bodyWorkL.add(bodywork);
 			}
 			vehicleModel.bodywork_vehicle = bodyWorkL;
-			vehicleInstanceL.add(vehicleModel);
-			vehicleModel = new Vehicle_Model(); 
+			vehiclesL.add(vehicleModel);
+			vehicleModel = new VehicleModel(); 
 		}
-		roadwayModel.vehicleInstance = vehicleInstanceL;
+		roadwayModel.categoryInstance.vehicles = vehiclesL;
 		
-		// Vehicle Costs
-		for(Map.Entry<String,Map<String, VehicleCostsBRE>> entryCountry : roadwayBRE.vehicleCosts.entrySet()) {
+		// COSTS - Instances
+		for(Entry<String, Map<String, CostsBRE>> entryCountry : roadwayBRE.costsInstance.entrySet()) {
 			String country_key = entryCountry.getKey();
-			vehiCosts =  roadwayBRE.vehicleCosts.get(country_key);
-			for(Map.Entry<String,VehicleCostsBRE> entryCar : vehiCosts.entrySet()) {
+			costsBRE_Map =  roadwayBRE.costsInstance.get(country_key);
+			for(Map.Entry<String,CostsBRE> entryCar : costsBRE_Map.entrySet()) {
 				String car_key =  entryCar.getKey();
-				VehicleCostsBRE vehicleCostsBRE = entryCar.getValue();
-				vehicleCostsObj.weight_cost = vehicleCostsBRE.weight_cost;
-				vehicleCostsObj.distance_cost = vehicleCostsBRE.distance_cost;
-				vehicleCostsObj.worktime_cost = vehicleCostsBRE.worktime_cost;
-				vehicleCostsObj.average_consumption_cost = vehicleCostsBRE.average_consumption_cost;
-				vehicleCostsObj.rate_exchange = vehicleCostsBRE.rate_exchange;
-				vehicleCostsObj.current_exchange = vehicleCostsBRE.current_exchange;
-				vehicleCostsModel.put(car_key, vehicleCostsObj);
-				vehicleCostsObj = new VehicleCosts_Model();
+				CostsBRE costsBRE = entryCar.getValue();
+				costsModel.weight_cost = costsBRE.weight_cost;
+				costsModel.distance_cost = costsBRE.distance_cost;
+				costsModel.worktime_cost = costsBRE.worktime_cost;
+				costsModel.average_consumption_cost = costsBRE.average_consumption_cost;
+				costsModel.rate_exchange = costsBRE.rate_exchange;
+				costsModel.current_exchange = costsBRE.current_exchange;
+				costs_Map.put(car_key, costsModel);
+				costsModel = new CostsModel();
 			}
-			costsModel.put(country_key, vehicleCostsModel);
-			vehicleCostsModel = new HashMap<String, VehicleCosts_Model>();
+			costsModel_Map.put(country_key, costs_Map);
+			costs_Map = new HashMap<String, CostsModel>();
 		}
-		roadwayModel.vehicleCosts = costsModel;
+		roadwayModel.costsInstance = costsModel_Map;
 		return roadwayModel;
 	}
 }

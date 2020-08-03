@@ -9,19 +9,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.BusinessRule_Model;
+import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
 import com.packsendme.microservice.manager.roadway.repository.IBusinessRuleManager_Repository;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class RoadwayDAO implements IRoadwayDAO<BusinessRule_Model> {
+public class RoadwayDAO implements IRoadwayDAO<RoadwayModel> {
 
 	@Autowired
 	IBusinessRuleManager_Repository roadwayManager_Rep; 
 
 	
 	@Override
-	public BusinessRule_Model save(BusinessRule_Model entity) {
+	public RoadwayModel save(RoadwayModel entity) {
 		try {
 			return entity = roadwayManager_Rep.insert(entity);
 		}
@@ -32,7 +32,7 @@ public class RoadwayDAO implements IRoadwayDAO<BusinessRule_Model> {
 	}
 
 	@Override
-	public Optional<BusinessRule_Model> findOneById(String id) {
+	public Optional<RoadwayModel> findOneById(String id) {
 		try {
 			return roadwayManager_Rep.findById(id);
 		}
@@ -43,9 +43,9 @@ public class RoadwayDAO implements IRoadwayDAO<BusinessRule_Model> {
 	}
 
 	@Override
-	public List<BusinessRule_Model> findAll() {
+	public List<RoadwayModel> findAll() {
 		try {
-			List<BusinessRule_Model> entityL = new ArrayList<BusinessRule_Model>(); 
+			List<RoadwayModel> entityL = new ArrayList<RoadwayModel>(); 
 			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
@@ -56,7 +56,7 @@ public class RoadwayDAO implements IRoadwayDAO<BusinessRule_Model> {
 	}
 
 	@Override
-	public Boolean remove(BusinessRule_Model entity) {
+	public Boolean remove(RoadwayModel entity) {
 		try {
 			roadwayManager_Rep.delete(entity);
 			return true; 
@@ -68,9 +68,9 @@ public class RoadwayDAO implements IRoadwayDAO<BusinessRule_Model> {
 	}
 
 	@Override
-	public BusinessRule_Model update(BusinessRule_Model entity) {
+	public RoadwayModel update(RoadwayModel entity) {
 		try {
-			BusinessRule_Model entityModel = roadwayManager_Rep.save(entity);
+			RoadwayModel entityModel = roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {

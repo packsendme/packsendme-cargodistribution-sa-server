@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IBodyworkManager_Repository extends MongoRepository<BodyWork_Model, String>{
+public interface IBodyworkManager_Repository extends MongoRepository<BodyWorkModel, String>{
 
 	@Query("{'bodyWork' :  {$eq: ?0}}")
-	BodyWork_Model findBodyworkByName(String bodyWork);
+	BodyWorkModel findBodyworkByName(String bodyWork);
 }

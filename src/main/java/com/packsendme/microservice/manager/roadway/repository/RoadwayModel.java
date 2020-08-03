@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter 
 @Setter
 @Document(collection = "RoadwayBusinessRuleManager")
-public class BusinessRule_Model implements Serializable {
+public class RoadwayModel implements Serializable {
 	
 	/**
 	 * 
@@ -30,25 +30,25 @@ public class BusinessRule_Model implements Serializable {
 	public String date_change;
 	public String status;
 	
-	public List<Vehicle_Model> vehicleInstance = new ArrayList<Vehicle_Model>();
-	public Map<String,Map<String, VehicleCosts_Model>> vehicleCosts = new HashMap<String, Map<String, VehicleCosts_Model>>();
+	public CategoryModel categoryInstance = new CategoryModel();
+	public Map<String,Map<String, CostsModel>> costsInstance = new HashMap<String, Map<String, CostsModel>>();
 	
 	
-	public BusinessRule_Model(String rule_name, String category_name, String date_creation, String date_change,
-			String status, List<Vehicle_Model> vehicleInstance,
-			Map<String, Map<String, VehicleCosts_Model>> vehicleCosts) {
+	public RoadwayModel(String rule_name, String category_name, String date_creation, String date_change,
+			String status, CategoryModel categoryInstance,
+			Map<String, Map<String, CostsModel>> costsInstance) {
 		super();
 		this.rule_name = rule_name;
 		this.category_name = category_name;
 		this.date_creation = date_creation;
 		this.date_change = date_change;
 		this.status = status;
-		this.vehicleInstance = vehicleInstance;
-		this.vehicleCosts = vehicleCosts;
+		this.categoryInstance = categoryInstance;
+		this.costsInstance = costsInstance;
 	}
 
 
-	public BusinessRule_Model() {
+	public RoadwayModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

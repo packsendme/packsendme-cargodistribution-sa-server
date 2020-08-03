@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
+import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class BodyworkListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<BodyWork_Model> bodyWorkL = new ArrayList<BodyWork_Model>();
+	public List<BodyWorkModel> bodyWorkL = new ArrayList<BodyWorkModel>();
 
 	
-	public BodyworkListDTO_Response(List<BodyWork_Model> bodyWorkL) {
+	public BodyworkListDTO_Response(List<BodyWorkModel> bodyWorkL) {
 		super();
 		this.bodyWorkL = bodyWorkL;
 	}
