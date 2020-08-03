@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter 
 @Setter 
 @Document(collection = "BodyWorkManager")
-public class BodyWork_Model implements Serializable {
+public class BodyWorkModel implements Serializable {
 	
 	
 	/**
@@ -24,13 +24,13 @@ public class BodyWork_Model implements Serializable {
 	public String bodyWork;
 	public String type;
 	
-	public BodyWork_Model(String bodyWork, String type) {
+	public BodyWorkModel(String bodyWork, String type) {
 		super();
 		this.bodyWork = bodyWork;
 		this.type = type;
 	}
 
-	public BodyWork_Model() {
+	public BodyWorkModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

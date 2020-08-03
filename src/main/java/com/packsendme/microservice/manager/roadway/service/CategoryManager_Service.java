@@ -14,8 +14,8 @@ import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.CategoryDAO;
 import com.packsendme.microservice.manager.roadway.dto.CategoryListDTO_Response;
-import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
-import com.packsendme.microservice.manager.roadway.repository.Category_Model;
+import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
 
 @Service
@@ -43,61 +43,61 @@ public class CategoryManager_Service {
 	}
 	
 	public ResponseEntity<?> saveCategory(CategoryBRE categoryBRE) {
-		Response<Category_Model> responseObj = null;
+		Response<CategoryModel> responseObj = null;
 		try {
-			Category_Model entity = parserObj.categoryDto_TO_Model(categoryBRE, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
+			CategoryModel entity = parserObj.categoryDto_TO_Model(categoryBRE, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			categoryManagerDAO.save(entity);
-			responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
+			responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.NOT_FOUND_CATEGORY.getAction(), null);
+			responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.NOT_FOUND_CATEGORY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	public ResponseEntity<?> deleteCategory(String id, CategoryBRE categoryBRE) {
-		Response<Category_Model> responseObj = null;
+		Response<CategoryModel> responseObj = null;
 		try {
-			Optional<Category_Model> categoryData = categoryManagerDAO.findOneById(id);
+			Optional<CategoryModel> categoryData = categoryManagerDAO.findOneById(id);
 			if(categoryData.isPresent()) {
-				Category_Model categoryEntity = categoryData.get(); 
+				CategoryModel categoryEntity = categoryData.get(); 
 				categoryManagerDAO.remove(categoryEntity);
-				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), categoryData.get());
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), categoryData.get());
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
 			else {
-				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), null);
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.NOT_FOUND_CATEGORY.getAction(), null);
+			responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.NOT_FOUND_CATEGORY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	public ResponseEntity<?> updateCategory(String id, CategoryBRE categoryBRE) {
-		Response<Category_Model> responseObj = null;
+		Response<CategoryModel> responseObj = null;
 		try {
-			Optional<Category_Model> categoryData = categoryManagerDAO.findOneById(id);
+			Optional<CategoryModel> categoryData = categoryManagerDAO.findOneById(id);
 			if(categoryData.isPresent()) {
-				Category_Model categoryEntity = categoryData.get(); 
+				CategoryModel categoryEntity = categoryData.get(); 
 				categoryEntity = parserObj.categoryDto_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				categoryManagerDAO.update(categoryEntity);
-				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {
-				responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<Category_Model>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
+			responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}

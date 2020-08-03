@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IVehicleManager_Repository extends MongoRepository<Vehicle_Model, String>{
+public interface IVehicleManager_Repository extends MongoRepository<VehicleModel, String>{
 
 	@Query("{'vehicle' :  {$eq: ?0}}")
-	Vehicle_Model findVehicleByName(String vehicle);
+	VehicleModel findVehicleByName(String vehicle);
 }

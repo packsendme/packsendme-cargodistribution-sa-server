@@ -9,19 +9,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.Category_Model;
+import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.ICategoryManager_Repository;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class CategoryDAO implements IRoadwayDAO<Category_Model> {
+public class CategoryDAO implements IRoadwayDAO<CategoryModel> {
 
 	@Autowired
 	ICategoryManager_Repository roadwayManager_Rep; 
 	
 	
 	@Override
-	public Category_Model save(Category_Model entity) {
+	public CategoryModel save(CategoryModel entity) {
 		try {
 			return entity = roadwayManager_Rep.insert(entity);
 		}
@@ -32,7 +32,7 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	}
 
 	@Override
-	public Optional<Category_Model> findOneById(String id) {
+	public Optional<CategoryModel> findOneById(String id) {
 		try {
 			return roadwayManager_Rep.findById(id);
 		}
@@ -43,9 +43,9 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	}
 
 	@Override
-	public List<Category_Model> findAll() {
+	public List<CategoryModel> findAll() {
 		try {
-			List<Category_Model> entityL = new ArrayList<Category_Model>(); 
+			List<CategoryModel> entityL = new ArrayList<CategoryModel>(); 
 			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
@@ -56,7 +56,7 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	}
 
 	@Override
-	public Boolean remove(Category_Model entity) {
+	public Boolean remove(CategoryModel entity) {
 		try {
 			roadwayManager_Rep.delete(entity);
 			return true; 
@@ -68,9 +68,9 @@ public class CategoryDAO implements IRoadwayDAO<Category_Model> {
 	}
 
 	@Override
-	public Category_Model update(Category_Model entity) {
+	public CategoryModel update(CategoryModel entity) {
 		try {
-			Category_Model entityModel = roadwayManager_Rep.save(entity);
+			CategoryModel entityModel = roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {

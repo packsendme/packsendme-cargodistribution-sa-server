@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.service.BodyworkManager_Service;
 import com.packsendme.microservice.manager.roadway.service.CategoryManager_Service;
-import com.packsendme.microservice.manager.roadway.service.BusinessRuleManager_Service;
+import com.packsendme.microservice.manager.roadway.service.RoadwayBREManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
-import com.packsendme.roadway.bre.model.businessrule.BusinessRuleRoadwayBRE;
+import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
 import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
@@ -38,7 +38,7 @@ public class RoadwayManager_Controller {
 	private BodyworkManager_Service bodyworkService;	
 	
 	@Autowired
-	private BusinessRuleManager_Service roadwayService;	
+	private RoadwayBREManager_Service roadwayService;	
 	
 	/***************************************
 	 VEHICLE :: GET | POST | DELETE 
@@ -159,35 +159,35 @@ public class RoadwayManager_Controller {
 	***************************************/
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@GetMapping("/businessrule")
+	@GetMapping("/roadwaybre")
 	public ResponseEntity<?> getRoadway(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
 		return roadwayService.findRoadwayAll();
 	}
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@PostMapping("/businessrule")
+	@PostMapping("/roadwaybre")
 	public ResponseEntity<?> postRoadway(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, 
-			@Validated  @RequestBody BusinessRuleRoadwayBRE roadwayBRE)
+			@Validated  @RequestBody RoadwayBRE roadwayBRE)
 	{	
 		return roadwayService.saveRoadway(roadwayBRE);
 	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@DeleteMapping("/businessrule")
+	@DeleteMapping("/roadwaybre")
 	public ResponseEntity<?> deleteRoadway(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody BusinessRuleRoadwayBRE roadwayBRE)
+			@Validated  @RequestBody RoadwayBRE roadwayBRE)
 	{	
 		return roadwayService.deleteRoadway(id, roadwayBRE);
 	}
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@PutMapping("/businessrule")
+	@PutMapping("/roadwaybre")
 	public ResponseEntity<?> updateRoadway(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody BusinessRuleRoadwayBRE roadwayBRE)
+			@Validated  @RequestBody RoadwayBRE roadwayBRE)
 	{	
 		return roadwayService.updateRoadway(id, roadwayBRE);
 	}

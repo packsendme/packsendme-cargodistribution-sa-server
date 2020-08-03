@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.packsendme.microservice.manager.roadway.repository.BusinessRule_Model;
+import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class RoadwayBREListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<BusinessRule_Model> roadwayBREL = new ArrayList<BusinessRule_Model>();
+	public List<RoadwayModel> roadwayBREL = new ArrayList<RoadwayModel>();
 
 	
-	public RoadwayBREListDTO_Response(List<BusinessRule_Model> roadwayBREL) {
+	public RoadwayBREListDTO_Response(List<RoadwayModel> roadwayBREL) {
 		super();
 		this.roadwayBREL = roadwayBREL;
 	}

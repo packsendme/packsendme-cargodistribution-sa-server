@@ -9,19 +9,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.BodyWork_Model;
+import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.IBodyworkManager_Repository;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
+public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 
 	@Autowired
 	IBodyworkManager_Repository roadwayManager_Rep; 
 	
 	
 	@Override
-	public BodyWork_Model save(BodyWork_Model entity) {
+	public BodyWorkModel save(BodyWorkModel entity) {
 		try {
 			return entity = roadwayManager_Rep.insert(entity);
 		}
@@ -32,7 +32,7 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
 	}
 
 	@Override
-	public Optional<BodyWork_Model> findOneById(String id) {
+	public Optional<BodyWorkModel> findOneById(String id) {
 		try {
 			return roadwayManager_Rep.findById(id);
 		}
@@ -43,9 +43,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
 	}
 
 	@Override
-	public List<BodyWork_Model> findAll() {
+	public List<BodyWorkModel> findAll() {
 		try {
-			List<BodyWork_Model> entityL = new ArrayList<BodyWork_Model>(); 
+			List<BodyWorkModel> entityL = new ArrayList<BodyWorkModel>(); 
 			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
@@ -56,7 +56,7 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
 	}
 
 	@Override
-	public Boolean remove(BodyWork_Model entity) {
+	public Boolean remove(BodyWorkModel entity) {
 		try {
 			roadwayManager_Rep.delete(entity);
 			return true; 
@@ -68,9 +68,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWork_Model> {
 	}
 
 	@Override
-	public BodyWork_Model update(BodyWork_Model entity) {
+	public BodyWorkModel update(BodyWorkModel entity) {
 		try {
-			BodyWork_Model entityModel = roadwayManager_Rep.save(entity);
+			BodyWorkModel entityModel = roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {

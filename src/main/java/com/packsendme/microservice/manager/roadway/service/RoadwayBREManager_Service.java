@@ -14,12 +14,12 @@ import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.RoadwayDAO;
 import com.packsendme.microservice.manager.roadway.dto.RoadwayBREListDTO_Response;
-import com.packsendme.microservice.manager.roadway.repository.BusinessRule_Model;
-import com.packsendme.roadway.bre.model.businessrule.BusinessRuleRoadwayBRE;
+import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
+import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
-public class BusinessRuleManager_Service {
+public class RoadwayBREManager_Service {
 	
 	@Autowired
 	private RoadwayDAO roadwayBRE_DAO;
@@ -40,67 +40,67 @@ public class BusinessRuleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> saveRoadway(BusinessRuleRoadwayBRE businessRuleBRE) {
-		Response<BusinessRule_Model> responseObj = null;
+	public ResponseEntity<?> saveRoadway(RoadwayBRE roadwayBRE) {
+		Response<RoadwayModel> responseObj = null;
 		try {
-			BusinessRule_Model  entity = parserObj.roadwayBRE_TO_Model(businessRuleBRE,null,RoadwayManagerConstants.ADD_OP_ROADWAY);
+			RoadwayModel  entity = parserObj.roadwayBRE_TO_Model(roadwayBRE,null,RoadwayManagerConstants.ADD_OP_ROADWAY);
 			roadwayBRE_DAO.save(entity);
-			responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.CREATE_ROADWAYBRE.getAction(), entity);
+			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.CREATE_ROADWAYBRE.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.CREATE_ROADWAYBRE.getAction(), null);
+			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.CREATE_ROADWAYBRE.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	public ResponseEntity<?> deleteRoadway(String id, BusinessRuleRoadwayBRE businessRuleObj) {
-		Response<BusinessRule_Model> responseObj = null;
+	public ResponseEntity<?> deleteRoadway(String id, RoadwayBRE businessRuleObj) {
+		Response<RoadwayModel> responseObj = null;
 		try {
-			Optional<BusinessRule_Model> roadwayBREData = roadwayBRE_DAO.findOneById(id);
+			Optional<RoadwayModel> roadwayBREData = roadwayBRE_DAO.findOneById(id);
 			if(roadwayBREData.isPresent()) {
-				BusinessRule_Model roadwayBRE_Entity = roadwayBREData.get(); 
+				RoadwayModel roadwayBRE_Entity = roadwayBREData.get(); 
 				if(roadwayBRE_DAO.remove(roadwayBRE_Entity) == true) {
-					responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), roadwayBRE_Entity);
+					responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), roadwayBRE_Entity);
 				}
 				else {
-					responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), roadwayBRE_Entity);
+					responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), roadwayBRE_Entity);
 					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 				}
 			}
 			else {
-				responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.DELETE_ROADWAYBRE.getAction(), roadwayBREData.get());
+				responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.DELETE_ROADWAYBRE.getAction(), roadwayBREData.get());
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), null);
+			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	public ResponseEntity<?> updateRoadway(String id, BusinessRuleRoadwayBRE businessRuleBRE) {
-		Response<BusinessRule_Model> responseObj = null;
+	public ResponseEntity<?> updateRoadway(String id, RoadwayBRE businessRuleBRE) {
+		Response<RoadwayModel> responseObj = null;
 		try {
-			Optional<BusinessRule_Model> roadwayBREData = roadwayBRE_DAO.findOneById(id);
+			Optional<RoadwayModel> roadwayBREData = roadwayBRE_DAO.findOneById(id);
 			if(roadwayBREData.isPresent()) {
-				BusinessRule_Model roadwayBRE_Entity = roadwayBREData.get(); 
+				RoadwayModel roadwayBRE_Entity = roadwayBREData.get(); 
 				roadwayBRE_Entity = parserObj.roadwayBRE_TO_Model(businessRuleBRE,roadwayBRE_Entity,RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				roadwayBRE_DAO.update(roadwayBRE_Entity);
-				responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), roadwayBRE_Entity);
+				responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), roadwayBRE_Entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {
-				responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
+				responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<BusinessRule_Model>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
+			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
