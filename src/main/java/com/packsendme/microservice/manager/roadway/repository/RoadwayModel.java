@@ -1,9 +1,7 @@
 package com.packsendme.microservice.manager.roadway.repository;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -14,7 +12,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter
-@Document(collection = "RoadwayBusinessRuleManager")
+@Document(collection = "RoadwayBRE_SA")
 public class RoadwayModel implements Serializable {
 	
 	/**

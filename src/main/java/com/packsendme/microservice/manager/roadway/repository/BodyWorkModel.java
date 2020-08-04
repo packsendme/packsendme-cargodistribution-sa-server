@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter 
-@Document(collection = "BodyWorkManager")
+@Document(collection = "BodyWorkManager_SA")
 public class BodyWorkModel implements Serializable {
 	
 	

@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter
-@Document(collection = "VehicleManager")
+@Document(collection = "VehicleManager_SA")
 public class VehicleModel implements Serializable{
 
 	/**
