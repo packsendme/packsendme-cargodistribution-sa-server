@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter
-@Document(collection = "CategoryManager")
+@Document(collection = "CategoryManager_SA")
 public class CategoryModel implements Serializable{
 
 	/**
