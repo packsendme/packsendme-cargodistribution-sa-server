@@ -91,8 +91,12 @@ public class BodyworkManager_Service {
 			Optional<BodyWorkModel> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWorkModel bodyWorkEntity = bodyWorkData.get();
+				System.out.println("(1-0) updateBodywork - BodyworkBRE "+ bodyWorkEntity.bodyWork);
+
 				BodyWorkModel bodyWorkEntityUp = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				bodyworkDAO.update(bodyWorkEntityUp);
+				System.out.println("(1-1) updateBodywork - BodyworkBRE "+ bodyWorkEntity.bodyWork);
+
 				crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, bodyWorkEntity, bodyworkBRE);
 
 				responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
