@@ -64,7 +64,7 @@ public class BodyworkManager_Service {
 			if(bodyWorkData.isPresent()) {
 				BodyWorkModel bodyWorkEntity = bodyWorkData.get();
 				if(bodyworkDAO.remove(bodyWorkEntity) == true) {
-					crudTrigger(RoadwayManagerConstants.DELETE_OP_ROADWAY, bodyWorkEntity, bodyworkBRE);
+					crudTrigger(RoadwayManagerConstants.DELETE_OP_ROADWAY, null, bodyworkBRE);
 				}
 				else {
 					responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), null);
@@ -91,13 +91,11 @@ public class BodyworkManager_Service {
 			Optional<BodyWorkModel> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWorkModel bodyWorkEntity = bodyWorkData.get();
-				System.out.println("(1-0) updateBodywork - BodyworkBRE "+ bodyWorkEntity.bodyWork);
-
+				String bodyworkS_change = bodyWorkEntity.bodyWork;
 				BodyWorkModel bodyWorkEntityUp = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				bodyworkDAO.update(bodyWorkEntityUp);
-				System.out.println("(1-1) updateBodywork - BodyworkBRE "+ bodyWorkEntity.bodyWork);
 
-				crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, bodyWorkEntity, bodyworkBRE);
+				crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, bodyworkS_change, bodyworkBRE);
 
 				responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
@@ -115,7 +113,7 @@ public class BodyworkManager_Service {
 	}
 	
 
-	public ResponseEntity<?> crudTrigger(String operationType, BodyWorkModel bodyworkModal, BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> crudTrigger(String operationType, String bodyworkModal, BodyworkBRE bodyworkBRE) {
 		Response<BodyworkBRE> responseObj = null;
 		try {
 			vehicleService.crudTrigger(operationType, bodyworkModal, bodyworkBRE);

@@ -111,7 +111,7 @@ public class CategoryManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> crudTrigger(String operationType, VehicleModel vehicleModelOld, VehicleModel vehicleModelNew) {
+	public ResponseEntity<?> crudTrigger(String operationType, String vehicleS_Old, VehicleModel vehicleModelNew) {
 		List<VehicleModel> catVehicleNewL = new ArrayList<VehicleModel>();
 		Response<CategoryModel> responseObj = null;
 		boolean statusCrud = false;
@@ -130,7 +130,7 @@ public class CategoryManager_Service {
 						}
 					} 
 					else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-						if(catVehicleDB.vehicle.equals(vehicleModelOld.vehicle)) {
+						if(catVehicleDB.vehicle.equals(vehicleS_Old)) {
 							catVehicleNewL.add(vehicleModelNew);
 							statusCrud = true;
 						}
