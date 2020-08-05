@@ -1,7 +1,5 @@
 package com.packsendme.microservice.manager.roadway.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,8 @@ import com.packsendme.lib.common.response.Response;
 import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.BodyworkDAO;
-import com.packsendme.microservice.manager.roadway.dao.VehicleDAO;
 import com.packsendme.microservice.manager.roadway.dto.BodyworkListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
-import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
 
 @Service

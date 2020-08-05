@@ -14,11 +14,9 @@ import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
-import com.packsendme.microservice.manager.roadway.dao.CategoryDAO;
 import com.packsendme.microservice.manager.roadway.dao.VehicleDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
-import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
 import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
@@ -137,13 +135,16 @@ public class VehicleManager_Service {
 							statusCrud = true;
 						}
 					} else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
+						System.out.println("(6-0) crudTrigger - bodyWork "+ bodyWork);
+						System.out.println("(6-0) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
+
 						if(bodyWork.equals(bodyworkModel.bodyWork)) {
-							System.out.println("(6) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
+							System.out.println("(6-1) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
 							bodyWorkL.add(bodyworkBRE.bodyWork);
 							statusCrud = true;
 						}
 						else {
-							System.out.println("(6-1) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
+							System.out.println("(6-2) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
 							bodyWorkL.add(bodyWork);
  						}
 					}		
