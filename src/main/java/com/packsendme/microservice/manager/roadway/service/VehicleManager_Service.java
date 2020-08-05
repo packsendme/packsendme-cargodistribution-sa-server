@@ -17,8 +17,10 @@ import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConst
 import com.packsendme.microservice.manager.roadway.dao.CategoryDAO;
 import com.packsendme.microservice.manager.roadway.dao.VehicleDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleListDTO_Response;
+import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
+import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
 import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 
 @Service
@@ -30,7 +32,7 @@ public class VehicleManager_Service {
 	@Autowired
 	private ParseDtoToModel vehicleParse;
 	@Autowired
-	private CategoryDAO categoryDAO;
+	private CategoryManager_Service categoryService;
 
 	
 	public ResponseEntity<?> findVehiclesAll() {
@@ -62,65 +64,14 @@ public class VehicleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> deleteVehicles(String id, VehicleBRE vehicleObj) {
+	public ResponseEntity<?> deleteVehicles(String id, VehicleBRE vehicleBRE) {
 		Response<VehicleModel> responseObj = null;
-		boolean cat_resave = false;
-		List<VehicleModel> newVehicleL = new ArrayList<VehicleModel>();
-		CategoryModel newCategory = new CategoryModel();
 		try {
 			Optional<VehicleModel> vehicleData = vehicleDAO.findOneById(id);
-			String vehicleName = vehicleData.get().vehicle;
-			
 			if (vehicleData.isPresent()) {
 				VehicleModel vehicleEntity = vehicleData.get();
 				if(vehicleDAO.remove(vehicleEntity) == true) {
-					// Find Category relationship with Vehicle will be removed
-					List<CategoryModel> categoryL = categoryDAO.findAll();
-					
-					System.out.println("============================");
-					System.out.println(" categoryL "+ categoryL.size());
-					System.out.println("============================");
-					
-					if(categoryL.size() > 0) {
-						for(CategoryModel c : categoryL) {
-							newCategory = c;
-							
-							System.out.println("============================");
-							System.out.println(" Category_Model ");
-							System.out.println("============================");
-
-							
-							for(VehicleModel v : c.vehicles) {
-								System.out.println("============================");
-								System.out.println(" vehicleDATA "+ v.vehicle);
-								System.out.println(" vehicleName "+ vehicleName);
-								System.out.println("============================");
-
-								if(!v.vehicle.equals(vehicleName)) {
-									System.out.println("============================");
-									System.out.println(" IF "+ v.vehicle);
-									System.out.println("============================");
-									newVehicleL.add(v);
-								}
-								else {
-									cat_resave = true;
-									System.out.println("============================");
-									System.out.println(" ELSE "+ v.vehicle);
-									System.out.println("============================");
-
-								}
-							}
-							if(cat_resave == true) {
-								cat_resave = false;
-								System.out.println("============================");
-								System.out.println(" UPDATE ");
-								System.out.println("============================");
-								newCategory.vehicles = null;
-								newCategory.vehicles = newVehicleL;
-								categoryDAO.update(newCategory);
-							}
-						}
-					}
+					categoryService.crudTrigger(RoadwayManagerConstants.DELETE_OP_ROADWAY, null, vehicleEntity);
 				}
 			}
 			responseObj = new Response<VehicleModel>(0,HttpExceptionPackSend.DELETE_VEHICLE.getAction(), vehicleData.get());
@@ -139,8 +90,9 @@ public class VehicleManager_Service {
 			Optional<VehicleModel> vehicleData = vehicleDAO.findOneById(id);
 			if(vehicleData.isPresent()) {
 				VehicleModel vehicleEntity = vehicleData.get(); 
-				vehicleEntity = vehicleParse.vehicleDto_TO_Model(vehicleBRE, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				vehicleDAO.update(vehicleEntity);
+				VehicleModel vehicleEntityChange = vehicleParse.vehicleDto_TO_Model(vehicleBRE, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				vehicleDAO.update(vehicleEntityChange);
+				categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleEntity, vehicleEntityChange);
 				responseObj = new Response<VehicleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
@@ -155,6 +107,53 @@ public class VehicleManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	public ResponseEntity<?> crudTrigger(String operationType, BodyWorkModel bodyworkModel, BodyworkBRE bodyworkBRE) {
+		boolean statusCrud = false;
+		Response<VehicleModel> responseObj = null;
+		List<String> bodyWorkL = new ArrayList<String>();
+
+		// FindAll - Vehicle to relationship with BodyWork will be removed or update
+		try {
+			List<VehicleModel> vehicleL = vehicleDAO.findAll();
+			for(VehicleModel vehicleOld : vehicleL) {
+				for(String bodyWork : vehicleOld.bodywork_vehicle) {
+					if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
+						if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
+							bodyWorkL.add(bodyWork);
+						}
+						else {
+							statusCrud = true;
+						}
+					} else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
+						if(bodyWork.equals(bodyworkModel.bodyWork)) {
+							bodyWorkL.add(bodyworkBRE.bodyWork);
+							statusCrud = true;
+						}
+						else {
+							bodyWorkL.add(bodyWork);
+ 						}
+					}		
+				}
+				if(statusCrud == true) {
+					VehicleModel vehicleNew = vehicleOld; 
+					vehicleDAO.remove(vehicleOld);
+					vehicleNew.bodywork_vehicle = null;
+					vehicleNew.bodywork_vehicle = bodyWorkL;
+					vehicleDAO.save(vehicleNew);
+					statusCrud = false;
+					categoryService.crudTrigger(operationType, vehicleOld, vehicleNew);
+				}
+			}
+			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<VehicleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	
 
 	
