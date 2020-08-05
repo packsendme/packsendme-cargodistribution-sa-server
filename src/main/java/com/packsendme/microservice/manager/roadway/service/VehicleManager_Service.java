@@ -106,7 +106,7 @@ public class VehicleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> crudTrigger(String operationType, BodyWorkModel bodyworkModel, BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> crudTrigger(String operationType, String bodyworkS_old, BodyworkBRE bodyworkBRE) {
 		boolean statusCrud = false;
 		Response<VehicleModel> responseObj = null;
 		List<String> bodyWorkL = new ArrayList<String>();
@@ -136,21 +136,22 @@ public class VehicleManager_Service {
 						}
 					} else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
 						System.out.println("(6-0) crudTrigger - bodyWork "+ bodyWork);
-						System.out.println("(6-0) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
+						System.out.println("(6-0) crudTrigger - bodyWork "+ bodyworkS_old);
 
-						if(bodyWork.equals(bodyworkModel.bodyWork)) {
-							System.out.println("(6-1) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
+						if(bodyWork.equals(bodyworkS_old)) {
+							System.out.println("(6-1) crudTrigger - bodyWork "+ bodyworkS_old);
 							bodyWorkL.add(bodyworkBRE.bodyWork);
 							statusCrud = true;
 						}
 						else {
-							System.out.println("(6-2) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
+							System.out.println("(6-2) crudTrigger - bodyWork "+ bodyworkS_old);
 							bodyWorkL.add(bodyWork);
  						}
 					}		
 				}
 				if(statusCrud == true) {
 					System.out.println("(7) crudTrigger - SAVE "+ statusCrud);
+					String vehicleS_Old = vehicleOld.vehicle;
 					VehicleModel vehicleNew = vehicleOld; 
 					vehicleDAO.remove(vehicleOld);
 					vehicleNew.bodywork_vehicle = null;
@@ -160,7 +161,7 @@ public class VehicleManager_Service {
 
 					vehicleDAO.save(vehicleNew);
 					statusCrud = false;
-					categoryService.crudTrigger(operationType, vehicleOld, vehicleNew);
+					categoryService.crudTrigger(operationType, vehicleS_Old, vehicleNew);
 				}
 			}
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
