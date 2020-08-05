@@ -112,34 +112,51 @@ public class VehicleManager_Service {
 		boolean statusCrud = false;
 		Response<VehicleModel> responseObj = null;
 		List<String> bodyWorkL = new ArrayList<String>();
+		System.out.println(" ");
+		System.out.println(" -------------------------------------------- ");
 
+		System.out.println("(1) crudTrigger - VehicleModel ");
 		// FindAll - Vehicle to relationship with BodyWork will be removed or update
 		try {
 			List<VehicleModel> vehicleL = vehicleDAO.findAll();
+			System.out.println(" (2) crudTrigger - vehicleL "+ vehicleL.size());
+			
 			for(VehicleModel vehicleOld : vehicleL) {
+				System.out.println(" (3) crudTrigger - vehicleOld.vehicle "+ vehicleOld.vehicle);
+
 				for(String bodyWork : vehicleOld.bodywork_vehicle) {
+					System.out.println("(4) crudTrigger - bodyWork "+ bodyWork);
+
 					if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
 						if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
+							System.out.println("(5) crudTrigger - bodyWork "+ bodyworkBRE.bodyWork);
 							bodyWorkL.add(bodyWork);
 						}
 						else {
+							System.out.println("(5-1) crudTrigger - bodyWork "+ bodyworkBRE.bodyWork);
 							statusCrud = true;
 						}
 					} else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
 						if(bodyWork.equals(bodyworkModel.bodyWork)) {
+							System.out.println("(6) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
 							bodyWorkL.add(bodyworkBRE.bodyWork);
 							statusCrud = true;
 						}
 						else {
+							System.out.println("(6-1) crudTrigger - bodyWork "+ bodyworkModel.bodyWork);
 							bodyWorkL.add(bodyWork);
  						}
 					}		
 				}
 				if(statusCrud == true) {
+					System.out.println("(7) crudTrigger - SAVE "+ statusCrud);
 					VehicleModel vehicleNew = vehicleOld; 
 					vehicleDAO.remove(vehicleOld);
 					vehicleNew.bodywork_vehicle = null;
 					vehicleNew.bodywork_vehicle = bodyWorkL;
+					System.out.println("(7-1) crudTrigger - SAVE "+ bodyWorkL.size());
+					System.out.println("(7-2) crudTrigger - SAVE "+ vehicleNew.vehicle);
+
 					vehicleDAO.save(vehicleNew);
 					statusCrud = false;
 					categoryService.crudTrigger(operationType, vehicleOld, vehicleNew);
