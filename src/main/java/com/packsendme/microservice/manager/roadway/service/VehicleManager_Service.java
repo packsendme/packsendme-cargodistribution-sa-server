@@ -87,10 +87,12 @@ public class VehicleManager_Service {
 		try {
 			Optional<VehicleModel> vehicleData = vehicleDAO.findOneById(id);
 			if(vehicleData.isPresent()) {
-				VehicleModel vehicleEntity = vehicleData.get(); 
+				VehicleModel vehicleEntity = vehicleData.get();
+				String vehicleS_old = vehicleEntity.vehicle;
+
 				VehicleModel vehicleEntityChange = vehicleParse.vehicleDto_TO_Model(vehicleBRE, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				vehicleDAO.update(vehicleEntityChange);
-				categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleEntity, vehicleEntityChange);
+				categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleS_old, vehicleEntityChange);
 				responseObj = new Response<VehicleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
