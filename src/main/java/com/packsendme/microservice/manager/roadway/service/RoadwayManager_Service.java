@@ -1,5 +1,7 @@
 package com.packsendme.microservice.manager.roadway.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,14 @@ import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.RoadwayDAO;
 import com.packsendme.microservice.manager.roadway.dto.RoadwayBREListDTO_Response;
+import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
-public class RoadwayBREManager_Service {
+public class RoadwayManager_Service {
 	
 	@Autowired
 	private RoadwayDAO roadwayBRE_DAO;
@@ -104,6 +108,54 @@ public class RoadwayBREManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
+	public ResponseEntity<?> crudTrigger(String operationType, CategoryModel categoryModelOld, CategoryModel categoryModelNew) {
+		CategoryModel categoryNew = new CategoryModel();
+		Response<RoadwayModel> responseObj = null;
+		boolean statusCrud = false;
+		
+		// Find Category relationship with Vehicle will be removed
+		try {
+			List<RoadwayModel> roadwayL = roadwayBRE_DAO.findAll();
+			for(RoadwayModel roadwayObj : roadwayL) {
+				
+				if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
+					if(!roadwayObj.categoryInstance.name_category.equals(categoryModelNew.name_category)) {
+						categoryNew = roadwayObj.categoryInstance;
+					}
+					else {
+						statusCrud = true;
+					}
+				} 
+				else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
+					if(roadwayObj.categoryInstance.name_category.equals(categoryModelOld.name_category)) {
+						categoryNew = categoryModelNew;
+						statusCrud = true;
+					}
+					else {
+						categoryNew = roadwayObj.categoryInstance;
+					}
+				}
+			
+				if (statusCrud == true) {
+					RoadwayModel roadwayNew = roadwayObj; 
+					roadwayBRE_DAO.remove(roadwayObj);
+					roadwayNew.categoryInstance = null;
+					roadwayNew.categoryInstance = categoryNew;
+					roadwayBRE_DAO.save(roadwayNew);
+				}
+			}
+			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 
 	
 }

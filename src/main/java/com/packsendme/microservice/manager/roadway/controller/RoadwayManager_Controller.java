@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.service.BodyworkManager_Service;
 import com.packsendme.microservice.manager.roadway.service.CategoryManager_Service;
-import com.packsendme.microservice.manager.roadway.service.RoadwayBREManager_Service;
+import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
@@ -38,7 +38,7 @@ public class RoadwayManager_Controller {
 	private BodyworkManager_Service bodyworkService;	
 	
 	@Autowired
-	private RoadwayBREManager_Service roadwayService;	
+	private RoadwayManager_Service roadwayService;	
 	
 	/***************************************
 	 VEHICLE :: GET | POST | DELETE 

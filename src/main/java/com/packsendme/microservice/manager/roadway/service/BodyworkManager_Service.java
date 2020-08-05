@@ -28,9 +28,9 @@ public class BodyworkManager_Service {
 	@Autowired
 	private BodyworkDAO bodyworkDAO;
 	@Autowired
-	private VehicleDAO vehicleDAO;
-	@Autowired
 	private ParseDtoToModel parserObj;
+	@Autowired
+	private VehicleManager_Service vehicleService;
 
 	public ResponseEntity<?> findBodyworkAll() {
 		Response<BodyworkListDTO_Response> responseObj = null;
@@ -63,33 +63,12 @@ public class BodyworkManager_Service {
 
 	public ResponseEntity<?> deleteBodywork(String id, BodyworkBRE bodyworkBRE) {
 		Response<BodyWorkModel> responseObj = null;
-		boolean cat_resave = false;
-		List<String> newBodyWorkL = new ArrayList<String>();
-
 		try {
 			Optional<BodyWorkModel> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWorkModel bodyWorkEntity = bodyWorkData.get();
 				if(bodyworkDAO.remove(bodyWorkEntity) == true) {
-					// Find Category relationship with Vehicle will be removed
-					List<VehicleModel> vehicleL = vehicleDAO.findAll();
-					for(VehicleModel vehicle : vehicleL) {
-						VehicleModel newVehicle = vehicle; 
-						for(String bodyWork : vehicle.bodywork_vehicle) {
-							if(!bodyWork.equals(bodyworkBRE.bodyWork)) {
-								newBodyWorkL.add(bodyWork);
-							}
-							else {
-								cat_resave = true;
-							}
-						}
-						if(cat_resave == true) {
-							vehicleDAO.remove(newVehicle);
-							newVehicle.bodywork_vehicle = null;
-							newVehicle.bodywork_vehicle = newBodyWorkL;
-							vehicleDAO.save(newVehicle);
-						}
-					}
+					crudTrigger(RoadwayManagerConstants.DELETE_OP_ROADWAY, bodyWorkEntity, bodyworkBRE);
 				}
 				else {
 					responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), null);
@@ -112,40 +91,14 @@ public class BodyworkManager_Service {
 	
 	public ResponseEntity<?> updateBodywork(String id, BodyworkBRE bodyworkBRE) {
 		Response<BodyWorkModel> responseObj = null;
-		List<String> newBodyWorkL = new ArrayList<String>();
-		boolean cat_resave = false;
-		String bodyworkS = "";
 		try {
 			Optional<BodyWorkModel> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWorkModel bodyWorkEntity = bodyWorkData.get();
-				bodyworkS = bodyWorkEntity.bodyWork;
-				bodyWorkEntity = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				bodyworkDAO.update(bodyWorkEntity);
-				List<VehicleModel> vehicleL = vehicleDAO.findAll();
-				for(VehicleModel vehicle : vehicleL) {
-					VehicleModel newVehicle = vehicle; 
-					for(String bodyWork : vehicle.bodywork_vehicle) {
-						System.out.println(" ========================== " );
-						System.out.println(" bodyWork VEHICLE "+ bodyWork);
-						System.out.println(" bodyWork BODYWORK "+ bodyworkS);
-						System.out.println(" ========================== " );
-						
-						if(bodyWork.equals(bodyworkS)) {
-							cat_resave = true;
-							newBodyWorkL.add(bodyworkBRE.bodyWork);
-						}
-						else {
-							newBodyWorkL.add(bodyWork);
-						}
-					}
-					if(cat_resave == true) {
-						newVehicle.bodywork_vehicle = null;
-						newVehicle.bodywork_vehicle = newBodyWorkL;
-						vehicleDAO.update(newVehicle);
-						cat_resave = false;
-					}
-				}
+				BodyWorkModel bodyWorkEntityUp = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				bodyworkDAO.update(bodyWorkEntityUp);
+				crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, bodyWorkEntity, bodyworkBRE);
+
 				responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
@@ -160,6 +113,22 @@ public class BodyworkManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+
+	public ResponseEntity<?> crudTrigger(String operationType, BodyWorkModel bodyworkModal, BodyworkBRE bodyworkBRE) {
+		Response<BodyworkBRE> responseObj = null;
+		try {
+			vehicleService.crudTrigger(operationType, bodyworkModal, bodyworkBRE);
+			responseObj = new Response<BodyworkBRE>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyworkBRE);
+			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<BodyworkBRE>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	
 
 }
