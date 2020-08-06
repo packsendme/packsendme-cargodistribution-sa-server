@@ -122,12 +122,24 @@ public class CategoryManager_Service {
 			for(CategoryModel category : categoryL) {
 				for(VehicleModel catVehicleDB : category.vehicles) {
 					if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
+						System.out.println(" ==================================================== ");
+						System.out.println("  ");
+						System.out.println(" crudTrigger - CategoryManager  ");
+						System.out.println(" (1) crudTrigger - CategoryManager catVehicleDB "+ catVehicleDB.vehicle);
+						System.out.println(" (1) crudTrigger - CategoryManager vehicleModelNew "+ vehicleModelNew.vehicle);
+
+
 						if(!catVehicleDB.vehicle.equals(vehicleModelNew.vehicle)) {
 							catVehicleNewL.add(catVehicleDB);
+							System.out.println(" (2) crudTrigger - CategoryManager ADD "+ catVehicleDB.vehicle);
+
 						}
 						else {
 							statusCrud = true;
+							System.out.println(" (3) crudTrigger - CategoryManager statusCrud "+ statusCrud);
+
 						}
+
 					} 
 					else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
 						if(catVehicleDB.vehicle.equals(vehicleS_Old)) {
@@ -144,6 +156,10 @@ public class CategoryManager_Service {
 					categoryManagerDAO.remove(category);
 					categoryNew.vehicles = null;
 					categoryNew.vehicles = catVehicleNewL;
+					System.out.println(" (4) crudTrigger - CategoryManager SAVE "+ categoryNew.vehicles.size());
+					System.out.println(" (4) crudTrigger - CategoryManager SAVE "+ catVehicleNewL.size());
+					System.out.println(" ==================================================== ");
+
 					categoryManagerDAO.save(categoryNew);
 					catVehicleNewL = new ArrayList<VehicleModel>();
 				}
