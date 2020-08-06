@@ -110,7 +110,7 @@ public class RoadwayManager_Service {
 	}
 	
 	
-	public ResponseEntity<?> crudTrigger(String operationType, CategoryModel categoryModelOld, CategoryModel categoryModelNew) {
+	public ResponseEntity<?> crudTrigger(String operationType, String categoryName_Old, CategoryModel categoryModelNew) {
 		CategoryModel categoryNew = new CategoryModel();
 		Response<RoadwayModel> responseObj = null;
 		boolean statusCrud = false;
@@ -129,7 +129,7 @@ public class RoadwayManager_Service {
 					}
 				} 
 				else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-					if(roadwayObj.categoryInstance.name_category.equals(categoryModelOld.name_category)) {
+					if(roadwayObj.categoryInstance.name_category.equals(categoryName_Old)) {
 						categoryNew = categoryModelNew;
 						statusCrud = true;
 					}
