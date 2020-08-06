@@ -145,6 +145,7 @@ public class CategoryManager_Service {
 					categoryNew.vehicles = null;
 					categoryNew.vehicles = catVehicleNewL;
 					categoryManagerDAO.save(categoryNew);
+					catVehicleNewL = new ArrayList<VehicleModel>();
 				}
 			}
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
