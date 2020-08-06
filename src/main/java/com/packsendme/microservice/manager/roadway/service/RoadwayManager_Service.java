@@ -115,9 +115,14 @@ public class RoadwayManager_Service {
 		
 		// Find Category relationship with Vehicle will be removed
 		try {
+			System.out.println(" ");
+			System.out.println(" -------------------------------------------- ");
+			System.out.println("(1) crudTrigger - RoadwayModel ");
+
 			List<RoadwayModel> roadwayL = roadwayBRE_DAO.findAll();
 			for(RoadwayModel roadwayObj : roadwayL) {
-				
+				System.out.println("(2) crudTrigger - RoadwayModel "+ roadwayObj.rule_name);
+
 				if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
 					if(!roadwayObj.categoryInstance.name_category.equals(categoryModelNew.name_category)) {
 						categoryNew = roadwayObj.categoryInstance;
@@ -127,23 +132,30 @@ public class RoadwayManager_Service {
 					}
 				} 
 				else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
+					System.out.println("(3-1) crudTrigger - RoadwayModel "+ roadwayObj.categoryInstance.name_category);
+					System.out.println("(3-2) crudTrigger - RoadwayModel "+ categoryName_Old);
+
 					if(roadwayObj.categoryInstance.name_category.equals(categoryName_Old)) {
+						System.out.println("(4-1) crudTrigger - RoadwayModel - categoryModelNew "+ categoryModelNew.name_category);
 						categoryNew = categoryModelNew;
 						statusCrud = true;
 					}
 					else {
+						System.out.println("(4-2) crudTrigger - RoadwayModel "+ roadwayObj.categoryInstance.name_category);
 						categoryNew = roadwayObj.categoryInstance;
 					}
 				}
 			
 				if (statusCrud == true) {
-					RoadwayModel roadwayNew = roadwayObj; 
+					System.out.println("(5) crudTrigger - RoadwayModel "+ categoryNew.name_category);
+					RoadwayModel roadwayNew = roadwayObj;
 					roadwayBRE_DAO.remove(roadwayObj);
 					roadwayNew.categoryInstance = null;
 					roadwayNew.categoryInstance = categoryNew;
 					roadwayBRE_DAO.save(roadwayNew);
 				}
 			}
+			System.out.println(" -------------------------------------------- ");
 			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
