@@ -160,8 +160,8 @@ public class VehicleManager_Service {
 					vehicleNew.bodywork_vehicle = bodyWorkL;
 					System.out.println("(7-1) crudTrigger - SAVE "+ bodyWorkL.size());
 					System.out.println("(7-2) crudTrigger - SAVE "+ vehicleNew.vehicle);
-
 					vehicleDAO.save(vehicleNew);
+					bodyWorkL = new ArrayList<String>();
 					statusCrud = false;
 					categoryService.crudTrigger(operationType, vehicleS_Old, vehicleNew);
 				}
