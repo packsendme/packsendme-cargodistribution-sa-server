@@ -163,7 +163,7 @@ public class VehicleManager_Service {
 					vehicleDAO.save(vehicleNew);
 					bodyWorkL = new ArrayList<String>();
 					statusCrud = false;
-					categoryService.crudTrigger(operationType, vehicleS_Old, vehicleNew);
+					categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleS_Old, vehicleNew);
 				}
 			}
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
