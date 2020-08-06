@@ -116,7 +116,8 @@ public class ParseDtoToModel {
 			}
 			vehicleModel.bodywork_vehicle = bodyWorkL;
 			vehiclesL.add(vehicleModel);
-			vehicleModel = new VehicleModel(); 
+			vehicleModel = new VehicleModel();
+			bodyWorkL = new ArrayList<String>();
 		}
 		roadwayModel.categoryInstance.vehicles = vehiclesL;
 		

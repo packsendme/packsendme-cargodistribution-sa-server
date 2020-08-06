@@ -1,6 +1,5 @@
 package com.packsendme.microservice.manager.roadway.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +17,6 @@ import com.packsendme.microservice.manager.roadway.dao.RoadwayDAO;
 import com.packsendme.microservice.manager.roadway.dto.RoadwayBREListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
-import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 
 @Service
