@@ -16,12 +16,9 @@ import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.CategoryDAO;
 import com.packsendme.microservice.manager.roadway.dto.CategoryListDTO_Response;
-import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
 import com.packsendme.roadway.bre.model.category.CategoryBRE;
-import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
-import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -93,9 +90,13 @@ public class CategoryManager_Service {
 			Optional<CategoryModel> categoryData = categoryManagerDAO.findOneById(id);
 			if(categoryData.isPresent()) {
 				CategoryModel categoryEntity = categoryData.get(); 
+				String categoryName_old = categoryEntity.name_category; 
 				categoryEntity = parserObj.categoryDto_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				categoryManagerDAO.update(categoryEntity);
-				roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, null, categoryEntity);
+
+				// Trigger Method - Update Roadway-Entity
+				roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
+				
 				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
@@ -119,25 +120,14 @@ public class CategoryManager_Service {
 		// Find Category relationship with Vehicle will be removed
 		try {
 			List<CategoryModel> categoryL = categoryManagerDAO.findAll();
-			for(CategoryModel category : categoryL) {
-				for(VehicleModel catVehicleDB : category.vehicles) {
+			for(CategoryModel category_old : categoryL) {
+				for(VehicleModel catVehicleDB : category_old.vehicles) {
 					if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
-						System.out.println(" ==================================================== ");
-						System.out.println("  ");
-						System.out.println(" crudTrigger - CategoryManager  ");
-						System.out.println(" (1) crudTrigger - CategoryManager catVehicleDB "+ catVehicleDB.vehicle);
-						System.out.println(" (1) crudTrigger - CategoryManager vehicleModelNew "+ vehicleModelNew.vehicle);
-
-
 						if(!catVehicleDB.vehicle.equals(vehicleModelNew.vehicle)) {
 							catVehicleNewL.add(catVehicleDB);
-							System.out.println(" (2) crudTrigger - CategoryManager ADD "+ catVehicleDB.vehicle);
-
 						}
 						else {
 							statusCrud = true;
-							System.out.println(" (3) crudTrigger - CategoryManager statusCrud "+ statusCrud);
-
 						}
 
 					} 
@@ -152,15 +142,13 @@ public class CategoryManager_Service {
 					}
 				}
 				if (statusCrud == true) {
-					CategoryModel categoryNew = category; 
-					categoryManagerDAO.remove(category);
+					CategoryModel categoryNew = category_old; 
+					String categoryName_old = category_old.name_category;
+					categoryManagerDAO.remove(category_old);
 					categoryNew.vehicles = null;
 					categoryNew.vehicles = catVehicleNewL;
-					System.out.println(" (4) crudTrigger - CategoryManager SAVE "+ categoryNew.vehicles.size());
-					System.out.println(" (4) crudTrigger - CategoryManager SAVE "+ catVehicleNewL.size());
-					System.out.println(" ==================================================== ");
-
 					categoryManagerDAO.save(categoryNew);
+					roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryNew);
 					catVehicleNewL = new ArrayList<VehicleModel>();
 				}
 			}
