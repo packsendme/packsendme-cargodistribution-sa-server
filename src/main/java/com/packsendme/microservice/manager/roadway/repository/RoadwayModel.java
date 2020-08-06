@@ -21,7 +21,7 @@ public class RoadwayModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	public long _id;
+	public String id;
 	public String rule_name;
 	public String category_name;
 	public String date_creation;
