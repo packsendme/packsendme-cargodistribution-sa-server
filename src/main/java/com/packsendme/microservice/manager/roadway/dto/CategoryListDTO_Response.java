@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class CategoryListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<CategoryModel> categoryL = new ArrayList<CategoryModel>();
+	public List<CategoryRuleModel> categoryL = new ArrayList<CategoryRuleModel>();
 
 	
-	public CategoryListDTO_Response(List<CategoryModel> categoryL) {
+	public CategoryListDTO_Response(List<CategoryRuleModel> categoryL) {
 		super();
 		this.categoryL = categoryL;
 	}

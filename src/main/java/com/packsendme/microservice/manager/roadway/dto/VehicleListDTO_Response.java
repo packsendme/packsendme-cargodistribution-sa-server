@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class VehicleListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<VehicleModel> vehiclesL = new ArrayList<VehicleModel>();
+	public List<VehicleRuleModel> vehiclesL = new ArrayList<VehicleRuleModel>();
 
 	
-	public VehicleListDTO_Response(List<VehicleModel> vehiclesL) {
+	public VehicleListDTO_Response(List<VehicleRuleModel> vehiclesL) {
 		super();
 		this.vehiclesL = vehiclesL;
 	}

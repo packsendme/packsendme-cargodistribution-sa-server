@@ -19,10 +19,9 @@ import com.packsendme.microservice.manager.roadway.service.CategoryManager_Servi
 import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
-import com.packsendme.roadway.bre.model.category.CategoryBRE;
-import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
-import com.packsendme.roadway.bre.model.vehicle.VehicleBRE;
-
+import com.packsendme.roadway.bre.model.category.CategoryRule;
+import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
+import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 
 @RestController
 @RequestMapping("/roadway/manager")
@@ -53,7 +52,7 @@ public class RoadwayManager_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/vehicle")
 	public ResponseEntity<?> postVehicle(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated  @RequestBody VehicleBRE vehicle)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated  @RequestBody VehicleRule vehicle)
 	{	
 		return vehiclesService.saveVehicles(vehicle);
 	}
@@ -62,18 +61,18 @@ public class RoadwayManager_Controller {
 	@DeleteMapping("/vehicle")
 	public ResponseEntity<?> deleteVehicle(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated @RequestBody VehicleBRE vehicleBRE)
+			@Validated @RequestBody VehicleRule vehicle)
 	{	
-		return vehiclesService.deleteVehicles(id, vehicleBRE);
+		return vehiclesService.deleteVehicles(id, vehicle);
 	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PutMapping("/vehicle")
 	public ResponseEntity<?> putVehicle(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody VehicleBRE vehicleBRE)
+			@Validated  @RequestBody VehicleRule vehicle)
 	{	
-		return vehiclesService.updateVehicle(id, vehicleBRE);
+		return vehiclesService.updateVehicle(id, vehicle);
 	}
 
 	
@@ -92,7 +91,7 @@ public class RoadwayManager_Controller {
 	@PostMapping("/category")
 	public ResponseEntity<?> postCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
-			@Validated  @RequestBody CategoryBRE category)
+			@Validated  @RequestBody CategoryRule category)
 	{	
 		return categoryService.saveCategory(category);
 	}
@@ -101,7 +100,7 @@ public class RoadwayManager_Controller {
 	@DeleteMapping("/category")
 	public ResponseEntity<?> deleteCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody CategoryBRE category)
+			@Validated  @RequestBody CategoryRule category)
 	{	
 		return categoryService.deleteCategory(id, category);
 	}
@@ -110,7 +109,7 @@ public class RoadwayManager_Controller {
 	@PutMapping("/category")
 	public ResponseEntity<?> putCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody CategoryBRE category)
+			@Validated  @RequestBody CategoryRule category)
 	{	
 		return categoryService.updateCategory(id, category);
 	}
@@ -130,7 +129,7 @@ public class RoadwayManager_Controller {
 	@PostMapping("/bodywork")
 	public ResponseEntity<?> postBodywork(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
-			@Validated  @RequestBody BodyworkBRE bodywork)
+			@Validated  @RequestBody BodyworkRule bodywork)
 	{	
 		return bodyworkService.saveBodywork(bodywork);
 	}
@@ -139,7 +138,7 @@ public class RoadwayManager_Controller {
 	@DeleteMapping("/bodywork")
 	public ResponseEntity<?> deleteBodywork(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody BodyworkBRE bodywork)
+			@Validated  @RequestBody BodyworkRule bodywork)
 	{	
 		return bodyworkService.deleteBodywork(id, bodywork);
 	}
@@ -148,7 +147,7 @@ public class RoadwayManager_Controller {
 	@PutMapping("/bodywork")
 	public ResponseEntity<?> putBodywork(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody BodyworkBRE bodywork)
+			@Validated  @RequestBody BodyworkRule bodywork)
 	{	
 		return bodyworkService.updateBodywork(id,bodywork);
 	}

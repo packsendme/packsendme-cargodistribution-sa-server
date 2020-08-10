@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
 import com.packsendme.microservice.manager.roadway.repository.IVehicleManager_Repository;
-import com.packsendme.microservice.manager.roadway.repository.VehicleModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class VehicleDAO implements IRoadwayDAO<VehicleModel> {
+public class VehicleDAO implements IRoadwayDAO<VehicleRuleModel> {
 
 	@Autowired
 	IVehicleManager_Repository roadwayManager_Rep; 
 		
 	@Override
-	public VehicleModel save(VehicleModel entity) {
+	public VehicleRuleModel save(VehicleRuleModel entity) {
 		try {
 			return entity = roadwayManager_Rep.insert(entity);
 		}
@@ -31,7 +31,7 @@ public class VehicleDAO implements IRoadwayDAO<VehicleModel> {
 	}
 
 	@Override
-	public Optional<VehicleModel> findOneById(String id) {
+	public Optional<VehicleRuleModel> findOneById(String id) {
 		try {
 			return roadwayManager_Rep.findById(id);
 		}
@@ -42,9 +42,9 @@ public class VehicleDAO implements IRoadwayDAO<VehicleModel> {
 	}
 
 	@Override
-	public List<VehicleModel> findAll() {
+	public List<VehicleRuleModel> findAll() {
 		try {
-			List<VehicleModel> entityL = new ArrayList<VehicleModel>(); 
+			List<VehicleRuleModel> entityL = new ArrayList<VehicleRuleModel>(); 
 			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
@@ -55,7 +55,7 @@ public class VehicleDAO implements IRoadwayDAO<VehicleModel> {
 	}
 
 	@Override
-	public Boolean remove(VehicleModel entity) {
+	public Boolean remove(VehicleRuleModel entity) {
 		try {
 			roadwayManager_Rep.delete(entity);
 			return true;
@@ -67,9 +67,9 @@ public class VehicleDAO implements IRoadwayDAO<VehicleModel> {
 	}
 
 	@Override
-	public VehicleModel update(VehicleModel entity) {
+	public VehicleRuleModel update(VehicleRuleModel entity) {
 		try {
-			VehicleModel entityModel =  roadwayManager_Rep.save(entity);
+			VehicleRuleModel entityModel =  roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {
