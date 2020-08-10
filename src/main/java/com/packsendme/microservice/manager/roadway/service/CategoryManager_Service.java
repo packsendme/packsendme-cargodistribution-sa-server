@@ -168,9 +168,14 @@ public class CategoryManager_Service {
 									Map<String, CategoryCostsModel> categoryCountryCosts_Map = category_old.categoryCosts.get(country_key);
 									for(Map.Entry<String,CategoryCostsModel> entryVehicle : categoryCountryCosts_Map.entrySet()) {
 										String vehicle_key =  entryVehicle.getKey();
+										System.out.println("================================================");
+										System.out.println("categoryCosts UPDATE-Y vehicle_key   "+ vehicle_key);
+										System.out.println("categoryCosts UPDATE-Y vehicleS_Old   "+ vehicleS_Old);
+
 										if(vehicle_key.equals(vehicleS_Old)) {
 											CategoryCostsModel costsObj = entryVehicle.getValue();
 											categoryVehicleCostsModel_Map.put(vehicleModelNew.vehicle, costsObj);
+											System.out.println("categoryCosts KEY CHANGE   "+ vehicleModelNew.vehicle);
 										}
 									}
 									categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
@@ -188,9 +193,14 @@ public class CategoryManager_Service {
 									Map<String, CategoryCostsModel> categoryCountryCosts_Map = category_old.categoryCosts.get(country_key);
 									for(Map.Entry<String,CategoryCostsModel> entryVehicle : categoryCountryCosts_Map.entrySet()) {
 										String vehicle_key =  entryVehicle.getKey();
+										System.out.println("categoryCosts UPDATE-N vehicle_key   "+ vehicle_key);
+										System.out.println("categoryCosts UPDATE-N vehicleS_Old   "+ vehicleS_Old);
+
 										if(!vehicle_key.equals(vehicleS_Old)) {
 											CategoryCostsModel costsObj = entryVehicle.getValue();
 											categoryVehicleCostsModel_Map.put(vehicle_key, costsObj);
+											System.out.println("categoryCosts NO CHANGE   "+ vehicle_key);
+
 										}
 									}
 									categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
@@ -209,6 +219,8 @@ public class CategoryManager_Service {
 					categoryNew.categoryCosts = null;
 					categoryNew.categoryCosts = categoryCountryCostsModel_Map;
 					categoryManagerDAO.save(categoryNew);
+					System.out.println("================================================");
+
 					roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryNew);
 					catVehicleNewL = new ArrayList<VehicleRuleModel>();
 				}
