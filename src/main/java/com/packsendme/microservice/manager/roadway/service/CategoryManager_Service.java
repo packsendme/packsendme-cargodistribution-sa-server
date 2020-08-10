@@ -185,7 +185,6 @@ public class CategoryManager_Service {
 						}
 						else {
 							catVehicleNewL.add(catVehicleDB);
-							
 							// Category-Costs
 							if(category_old.categoryCosts.size() >= 1) {
 								for(Entry<String, Map<String, CategoryCostsModel>> entryCountry : category_old.categoryCosts.entrySet()) {
@@ -199,8 +198,9 @@ public class CategoryManager_Service {
 										if(!vehicle_key.equals(vehicleS_Old)) {
 											CategoryCostsModel costsObj = entryVehicle.getValue();
 											categoryVehicleCostsModel_Map.put(vehicle_key, costsObj);
+											CategoryCostsModel costsNewVehicleObj = new CategoryCostsModel(0.0, 0.0, 0.0, 0.0, 0.0, "0.0");
+											categoryVehicleCostsModel_Map.put(vehicleModelNew.vehicle, costsNewVehicleObj);
 											System.out.println("categoryCosts NO CHANGE   "+ vehicle_key);
-
 										}
 									}
 									categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
