@@ -1,6 +1,10 @@
 package com.packsendme.microservice.manager.roadway.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +15,14 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
+import com.packsendme.microservice.manager.roadway.component.ParseModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.RoadwayDAO;
 import com.packsendme.microservice.manager.roadway.dto.RoadwayBREListDTO_Response;
-import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 
 @Service
@@ -26,7 +32,7 @@ public class RoadwayManager_Service {
 	@Autowired
 	private RoadwayDAO roadwayBRE_DAO;
 	@Autowired
-	private ParseDtoToModel parserObj;
+	private ParseModel parserObj;
 
 	public ResponseEntity<?> findRoadwayAll() {
 		Response<RoadwayBREListDTO_Response> responseObj = null;
@@ -45,7 +51,7 @@ public class RoadwayManager_Service {
 	public ResponseEntity<?> saveRoadway(RoadwayBRE roadwayBRE) {
 		Response<RoadwayModel> responseObj = null;
 		try {
-			RoadwayModel  entity = parserObj.roadwayBRE_TO_Model(roadwayBRE,null,RoadwayManagerConstants.ADD_OP_ROADWAY);
+			RoadwayModel  entity = parserObj.parserRoadway_TO_Model(roadwayBRE,null,RoadwayManagerConstants.ADD_OP_ROADWAY);
 			roadwayBRE_DAO.save(entity);
 			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.CREATE_ROADWAYBRE.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
@@ -90,7 +96,7 @@ public class RoadwayManager_Service {
 			Optional<RoadwayModel> roadwayBREData = roadwayBRE_DAO.findOneById(id);
 			if(roadwayBREData.isPresent()) {
 				RoadwayModel roadwayBRE_Entity = roadwayBREData.get(); 
-				roadwayBRE_Entity = parserObj.roadwayBRE_TO_Model(businessRuleBRE,roadwayBRE_Entity,RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				roadwayBRE_Entity = parserObj.parserRoadway_TO_Model(businessRuleBRE,roadwayBRE_Entity,RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				roadwayBRE_DAO.update(roadwayBRE_Entity);
 				responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), roadwayBRE_Entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
@@ -107,61 +113,38 @@ public class RoadwayManager_Service {
 		}
 	}
 	
+	public ResponseEntity<?> crudTrigger(String operationType, String categoryName_Old, CategoryRuleModel categoryModelNew) {
+		RoadwayModel roadwayObj_Model = new RoadwayModel();
+		Response<CategoryRuleModel> responseObj = null;
 	
-	public ResponseEntity<?> crudTrigger(String operationType, String categoryName_Old, CategoryModel categoryModelNew) {
-		CategoryModel categoryNew = new CategoryModel();
-		Response<RoadwayModel> responseObj = null;
-		boolean statusCrud = false;
-		
 		// Find Category relationship with Vehicle will be removed
 		try {
-			System.out.println(" ");
-			System.out.println(" -------------------------------------------- ");
-			System.out.println("(1) crudTrigger - RoadwayModel ");
-
 			List<RoadwayModel> roadwayL = roadwayBRE_DAO.findAll();
-			for(RoadwayModel roadwayObj : roadwayL) {
-				System.out.println("(2) crudTrigger - RoadwayModel "+ roadwayObj.rule_name);
-
+			for(RoadwayModel roadway_entity : roadwayL) {
+				
 				if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
-					if(!roadwayObj.categoryInstance.name_category.equals(categoryModelNew.name_category)) {
-						categoryNew = roadwayObj.categoryInstance;
-					}
-					else {
-						statusCrud = true;
+					if(roadway_entity.categoryRule.name_category.equals(categoryModelNew.name_category)) {
+						roadwayObj_Model = roadway_entity;
+						roadwayBRE_DAO.remove(roadwayObj_Model);
+						roadwayObj_Model = new RoadwayModel();
 					}
 				} 
 				else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-					System.out.println("(3-1) crudTrigger - RoadwayModel "+ roadwayObj.categoryInstance.name_category);
-					System.out.println("(3-2) crudTrigger - RoadwayModel "+ categoryName_Old);
-
-					if(roadwayObj.categoryInstance.name_category.equals(categoryName_Old)) {
-						System.out.println("(4-1) crudTrigger - RoadwayModel - categoryModelNew "+ categoryModelNew.name_category);
-						categoryNew = categoryModelNew;
-						statusCrud = true;
+					if(roadway_entity.categoryRule.name_category.equals(categoryName_Old)) {
+						roadwayObj_Model = roadway_entity;
+						roadwayObj_Model.categoryRule = null;
+						roadwayObj_Model.categoryRule = categoryModelNew;
+						roadwayBRE_DAO.update(roadwayObj_Model);
+						roadwayObj_Model = new RoadwayModel();
 					}
-					else {
-						System.out.println("(4-2) crudTrigger - RoadwayModel "+ roadwayObj.categoryInstance.name_category);
-						categoryNew = roadwayObj.categoryInstance;
-					}
-				}
-			
-				if (statusCrud == true) {
-					System.out.println("(5) crudTrigger - RoadwayModel "+ categoryNew.name_category);
-					RoadwayModel roadwayNew = roadwayObj;
-					roadwayBRE_DAO.remove(roadwayObj);
-					roadwayNew.categoryInstance = null;
-					roadwayNew.categoryInstance = categoryNew;
-					roadwayBRE_DAO.save(roadwayNew);
 				}
 			}
-			System.out.println(" -------------------------------------------- ");
-			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
+			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
+			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}

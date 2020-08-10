@@ -28,23 +28,19 @@ public class RoadwayModel implements Serializable {
 	public String date_change;
 	public String status;
 	
-	public CategoryModel categoryInstance = new CategoryModel();
-	public Map<String,Map<String, CostsModel>> costsInstance = new HashMap<String, Map<String, CostsModel>>();
+	public CategoryRuleModel categoryRule = new CategoryRuleModel();
 	
-	
-	public RoadwayModel(String rule_name, String category_name, String date_creation, String date_change,
-			String status, CategoryModel categoryInstance,
-			Map<String, Map<String, CostsModel>> costsInstance) {
+	public RoadwayModel(String id, String rule_name, String category_name, String date_creation, String date_change,
+			String status, CategoryRuleModel categoryRule) {
 		super();
+		this.id = id;
 		this.rule_name = rule_name;
 		this.category_name = category_name;
 		this.date_creation = date_creation;
 		this.date_change = date_change;
 		this.status = status;
-		this.categoryInstance = categoryInstance;
-		this.costsInstance = costsInstance;
+		this.categoryRule = categoryRule;
 	}
-
 
 	public RoadwayModel() {
 		super();

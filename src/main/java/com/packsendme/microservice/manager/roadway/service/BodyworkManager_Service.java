@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseDtoToModel;
+import com.packsendme.microservice.manager.roadway.component.ParseModel;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.BodyworkDAO;
 import com.packsendme.microservice.manager.roadway.dto.BodyworkListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
-import com.packsendme.roadway.bre.model.vehicle.BodyworkBRE;
+import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -24,7 +24,7 @@ public class BodyworkManager_Service {
 	@Autowired
 	private BodyworkDAO bodyworkDAO;
 	@Autowired
-	private ParseDtoToModel parserObj;
+	private ParseModel parserObj;
 	@Autowired
 	private VehicleManager_Service vehicleService;
 
@@ -42,10 +42,10 @@ public class BodyworkManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> saveBodywork(BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> saveBodywork(BodyworkRule bodywork) {
 		Response<BodyWorkModel> responseObj = null;
 		try {
-			BodyWorkModel entity = parserObj.bodyworkDto_TO_Model(bodyworkBRE, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
+			BodyWorkModel entity = parserObj.parserBodywork_TO_Model(bodywork, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			bodyworkDAO.save(entity);
 			responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.CREATED_BODYWORK.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
@@ -57,7 +57,7 @@ public class BodyworkManager_Service {
 		}
 	}
 
-	public ResponseEntity<?> deleteBodywork(String id, BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> deleteBodywork(String id, BodyworkRule bodyworkBRE) {
 		Response<BodyWorkModel> responseObj = null;
 		try {
 			Optional<BodyWorkModel> bodyWorkData = bodyworkDAO.findOneById(id);
@@ -85,18 +85,17 @@ public class BodyworkManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateBodywork(String id, BodyworkBRE bodyworkBRE) {
+	public ResponseEntity<?> updateBodywork(String id, BodyworkRule bodyworkRule) {
 		Response<BodyWorkModel> responseObj = null;
 		try {
 			Optional<BodyWorkModel> bodyWorkData = bodyworkDAO.findOneById(id);
 			if(bodyWorkData.isPresent()) {
 				BodyWorkModel bodyWorkEntity = bodyWorkData.get();
 				String bodyworkS_change = bodyWorkEntity.bodyWork;
-				BodyWorkModel bodyWorkEntityUp = parserObj.bodyworkDto_TO_Model(bodyworkBRE, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				bodyworkDAO.update(bodyWorkEntityUp);
-
-				crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, bodyworkS_change, bodyworkBRE);
-
+				BodyWorkModel bodyWorkEntityUp = parserObj.parserBodywork_TO_Model(bodyworkRule, bodyWorkEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				if (bodyworkDAO.update(bodyWorkEntityUp) != null) {
+					crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, bodyworkS_change, bodyworkRule);
+				}
 				responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWorkEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
@@ -113,16 +112,21 @@ public class BodyworkManager_Service {
 	}
 	
 
-	public ResponseEntity<?> crudTrigger(String operationType, String bodyworkModal, BodyworkBRE bodyworkBRE) {
-		Response<BodyworkBRE> responseObj = null;
+	public ResponseEntity<?> crudTrigger(String operationType, String bodyworkModal, BodyworkRule bodyworkRule) {
+		Response<BodyWorkModel> responseObj = null;
 		try {
-			vehicleService.crudTrigger(operationType, bodyworkModal, bodyworkBRE);
-			responseObj = new Response<BodyworkBRE>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyworkBRE);
+			vehicleService.crudTrigger(operationType, bodyworkModal, bodyworkRule);
+			if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
+				responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.DELETE_BODYWORK.getAction(), null);
+			}
+			else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
+				responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), null);
+			}
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<BodyworkBRE>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), null);
+			responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
