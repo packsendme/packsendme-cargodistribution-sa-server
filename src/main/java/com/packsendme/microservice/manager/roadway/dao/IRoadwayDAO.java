@@ -15,4 +15,6 @@ public interface IRoadwayDAO<T> {
 	
 	public T update(T entity);
 	
+	public T findOneByName(String name);
+	
 }

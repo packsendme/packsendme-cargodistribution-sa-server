@@ -78,6 +78,17 @@ public class VehicleDAO implements IRoadwayDAO<VehicleRuleModel> {
 		}
 	}
 
+	@Override
+	public VehicleRuleModel findOneByName(String name) {
+		try {
+			return roadwayManager_Rep.findVehicleByName(name);
+		}
+		catch (MongoClientException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
  
 	
 }

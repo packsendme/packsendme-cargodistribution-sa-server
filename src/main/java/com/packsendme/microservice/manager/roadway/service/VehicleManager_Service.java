@@ -50,9 +50,14 @@ public class VehicleManager_Service {
 		Response<VehicleRuleModel> responseObj = null;
 		try {
 			VehicleRuleModel entity = parserObj.parserVehicle_TO_Model(vehicle, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
-			vehicleDAO.save(entity);
-			responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.SIMULATION_ROADWAY.getAction(), entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.CREATED_VEHICLE.getAction(), entity);
+			if(vehicleDAO.findOneByName(entity.vehicle) != null) {
+				vehicleDAO.save(entity);
+				return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -81,6 +86,34 @@ public class VehicleManager_Service {
 		}
 	}
 	
+	public ResponseEntity<?> updateVehicleCheck(String id, VehicleRule vehicle) {
+		Response<String> responseObj = null;
+		try {
+			VehicleRuleModel vehicleModelFindName = vehicleDAO.findOneByName(vehicle.vehicle);
+			if(vehicleModelFindName != null) {
+				if (vehicleModelFindName.id.equals(id)) {
+					ResponseEntity<?> responseUpdate = updateVehicle(id,vehicle);
+					return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
+				}
+				else {
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicle.vehicle);
+					return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+				}
+			}
+			else {
+				ResponseEntity<?> responseUpdate = updateVehicle(id,vehicle);
+				return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+				
+
+
 	public ResponseEntity<?> updateVehicle(String id, VehicleRule vehicle) {
 		Response<VehicleRuleModel> responseObj = null;
 		try {
@@ -88,11 +121,12 @@ public class VehicleManager_Service {
 			if(vehicleData.isPresent()) {
 				VehicleRuleModel vehicleEntity = vehicleData.get();
 				String vehicleS_old = vehicleEntity.vehicle;
-
 				VehicleRuleModel vehicleEntityChange = parserObj.parserVehicle_TO_Model(vehicle, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				
 				if(vehicleDAO.update(vehicleEntityChange) != null) {
 					categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleS_old, vehicleEntityChange);
 				}
+					
 				responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}

@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.repository;
 
 import java.io.Serializable;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -16,6 +17,9 @@ public class LocationModel implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	public String id;
 	public String countryName;
 	public String cityName;
 	public String stateName;

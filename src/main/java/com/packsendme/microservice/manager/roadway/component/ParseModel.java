@@ -9,15 +9,15 @@ import java.util.Map.Entry;
 import org.springframework.stereotype.Component;
 
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
-import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
-import com.packsendme.roadway.bre.model.location.Location;
+import com.packsendme.roadway.bre.model.location.LocationRule;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 
@@ -103,7 +103,7 @@ public class ParseModel {
 		}
 		// Category-Location
 		if(category.locations.size() >= 1) {
-			for(Location l : category.locations) {
+			for(LocationRule l : category.locations) {
 				LocationModel locationModel = new LocationModel(l.countryName, l.cityName, l.stateName, l.codCountry);
 				locationL.add(locationModel);
 				locationModel = null;
@@ -113,6 +113,18 @@ public class ParseModel {
 		return categoryModel;
 	}
 	
+	/* ==============================================
+	 *  L O C A T I O N  - P A R S E R  
+	 * ==============================================
+	 */
+	public LocationModel parserLocation_TO_Model(LocationRule location, LocationModel entity, String operationType) {
+		
+		if(operationType.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			entity = new LocationModel();
+		}
+		LocationModel locationModel = new LocationModel(location.countryName, location.cityName, location.stateName, location.codCountry);
+		return locationModel;
+	}
 	
 	/* ==============================================
 	 *  B O D Y  W O R K   - P A R S E R  
