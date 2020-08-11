@@ -11,20 +11,21 @@ import org.springframework.stereotype.Component;
 import com.mongodb.MongoClientException;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.IBodyworkManager_Repository;
-import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
+import com.packsendme.microservice.manager.roadway.repository.ILocationManager_Repository;
+import com.packsendme.microservice.manager.roadway.repository.LocationModel;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
+public class LocationDAO implements IRoadwayDAO<LocationModel> {
 
 	@Autowired
-	IBodyworkManager_Repository roadwayManager_Rep; 
+	ILocationManager_Repository locationManager_Rep; 
 	
 	
 	@Override
-	public BodyWorkModel save(BodyWorkModel entity) {
+	public LocationModel save(LocationModel entity) {
 		try {
-			return entity = roadwayManager_Rep.insert(entity);
+			return entity = locationManager_Rep.insert(entity);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
@@ -33,9 +34,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 	}
 
 	@Override
-	public Optional<BodyWorkModel> findOneById(String id) {
+	public Optional<LocationModel> findOneById(String id) {
 		try {
-			return roadwayManager_Rep.findById(id);
+			return locationManager_Rep.findById(id);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
@@ -44,10 +45,10 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 	}
 
 	@Override
-	public List<BodyWorkModel> findAll() {
+	public List<LocationModel> findAll() {
 		try {
-			List<BodyWorkModel> entityL = new ArrayList<BodyWorkModel>(); 
-			entityL = roadwayManager_Rep.findAll();
+			List<LocationModel> entityL = new ArrayList<LocationModel>(); 
+			entityL = locationManager_Rep.findAll();
 			return entityL;
 		}
 		catch (MongoClientException e) {
@@ -57,9 +58,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 	}
 
 	@Override
-	public Boolean remove(BodyWorkModel entity) {
+	public Boolean remove(LocationModel entity) {
 		try {
-			roadwayManager_Rep.delete(entity);
+			locationManager_Rep.delete(entity);
 			return true; 
 		}
 		catch (Exception e) {
@@ -69,9 +70,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 	}
 
 	@Override
-	public BodyWorkModel update(BodyWorkModel entity) {
+	public LocationModel update(LocationModel entity) {
 		try {
-			BodyWorkModel entityModel = roadwayManager_Rep.save(entity);
+			LocationModel entityModel = locationManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {
@@ -81,9 +82,9 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 	}
 	
 	@Override
-	public BodyWorkModel findOneByName(String name) {
+	public LocationModel findOneByName(String country) {
 		try {
-			return roadwayManager_Rep.findBodyworkByName(name);
+			return locationManager_Rep.findLocationByCountry(country);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();

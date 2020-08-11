@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.service.BodyworkManager_Service;
 import com.packsendme.microservice.manager.roadway.service.CategoryManager_Service;
+import com.packsendme.microservice.manager.roadway.service.LocationManager_Service;
 import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
+import com.packsendme.roadway.bre.model.location.LocationRule;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 
@@ -38,6 +40,10 @@ public class RoadwayManager_Controller {
 	
 	@Autowired
 	private RoadwayManager_Service roadwayService;	
+
+	@Autowired
+	private LocationManager_Service locationService;	
+	
 	
 	/***************************************
 	 VEHICLE :: GET | POST | DELETE 
@@ -72,7 +78,7 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
 			@Validated  @RequestBody VehicleRule vehicle)
 	{	
-		return vehiclesService.updateVehicle(id, vehicle);
+		return vehiclesService.updateVehicleCheck(id, vehicle);
 	}
 
 	
@@ -149,7 +155,7 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
 			@Validated  @RequestBody BodyworkRule bodywork)
 	{	
-		return bodyworkService.updateBodywork(id,bodywork);
+		return bodyworkService.updateBodyworkCheck(id,bodywork);
 	}
 
 	
@@ -190,5 +196,45 @@ public class RoadwayManager_Controller {
 	{	
 		return roadwayService.updateRoadway(id, roadwayBRE);
 	}
+	
+	/***************************************
+	 LOCATION <--> GET | POST | DELETE 
+	***************************************/
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/location")
+	public ResponseEntity<?> getLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
+		return locationService.findLocationAll();
+	}
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/location")
+	public ResponseEntity<?> postLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, 
+			@Validated  @RequestBody LocationRule location)
+	{	
+		return locationService.saveLocation(location);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@DeleteMapping("/location")
+	public ResponseEntity<?> deleteLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
+			@Validated  @RequestBody LocationRule location)
+	{	
+		return locationService.deleteLocation(id, location);
+	}
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PutMapping("/location")
+	public ResponseEntity<?> updateLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
+			@Validated  @RequestBody LocationRule location)
+	{	
+		return locationService.updateLocationCheck(id, location);
+	}
+
+	
 
 }

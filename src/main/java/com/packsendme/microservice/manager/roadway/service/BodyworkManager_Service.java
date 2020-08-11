@@ -15,7 +15,9 @@ import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConst
 import com.packsendme.microservice.manager.roadway.dao.BodyworkDAO;
 import com.packsendme.microservice.manager.roadway.dto.BodyworkListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
+import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -46,9 +48,14 @@ public class BodyworkManager_Service {
 		Response<BodyWorkModel> responseObj = null;
 		try {
 			BodyWorkModel entity = parserObj.parserBodywork_TO_Model(bodywork, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
-			bodyworkDAO.save(entity);
 			responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.CREATED_BODYWORK.getAction(), entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			if(bodyworkDAO.findOneByName(entity.bodyWork) != null) {
+				bodyworkDAO.save(entity);
+				return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -81,6 +88,32 @@ public class BodyworkManager_Service {
 		catch (Exception e) {
 			e.printStackTrace();
 			responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	public ResponseEntity<?> updateBodyworkCheck(String id, BodyworkRule bodyWork) {
+		Response<String> responseObj = null;
+		try {
+			BodyWorkModel bodyworkModelFindName = bodyworkDAO.findOneByName(bodyWork.bodyWork);
+			if(bodyworkModelFindName != null) {
+				if (bodyworkModelFindName.id.equals(id)) {
+					ResponseEntity<?> responseUpdate = updateBodywork(id,bodyWork);
+					return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
+				}
+				else {
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), bodyWork.bodyWork);
+					return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+				}
+			}
+			else {
+				ResponseEntity<?> responseUpdate = updateBodywork(id,bodyWork);
+				return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
