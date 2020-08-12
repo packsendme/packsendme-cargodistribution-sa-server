@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.mongodb.MongoClientException;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.IBodyworkManager_Repository;
-import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
@@ -83,12 +82,25 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 	@Override
 	public BodyWorkModel findOneByName(String name) {
 		try {
-			return roadwayManager_Rep.findBodyworkByName(name);
+			return roadwayManager_Rep.findBodyWorkByName(name);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
+	@Override
+	public BodyWorkModel findOneByIdAndName(String id, String name) {
+		try {
+			return roadwayManager_Rep.findBodyWorkByIdAndName(id, name);
+		}
+		catch (MongoClientException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
  
 }

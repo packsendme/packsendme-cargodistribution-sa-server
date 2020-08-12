@@ -87,45 +87,34 @@ public class LocationManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateLocationCheck(String id, LocationRule location) {
+	public ResponseEntity<?> updateLocation(String id, LocationRule locationRule) {
 		Response<String> responseObj = null;
 		try {
-			LocationModel locationModelFindName = locationDAO.findOneByName(location.countryName);
+			// Check if exist same bodywork in Database
+			LocationModel locationModelFindName = locationDAO.findOneByIdAndName(id, locationRule.countryName);
+
 			if(locationModelFindName == null) {
-					ResponseEntity<?> responseUpdate = updateLocation(id,location);
-					return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
+				Optional<LocationModel> locationData = locationDAO.findOneById(id);
+				if(locationData.isPresent()) {
+					LocationModel locationEntity = locationData.get();
+					LocationModel locationEntityUp = parserObj.parserLocation_TO_Model(locationRule, locationEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+					locationDAO.update(locationEntityUp);
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), locationEntity.countryName);
+					return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+				}
+				else {
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), null);
+					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				}
 			}
 			else {
-				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), location.cityName);
+				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), locationRule.countryName);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
-			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	public ResponseEntity<?> updateLocation(String id, LocationRule locationRule) {
-		Response<LocationModel> responseObj = null;
-		try {
-			Optional<LocationModel> locationData = locationDAO.findOneById(id);
-			if(locationData.isPresent()) {
-				LocationModel locationEntity = locationData.get();
-				LocationModel locationEntityUp = parserObj.parserLocation_TO_Model(locationRule, locationEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				locationDAO.update(locationEntityUp);
-				responseObj = new Response<LocationModel>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), locationEntity);
-				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
-			}
-			else {
-				responseObj = new Response<LocationModel>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), null);
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			responseObj = new Response<LocationModel>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), null);
+			responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}

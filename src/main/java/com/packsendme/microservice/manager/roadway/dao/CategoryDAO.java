@@ -85,5 +85,11 @@ public class CategoryDAO implements IRoadwayDAO<CategoryRuleModel> {
 		return null;
 	}
 
+	@Override
+	public CategoryRuleModel findOneByIdAndName(String id, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

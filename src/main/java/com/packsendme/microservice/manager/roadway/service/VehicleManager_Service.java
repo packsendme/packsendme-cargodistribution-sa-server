@@ -115,29 +115,38 @@ public class VehicleManager_Service {
 
 
 	public ResponseEntity<?> updateVehicle(String id, VehicleRule vehicle) {
-		Response<VehicleRuleModel> responseObj = null;
+		Response<String> responseObj = null;
 		try {
-			Optional<VehicleRuleModel> vehicleData = vehicleDAO.findOneById(id);
-			if(vehicleData.isPresent()) {
-				VehicleRuleModel vehicleEntity = vehicleData.get();
-				String vehicleS_old = vehicleEntity.vehicle;
-				VehicleRuleModel vehicleEntityChange = parserObj.parserVehicle_TO_Model(vehicle, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				
-				if(vehicleDAO.update(vehicleEntityChange) != null) {
-					categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleS_old, vehicleEntityChange);
-				}
+			// Check if exist same vehicle in Database
+			VehicleRuleModel vehicleModelFindName = vehicleDAO.findOneByIdAndName(id, vehicle.vehicle);
+			
+			if(vehicleModelFindName == null) {
+				Optional<VehicleRuleModel> vehicleData = vehicleDAO.findOneById(id);
+				if(vehicleData.isPresent()) {
+					VehicleRuleModel vehicleEntity = vehicleData.get();
+					String vehicleS_old = vehicleEntity.vehicle;
+					VehicleRuleModel vehicleEntityChange = parserObj.parserVehicle_TO_Model(vehicle, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 					
-				responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity);
-				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+					if(vehicleDAO.update(vehicleEntityChange) != null) {
+						categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleS_old, vehicleEntityChange);
+					}
+						
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity.vehicle);
+					return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+				}
+				else {
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
+					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				}
 			}
 			else {
-				responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicle.vehicle);
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
+			responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}

@@ -82,14 +82,23 @@ public class LocationDAO implements IRoadwayDAO<LocationModel> {
 	}
 	
 	@Override
-	public LocationModel findOneByName(String country) {
+	public LocationModel findOneByIdAndName(String id, String name) {
 		try {
-			return locationManager_Rep.findLocationByCountry(country);
+			return locationManager_Rep.findLocationByIdAndCountry(id, name);
 		}
 		catch (MongoClientException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
- 
+	@Override
+	public LocationModel findOneByName(String name) {
+		try {
+			return locationManager_Rep.findLocationByCountry(name);
+		}
+		catch (MongoClientException e) {
+			e.printStackTrace();
+			return null;
+		}
+	} 
 }
