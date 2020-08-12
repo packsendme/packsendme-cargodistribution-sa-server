@@ -45,7 +45,7 @@ public class LocationManager_Service {
 		try {
 			LocationModel entity = parserObj.parserLocation_TO_Model(location, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			responseObj = new Response<LocationModel>(0,HttpExceptionPackSend.CREATED_LOCATION.getAction(), entity);
-			if(locationDAO.findOneByName(entity.countryName) != null) {
+			if(locationDAO.findOneByName(entity.countryName) == null) {
 				locationDAO.save(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}

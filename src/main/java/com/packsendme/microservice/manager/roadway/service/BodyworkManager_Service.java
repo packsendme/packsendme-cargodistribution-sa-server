@@ -49,7 +49,7 @@ public class BodyworkManager_Service {
 		try {
 			BodyWorkModel entity = parserObj.parserBodywork_TO_Model(bodywork, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			responseObj = new Response<BodyWorkModel>(0,HttpExceptionPackSend.CREATED_BODYWORK.getAction(), entity);
-			if(bodyworkDAO.findOneByName(entity.bodyWork) != null) {
+			if(bodyworkDAO.findOneByName(entity.bodyWork) == null) {
 				bodyworkDAO.save(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}

@@ -51,7 +51,7 @@ public class VehicleManager_Service {
 		try {
 			VehicleRuleModel entity = parserObj.parserVehicle_TO_Model(vehicle, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.CREATED_VEHICLE.getAction(), entity);
-			if(vehicleDAO.findOneByName(entity.vehicle) != null) {
+			if(vehicleDAO.findOneByName(entity.vehicle) == null) {
 				vehicleDAO.save(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
