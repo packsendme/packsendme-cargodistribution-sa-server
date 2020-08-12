@@ -122,8 +122,11 @@ public class ParseModel {
 		if(operationType.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new LocationModel();
 		}
-		LocationModel locationModel = new LocationModel(location.countryName, location.cityName, location.stateName, location.codCountry);
-		return locationModel;
+		entity.countryName = location.countryName;
+		entity.cityName = location.cityName;
+		entity.stateName = location.stateName;
+		entity.codCountry = location.codCountry;
+		return entity;
 	}
 	
 	/* ==============================================
