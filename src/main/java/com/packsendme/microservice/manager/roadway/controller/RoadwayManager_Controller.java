@@ -155,7 +155,7 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
 			@Validated  @RequestBody BodyworkRule bodywork)
 	{	
-		return bodyworkService.updateBodyworkCheck(id,bodywork);
+		return bodyworkService.updateBodywork(id,bodywork);
 	}
 
 	
@@ -232,7 +232,7 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
 			@Validated  @RequestBody LocationRule location)
 	{	
-		return locationService.updateLocationCheck(id, location);
+		return locationService.updateLocation(id, location);
 	}
 
 	

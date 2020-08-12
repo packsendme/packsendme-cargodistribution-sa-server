@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ILocationManager_Repository extends MongoRepository<LocationModel, String>{
 
-	@Query("{'countryName' : ?0, id :  { $ne : ?1}}")
-	LocationModel findLocationByCountry(String country, String id);
+	@Query("{id : { $ne : ?0}, countryName : ?1}")
+	LocationModel findLocationByIdAndCountry(String id, String country);
+
+	@Query("{'countryName' : ?0}")
+	LocationModel findLocationByCountry(String country);
+
 }

@@ -84,4 +84,10 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayModel> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public RoadwayModel findOneByIdAndName(String id, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IVehicleManager_Repository extends MongoRepository<VehicleRuleModel, String>{
 
-	@Query("{'vehicle' :  {$eq: ?0}}")
-	VehicleRuleModel findVehicleByName(String vehicle);
+	@Query("{id : { $ne : ?0}, vehicle : ?1}")
+	VehicleRuleModel findVehicleByIdAndName(String id, String name);
+
+	@Query("{'vehicle' : ?0}")
+	VehicleRuleModel findVehicleByName(String name);
 }
