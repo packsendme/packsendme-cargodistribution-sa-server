@@ -91,19 +91,13 @@ public class LocationManager_Service {
 		Response<String> responseObj = null;
 		try {
 			LocationModel locationModelFindName = locationDAO.findOneByName(location.countryName);
-			if(locationModelFindName != null) {
-				if (locationModelFindName.id.equals(id)) {
+			if(locationModelFindName == null) {
 					ResponseEntity<?> responseUpdate = updateLocation(id,location);
 					return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
-				}
-				else {
-					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), location.cityName);
-					return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
-				}
 			}
 			else {
-				ResponseEntity<?> responseUpdate = updateLocation(id,location);
-				return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
+				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_BODYWORK.getAction(), location.cityName);
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 		}
 		catch (Exception e) {
