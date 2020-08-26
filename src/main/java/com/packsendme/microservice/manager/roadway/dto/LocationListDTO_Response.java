@@ -18,12 +18,12 @@ public class LocationListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<LocationModel> locationL = new ArrayList<LocationModel>();
+	public List<LocationModel> locations = new ArrayList<LocationModel>();
 
 	
-	public LocationListDTO_Response(List<LocationModel> locationL) {
+	public LocationListDTO_Response(List<LocationModel> locations) {
 		super();
-		this.locationL = locationL;
+		this.locations = locations;
 	}
 
 	public LocationListDTO_Response() {
@@ -33,3 +33,9 @@ public class LocationListDTO_Response implements Serializable{
 	
 	
 }
+
+/*
+A pureza interior de uma criança transcende a sua capacidade para ver
+, se almas de luz que 
+  
+*/
