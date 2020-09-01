@@ -60,7 +60,7 @@ public class LocationManager_Service {
 		}
 	}
 
-	public ResponseEntity<?> deleteLocation(String id, LocationRule location) {
+	public ResponseEntity<?> deleteLocation(String id) {
 		Response<LocationModel> responseObj = null;
 		try {
 			Optional<LocationModel> locationData = locationDAO.findOneById(id);

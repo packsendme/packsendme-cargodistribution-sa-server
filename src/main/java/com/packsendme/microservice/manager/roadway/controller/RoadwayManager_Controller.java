@@ -220,10 +220,9 @@ public class RoadwayManager_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@DeleteMapping("/location")
 	public ResponseEntity<?> deleteLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody LocationRule location)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
 	{	
-		return locationService.deleteLocation(id, location);
+		return locationService.deleteLocation(id);
 	}
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
