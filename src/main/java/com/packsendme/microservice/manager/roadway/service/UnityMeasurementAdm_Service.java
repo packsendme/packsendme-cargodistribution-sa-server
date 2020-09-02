@@ -17,6 +17,8 @@ import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
 import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementListDTO_Response;
 import com.packsendme.microservice.manager.roadway.dto.VehicleTypeListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.UnityMeasurementModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
+import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -65,11 +67,11 @@ public class UnityMeasurementAdm_Service {
 	public ResponseEntity<?> deleteUnityMeasurement(String id) {
 		Response<UnityMeasurementModel> responseObj = null;
 		try {
-			Optional<UnityMeasurementModel> vehicleData = unityDAO.findOneById(id);
-			if (vehicleData.isPresent()) {
-				UnityMeasurementModel vehicleEntity = vehicleData.get();
-				if(unityDAO.remove(vehicleEntity) == true) {
-					responseObj = new Response<UnityMeasurementModel>(0,HttpExceptionPackSend.DELETE_UNITY_MEASUREMENT.getAction(), vehicleData.get());
+			Optional<UnityMeasurementModel> unityData = unityDAO.findOneById(id);
+			if (unityData.isPresent()) {
+				UnityMeasurementModel unityEntity = unityData.get();
+				if(unityDAO.remove(unityEntity) == true) {
+					responseObj = new Response<UnityMeasurementModel>(0,HttpExceptionPackSend.DELETE_UNITY_MEASUREMENT.getAction(), unityData.get());
 				}
 			}
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
@@ -81,24 +83,24 @@ public class UnityMeasurementAdm_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateUnityMeasurement(String id, UnityMeasurementDTO unityMeasurement) {
-		Response<String> responseObj = null;
+	public ResponseEntity<?> updateUnityMeasurement(String id, UnityMeasurementDTO unityDTO) {
+		Response<UnityMeasurementModel> responseObj = null;
+		UnityMeasurementModel entity = null;
+		responseObj = new Response<UnityMeasurementModel>(0,HttpExceptionPackSend.UPDATE_UNITY_MEASUREMENT.getAction(), entity);
 		try {
-			UnityMeasurementModel unityMeaModelFindName = unityDAO.findOneByName(unityMeasurement.unitMeasurement);
-			if(unityMeaModelFindName != null) {
-				unityMeaModelFindName = unityDAO.update(unityMeaModelFindName);
-				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
+			Optional<UnityMeasurementModel> unityData = unityDAO.findOneById(id);
+			if(unityData != null) {
+				entity = parserObj.parserUnityMeasurement_TO_Model(unityDTO, unityData.get(), RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				entity = unityDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {
-				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), null);
-			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

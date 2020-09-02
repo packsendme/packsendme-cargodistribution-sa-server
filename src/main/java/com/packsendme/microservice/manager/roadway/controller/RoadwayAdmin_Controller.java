@@ -18,6 +18,7 @@ import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
 import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
 import com.packsendme.microservice.manager.roadway.service.UnityMeasurementAdm_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleTypeAdm_Service;
+import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @RestController
 @RequestMapping("/roadway/admin")
@@ -42,7 +43,7 @@ public class RoadwayAdmin_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/vehicletype")
 	public ResponseEntity<?> postVehicle(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated  @RequestBody VehicleTypeModel vehicleType)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated  @RequestBody VehicleType vehicleType)
 	{	
 		return vehiclesAdmService.saveVehiclesType(vehicleType);
 	}
@@ -59,7 +60,7 @@ public class RoadwayAdmin_Controller {
 	@PutMapping("/vehicletype")
 	public ResponseEntity<?> putVehicle(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody VehicleTypeModel vehicleType)
+			@Validated  @RequestBody VehicleType vehicleType)
 	{	
 		return vehiclesAdmService.updateVehicleType(id, vehicleType);
 	}
