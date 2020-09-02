@@ -63,7 +63,7 @@ public class RoadwayManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> deleteRoadway(String id, RoadwayBRE businessRuleObj) {
+	public ResponseEntity<?> deleteRoadway(String id) {
 		Response<RoadwayModel> responseObj = null;
 		try {
 			Optional<RoadwayModel> roadwayBREData = roadwayBRE_DAO.findOneById(id);

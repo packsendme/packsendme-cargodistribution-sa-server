@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +22,6 @@ import com.packsendme.microservice.manager.roadway.dto.CategoryListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
-import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 
 @Service
@@ -66,7 +65,7 @@ public class CategoryManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> deleteCategory(String id, CategoryRule category) {
+	public ResponseEntity<?> deleteCategory(String id) {
 		Response<CategoryRuleModel> responseObj = null;
 		try {
 			Optional<CategoryRuleModel> categoryData = categoryManagerDAO.findOneById(id);
