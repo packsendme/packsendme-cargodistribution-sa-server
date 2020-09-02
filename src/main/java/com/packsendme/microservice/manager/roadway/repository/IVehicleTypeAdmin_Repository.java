@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IVehicleTypeAdmin_Repository extends MongoRepository<VehicleTypeModel, String>{
 
-	@Query("{'type_vehicle' : ?0}")
+	@Query("{'type_vehicle' :  {$eq: ?0}}")
 	VehicleTypeModel findVehicleTypeByName(String type_vehicle);
 
 }
