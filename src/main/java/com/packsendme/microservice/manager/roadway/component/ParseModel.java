@@ -8,12 +8,15 @@ import java.util.Map.Entry;
 
 import org.springframework.stereotype.Component;
 
+import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
+import com.packsendme.microservice.manager.roadway.repository.UnityMeasurementModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
+import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
@@ -162,5 +165,32 @@ public class ParseModel {
 		roadwayModel.categoryRule = categoryRuleModel;
 		
 		return roadwayModel;
+	}
+	
+	/* ==============================================
+	 *  V E H I C L E - TYPE  - P A R S E R  
+	 * ==============================================
+	 */
+	
+	public VehicleTypeModel parserVehicleType_TO_Model(VehicleTypeModel vehicle, VehicleTypeModel entity, String typeOperation) {
+		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			entity = new VehicleTypeModel();
+		}
+		entity.type_vehicle = vehicle.type_vehicle;
+		return entity;
+	}
+	
+	/* ==============================================
+	 * U N I T Y  - P A R S E R  
+	 * ==============================================
+	 */
+	
+	public UnityMeasurementModel parserUnityMeasurement_TO_Model(UnityMeasurementDTO vehicle, UnityMeasurementModel entity, String typeOperation) {
+		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			entity = new UnityMeasurementModel();
+		}
+		entity.unitMeasurement = vehicle.unitMeasurement;
+		entity.origin_country = vehicle.origin_country;
+		return entity;
 	}
 }

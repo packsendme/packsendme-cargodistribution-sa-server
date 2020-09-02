@@ -66,7 +66,7 @@ public class VehicleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> deleteVehicles(String id, VehicleRule vehicle) {
+	public ResponseEntity<?> deleteVehicles(String id) {
 		Response<VehicleRuleModel> responseObj = null;
 		try {
 			Optional<VehicleRuleModel> vehicleData = vehicleDAO.findOneById(id);

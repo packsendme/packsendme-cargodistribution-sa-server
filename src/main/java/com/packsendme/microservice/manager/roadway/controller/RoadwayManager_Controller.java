@@ -66,10 +66,9 @@ public class RoadwayManager_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@DeleteMapping("/vehicle")
 	public ResponseEntity<?> deleteVehicle(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated @RequestBody VehicleRule vehicle)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
 	{	
-		return vehiclesService.deleteVehicles(id, vehicle);
+		return vehiclesService.deleteVehicles(id);
 	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -105,10 +104,9 @@ public class RoadwayManager_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@DeleteMapping("/category")
 	public ResponseEntity<?> deleteCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody CategoryRule category)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
 	{	
-		return categoryService.deleteCategory(id, category);
+		return categoryService.deleteCategory(id);
 	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -144,9 +142,9 @@ public class RoadwayManager_Controller {
 	@DeleteMapping("/bodywork")
 	public ResponseEntity<?> deleteBodywork(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody BodyworkRule bodywork)
+			@Validated @RequestBody BodyworkRule bodyworkBRE)
 	{	
-		return bodyworkService.deleteBodywork(id, bodywork);
+		return bodyworkService.deleteBodywork(id, bodyworkBRE);
 	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -182,10 +180,9 @@ public class RoadwayManager_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@DeleteMapping("/roadwaybre")
 	public ResponseEntity<?> deleteRoadway(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody RoadwayBRE roadwayBRE)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
 	{	
-		return roadwayService.deleteRoadway(id, roadwayBRE);
+		return roadwayService.deleteRoadway(id);
 	}
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
