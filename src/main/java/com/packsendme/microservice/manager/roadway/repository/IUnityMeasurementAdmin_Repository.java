@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IUnityMeasurementAdmin_Repository extends MongoRepository<UnityMeasurementModel, String>{
 	
-	@Query("{origin_country: ?0}")
+	@Query("{'origin_country' :  {$eq: ?0}}")
 	List<UnityMeasurementModel> findUnityMeasurementByCountry(String origin_country);
 
-	@Query("{'unitMeasurement' : ?0}")
+	@Query("{'unitMeasurement' :  {$eq: ?0}}")
 	UnityMeasurementModel findUnityMeasurementByName(String unitMeasurement);
 
 }
