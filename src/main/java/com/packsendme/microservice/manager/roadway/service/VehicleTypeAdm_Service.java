@@ -15,6 +15,7 @@ import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConst
 import com.packsendme.microservice.manager.roadway.dao.VehicleTypeDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleTypeListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
+import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -40,7 +41,7 @@ public class VehicleTypeAdm_Service {
 		}
 	}
 	
-	public ResponseEntity<?> saveVehiclesType(VehicleTypeModel vehicle) {
+	public ResponseEntity<?> saveVehiclesType(VehicleType vehicle) {
 		Response<VehicleTypeModel> responseObj = null;
 		try {
 			VehicleTypeModel entity = parserObj.parserVehicleType_TO_Model(vehicle, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
@@ -86,13 +87,15 @@ public class VehicleTypeAdm_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateVehicleType(String id, VehicleTypeModel vehicle) {
-		Response<String> responseObj = null;
-		responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_UNITY_MEASUREMENT.getAction(), null);
+	public ResponseEntity<?> updateVehicleType(String id, VehicleType vehicleBRE) {
+		Response<VehicleTypeModel> responseObj = null;
+		VehicleTypeModel entity = null;
+		responseObj = new Response<VehicleTypeModel>(0,HttpExceptionPackSend.UPDATE_UNITY_MEASUREMENT.getAction(), entity);
 		try {
-			VehicleTypeModel vehicleModelFindName = vehicleDAO.findOneByName(vehicle.type_vehicle);
-			if(vehicleModelFindName != null) {
-				vehicleModelFindName = vehicleDAO.update(vehicleModelFindName);
+			Optional<VehicleTypeModel> vehicleModel = vehicleDAO.findOneById(id);
+			if(vehicleModel != null) {
+				entity = parserObj.parserVehicleType_TO_Model(vehicleBRE, vehicleModel.get(), RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				entity = vehicleDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			else {

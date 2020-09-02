@@ -23,6 +23,7 @@ import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.location.LocationRule;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
+import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @Component
 public class ParseModel {
@@ -172,11 +173,11 @@ public class ParseModel {
 	 * ==============================================
 	 */
 	
-	public VehicleTypeModel parserVehicleType_TO_Model(VehicleTypeModel vehicle, VehicleTypeModel entity, String typeOperation) {
+	public VehicleTypeModel parserVehicleType_TO_Model(VehicleType vehicleBRE, VehicleTypeModel entity, String typeOperation) {
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new VehicleTypeModel();
 		}
-		entity.type_vehicle = vehicle.type_vehicle;
+		entity.type_vehicle = vehicleBRE.type_vehicle;
 		return entity;
 	}
 	
@@ -185,12 +186,12 @@ public class ParseModel {
 	 * ==============================================
 	 */
 	
-	public UnityMeasurementModel parserUnityMeasurement_TO_Model(UnityMeasurementDTO vehicle, UnityMeasurementModel entity, String typeOperation) {
+	public UnityMeasurementModel parserUnityMeasurement_TO_Model(UnityMeasurementDTO unityDTO, UnityMeasurementModel entity, String typeOperation) {
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new UnityMeasurementModel();
 		}
-		entity.unitMeasurement = vehicle.unitMeasurement;
-		entity.origin_country = vehicle.origin_country;
+		entity.unitMeasurement = unityDTO.unitMeasurement;
+		entity.origin_country = unityDTO.origin_country;
 		return entity;
 	}
 }
