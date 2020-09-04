@@ -18,12 +18,12 @@ public class BodyworkListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<BodyWorkModel> bodyWorkL = new ArrayList<BodyWorkModel>();
+	public List<BodyWorkModel> bodies = new ArrayList<BodyWorkModel>();
 
 	
-	public BodyworkListDTO_Response(List<BodyWorkModel> bodyWorkL) {
+	public BodyworkListDTO_Response(List<BodyWorkModel> bodies) {
 		super();
-		this.bodyWorkL = bodyWorkL;
+		this.bodies = bodies;
 	}
 
 	public BodyworkListDTO_Response() {
