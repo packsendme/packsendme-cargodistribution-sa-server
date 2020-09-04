@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseModel;
+import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.UnityMeasurementDAO;
 import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
@@ -27,7 +27,7 @@ public class UnityMeasurementAdm_Service {
 	@Autowired
 	private UnityMeasurementDAO unityDAO;
 	@Autowired
-	private ParseModel parserObj;
+	private ParseComponent parserObj;
 
 	
 	public ResponseEntity<?> findUnityMeasurementAll(String name) {

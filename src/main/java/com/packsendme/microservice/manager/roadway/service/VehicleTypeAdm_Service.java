@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseModel;
+import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.VehicleTypeDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleTypeListDTO_Response;
@@ -24,7 +24,7 @@ public class VehicleTypeAdm_Service {
 	@Autowired
 	private VehicleTypeDAO vehicleDAO;
 	@Autowired
-	private ParseModel parserObj;
+	private ParseComponent parserObj;
 
 	
 	public ResponseEntity<?> findVehiclesTypeAll() {

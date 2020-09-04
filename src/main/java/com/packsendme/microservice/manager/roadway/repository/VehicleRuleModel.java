@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter
-@Document(collection = "VehicleManager_SA")
+@Document(collection = "VehicleRuleManager_SA")
 public class VehicleRuleModel implements Serializable{
 
 	/**
@@ -22,17 +22,17 @@ public class VehicleRuleModel implements Serializable{
 	
 	@Id
 	public String id;	
-	public String vehicle;
+	public String vehicle_type;
 	public List<String> bodywork_vehicle = new ArrayList<String>();
 	public Double cargo_max;
 	public Integer axis_total;
 	public String unity_measurement_weight;
 	public Integer people;
 	
-	public VehicleRuleModel(String vehicle, List<String> bodywork_vehicle, Double cargo_max, Integer axis_total,
+	public VehicleRuleModel(String vehicle_type, List<String> bodywork_vehicle, Double cargo_max, Integer axis_total,
 			String unity_measurement_weight, Integer people) {
 		super();
-		this.vehicle = vehicle;
+		this.vehicle_type = vehicle_type;
 		this.bodywork_vehicle = bodywork_vehicle;
 		this.cargo_max = cargo_max;
 		this.axis_total = axis_total;

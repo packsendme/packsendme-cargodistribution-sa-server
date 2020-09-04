@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseModel;
+import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.VehicleDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleListDTO_Response;
@@ -27,9 +27,9 @@ public class VehicleManager_Service {
 	@Autowired
 	private VehicleDAO vehicleDAO;
 	@Autowired
-	private ParseModel parserObj;
+	private ParseComponent parserObj;
 	@Autowired
-	private CategoryManager_Service categoryService;
+	private CategoryRuleManager_Service categoryService;
 
 	
 	public ResponseEntity<?> findVehiclesAll() {
@@ -51,7 +51,7 @@ public class VehicleManager_Service {
 		try {
 			VehicleRuleModel entity = parserObj.parserVehicle_TO_Model(vehicle, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			responseObj = new Response<VehicleRuleModel>(0,HttpExceptionPackSend.CREATED_VEHICLE.getAction(), entity);
-			if(vehicleDAO.findOneByName(entity.vehicle) == null) {
+			if(vehicleDAO.findOneByName(entity.vehicle_type) == null) {
 				vehicleDAO.save(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
@@ -89,14 +89,14 @@ public class VehicleManager_Service {
 	public ResponseEntity<?> updateVehicleCheck(String id, VehicleRule vehicle) {
 		Response<String> responseObj = null;
 		try {
-			VehicleRuleModel vehicleModelFindName = vehicleDAO.findOneByName(vehicle.vehicle);
+			VehicleRuleModel vehicleModelFindName = vehicleDAO.findOneByName(vehicle.vehicle_type);
 			if(vehicleModelFindName != null) {
 				if (vehicleModelFindName.id.equals(id)) {
 					ResponseEntity<?> responseUpdate = updateVehicle(id,vehicle);
 					return new ResponseEntity<>(responseUpdate, HttpStatus.ACCEPTED);
 				}
 				else {
-					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicle.vehicle);
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicle.vehicle_type);
 					return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 				}
 			}
@@ -118,20 +118,20 @@ public class VehicleManager_Service {
 		Response<String> responseObj = null;
 		try {
 			// Check if exist same vehicle in Database
-			VehicleRuleModel vehicleModelFindName = vehicleDAO.findOneByIdAndName(id, vehicle.vehicle);
+			VehicleRuleModel vehicleModelFindName = vehicleDAO.findOneByIdAndName(id, vehicle.vehicle_type);
 			
 			if(vehicleModelFindName == null) {
 				Optional<VehicleRuleModel> vehicleData = vehicleDAO.findOneById(id);
 				if(vehicleData.isPresent()) {
 					VehicleRuleModel vehicleEntity = vehicleData.get();
-					String vehicleS_old = vehicleEntity.vehicle;
+					String vehicleS_old = vehicleEntity.vehicle_type;
 					VehicleRuleModel vehicleEntityChange = parserObj.parserVehicle_TO_Model(vehicle, vehicleEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 					
 					if(vehicleDAO.update(vehicleEntityChange) != null) {
 						categoryService.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, vehicleS_old, vehicleEntityChange);
 					}
 						
-					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity.vehicle);
+					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicleEntity.vehicle_type);
 					return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 				}
 				else {
@@ -140,7 +140,7 @@ public class VehicleManager_Service {
 				}
 			}
 			else {
-				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicle.vehicle);
+				responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_VEHICLE.getAction(), vehicle.vehicle_type);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 		}
@@ -181,7 +181,7 @@ public class VehicleManager_Service {
 				}
 				if(statusCrud == true) {
 					System.out.println("(7) crudTrigger - SAVE "+ statusCrud);
-					String vehicleS_Old = vehicleOld.vehicle;
+					String vehicleS_Old = vehicleOld.vehicle_type;
 					VehicleRuleModel vehicleNew = vehicleOld; 
 					vehicleDAO.remove(vehicleOld);
 					vehicleNew.bodywork_vehicle = null;

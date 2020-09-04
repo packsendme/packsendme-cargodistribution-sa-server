@@ -12,6 +12,7 @@ import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
 import com.packsendme.microservice.manager.roadway.repository.UnityMeasurementModel;
@@ -20,13 +21,14 @@ import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
+import com.packsendme.roadway.bre.model.category.CategoryType;
 import com.packsendme.roadway.bre.model.location.LocationRule;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @Component
-public class ParseModel {
+public class ParseComponent {
 
 	
 	/* ==============================================
@@ -38,7 +40,7 @@ public class ParseModel {
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			entity = new VehicleRuleModel();
 		}
-		entity.vehicle = vehicle.vehicle;
+		entity.vehicle_type = vehicle.vehicle_type;
 		entity.bodywork_vehicle = vehicle.bodywork_vehicle;
 		entity.cargo_max = vehicle.cargo_max;
 		entity.axis_total = vehicle.axis_total;
@@ -49,12 +51,27 @@ public class ParseModel {
 	
 	
 	/* ==============================================
-	 *  C A T E G O R Y  - P A R S E R  
+	 *  C A T E G O R Y    
 	 * ==============================================
 	 */
 	
-	public CategoryRuleModel parserCategory_TO_Model(CategoryRule category, CategoryRuleModel categoryModel, String typeOperation) {
+	public CategoryTypeModel parserCategoryType_TO_Model(CategoryType categoryTypeBRE, CategoryTypeModel categoryTypeModel, String typeOperation) {
+		
+		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			categoryTypeModel = new CategoryTypeModel();
+		}
+		// Category-Head
+		categoryTypeModel.name_category = categoryTypeBRE.name_category;
+		categoryTypeModel.weight_min = categoryTypeBRE.weight_min;
+		categoryTypeModel.weight_max = categoryTypeBRE.weight_max;
+		categoryTypeModel.unity_measurement_weight_min = categoryTypeBRE.unity_measurement_weight_min;
+		categoryTypeModel.unity_measurement_weight_max = categoryTypeBRE.unity_measurement_weight_max;
+		return categoryTypeModel;
+	}
+	
+	public CategoryRuleModel parserCategoryRule_TO_Model(CategoryRule categoryBRE, CategoryRuleModel categoryRuleModel, String typeOperation) {
 		VehicleRuleModel vehicleModel = null;
+		CategoryTypeModel categoryTypeModel = null;
 		List<VehicleRuleModel> vehicleModelL = new ArrayList<VehicleRuleModel>();
 		List<LocationModel> locationL = new ArrayList<LocationModel>();
 		
@@ -64,30 +81,29 @@ public class ParseModel {
 		CategoryCostsModel categoryCostsModel = new CategoryCostsModel();
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
-			categoryModel = new CategoryRuleModel();
+			categoryRuleModel = new CategoryRuleModel();
 		}
-		// Category-Head
-		categoryModel.name_category = category.name_category;
-		categoryModel.weight_min = category.weight_min;
-		categoryModel.weight_max = category.weight_max;
-		categoryModel.axis_max = category.axis_max;
-		categoryModel.unity_measurement_weight_min = category.unity_measurement_weight_min;
-		categoryModel.unity_measurement_weight_max = category.unity_measurement_weight_max;
+		// Category-Type (Update in CategoryRule class - no trigger method)
+		categoryTypeModel = new CategoryTypeModel(categoryBRE.categoryType.name_category, categoryBRE.categoryType.transport_type, 
+				categoryBRE.categoryType.weight_min, categoryBRE.categoryType.weight_max, categoryBRE.categoryType.unity_measurement_weight_min, 
+				categoryBRE.categoryType.unity_measurement_weight_max);
+		
+		categoryRuleModel.type_category = categoryTypeModel;
 
 		// Category-Vehicle
-		if(category.vehicles.size() >= 1) {
-			for(VehicleRule v : category.vehicles) {
-				vehicleModel = new VehicleRuleModel(v.vehicle, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people);
+		if(categoryBRE.vehicles.size() >= 1) {
+			for(VehicleRule v : categoryBRE.vehicles) {
+				vehicleModel = new VehicleRuleModel(v.vehicle_type, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people);
 				vehicleModelL.add(vehicleModel);
 				vehicleModel = null;
 			}
-			categoryModel.vehicles = vehicleModelL;
+			categoryRuleModel.vehicles = vehicleModelL;
 		}
 		// Category-Costs
-		if(category.categoryCosts.size() >= 1) {
-			for(Entry<String, Map<String, CategoryCosts>> entryCountry : category.categoryCosts.entrySet()) {
+		if(categoryBRE.categoryCosts.size() >= 1) {
+			for(Entry<String, Map<String, CategoryCosts>> entryCountry : categoryBRE.categoryCosts.entrySet()) {
 				String country_key = entryCountry.getKey();
-				categoryCountryCosts_Map =  category.categoryCosts.get(country_key);
+				categoryCountryCosts_Map =  categoryBRE.categoryCosts.get(country_key);
 				for(Map.Entry<String,CategoryCosts> entryVehicle : categoryCountryCosts_Map.entrySet()) {
 					String vehicle_key =  entryVehicle.getKey();
 					CategoryCosts costsObj = entryVehicle.getValue();
@@ -103,18 +119,18 @@ public class ParseModel {
 				categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
 				categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
 			}
-			categoryModel.categoryCosts = categoryCountryCostsModel_Map;
+			categoryRuleModel.categoryCosts = categoryCountryCostsModel_Map;
 		}
 		// Category-Location
-		if(category.locations.size() >= 1) {
-			for(LocationRule l : category.locations) {
+		if(categoryBRE.locations.size() >= 1) {
+			for(LocationRule l : categoryBRE.locations) {
 				LocationModel locationModel = new LocationModel(l.countryName, l.cityName, l.stateName, l.codCountry);
 				locationL.add(locationModel);
 				locationModel = null;
 			}
-			categoryModel.locations = locationL;
+			categoryRuleModel.locations = locationL;
 		}
-		return categoryModel;
+		return categoryRuleModel;
 	}
 	
 	/* ==============================================
@@ -162,7 +178,7 @@ public class ParseModel {
 		roadwayModel.date_change = roadwayBRE.date_change;
 		roadwayModel.status = roadwayBRE.status;
 		
-		CategoryRuleModel categoryRuleModel = parserCategory_TO_Model(roadwayBRE.category.categoryRule, roadwayModel.categoryRule, typeOperation);
+		CategoryRuleModel categoryRuleModel = parserCategoryRule_TO_Model(roadwayBRE.category.categoryRule, roadwayModel.categoryRule, typeOperation);
 		roadwayModel.categoryRule = categoryRuleModel;
 		
 		return roadwayModel;

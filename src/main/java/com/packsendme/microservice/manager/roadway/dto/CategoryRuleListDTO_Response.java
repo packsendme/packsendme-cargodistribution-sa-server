@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter
-public class CategoryListDTO_Response implements Serializable{
+public class CategoryRuleListDTO_Response implements Serializable{
 
 	/**
 	 * 
@@ -21,12 +21,12 @@ public class CategoryListDTO_Response implements Serializable{
 	public List<CategoryRuleModel> categoryL = new ArrayList<CategoryRuleModel>();
 
 	
-	public CategoryListDTO_Response(List<CategoryRuleModel> categoryL) {
+	public CategoryRuleListDTO_Response(List<CategoryRuleModel> categoryL) {
 		super();
 		this.categoryL = categoryL;
 	}
 
-	public CategoryListDTO_Response() {
+	public CategoryRuleListDTO_Response() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
