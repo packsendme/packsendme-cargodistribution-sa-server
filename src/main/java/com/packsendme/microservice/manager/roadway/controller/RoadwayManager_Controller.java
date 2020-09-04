@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.service.BodyworkManager_Service;
 import com.packsendme.microservice.manager.roadway.service.CategoryRuleManager_Service;
+import com.packsendme.microservice.manager.roadway.service.CategoryTypeManager_Service;
 import com.packsendme.microservice.manager.roadway.service.LocationManager_Service;
 import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
+import com.packsendme.roadway.bre.model.category.CategoryType;
 import com.packsendme.roadway.bre.model.location.LocationRule;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
@@ -29,11 +31,15 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 @RequestMapping("/roadway/manager")
 public class RoadwayManager_Controller {
 
+	
 	@Autowired
 	private VehicleManager_Service vehiclesService;
 	
 	@Autowired
 	private CategoryRuleManager_Service categoryService;	
+	
+	@Autowired
+	private CategoryTypeManager_Service categoryTypeService;
 	
 	@Autowired
 	private BodyworkManager_Service bodyworkService;	
@@ -116,6 +122,44 @@ public class RoadwayManager_Controller {
 			@Validated  @RequestBody CategoryRule category)
 	{	
 		return categoryService.updateCategory(id, category);
+	}
+	
+
+	/***************************************
+	 CATEGORY-TYPE :: GET | POST | DELETE 
+	***************************************/
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/categorytype")
+	public ResponseEntity<?> getCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
+		return categoryTypeService.findCategoryTypeAll();
+	}
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/categorytype")
+	public ResponseEntity<?> postCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
+			@Validated  @RequestBody CategoryType category)
+	{	
+		return categoryTypeService.saveCategoryType(category);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@DeleteMapping("/categorytype")
+	public ResponseEntity<?> deleteCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
+	{	
+		return categoryTypeService.deleteCategoryType(id);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PutMapping("/categorytype")
+	public ResponseEntity<?> putCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
+			@Validated  @RequestBody CategoryType category)
+	{	
+		return categoryTypeService.updateCategoryType(id, category);
 	}
 	
 	/***************************************
