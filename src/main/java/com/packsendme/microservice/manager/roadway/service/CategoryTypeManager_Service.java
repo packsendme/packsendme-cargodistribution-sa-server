@@ -1,10 +1,5 @@
  package com.packsendme.microservice.manager.roadway.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +13,8 @@ import com.packsendme.lib.common.response.Response;
 import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.CategoryTypeDAO;
-import com.packsendme.microservice.manager.roadway.dto.CategoryRuleListDTO_Response;
 import com.packsendme.microservice.manager.roadway.dto.CategoryTypeListDTO_Response;
-import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
-import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
-import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
-import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;
 
 @Service
