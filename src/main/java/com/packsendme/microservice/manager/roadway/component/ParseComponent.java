@@ -62,6 +62,7 @@ public class ParseComponent {
 		}
 		// Category-Head
 		categoryTypeModel.name_category = categoryTypeBRE.name_category;
+		categoryTypeModel.transport_type = categoryTypeBRE.transport_type;
 		categoryTypeModel.weight_min = categoryTypeBRE.weight_min;
 		categoryTypeModel.weight_max = categoryTypeBRE.weight_max;
 		categoryTypeModel.unity_measurement_weight_min = categoryTypeBRE.unity_measurement_weight_min;
