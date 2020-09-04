@@ -46,8 +46,11 @@ public class CategoryTypeManager_Service {
 	public ResponseEntity<?> saveCategoryType(CategoryType category) {
 		Response<CategoryTypeModel> responseObj = null;
 		try {
+			System.out.println(" ---------------------------------- ");
+			System.out.println(" CATEGORY TYPE  - SAVE "+ category.name_category);
 			CategoryTypeModel entity = parserObj.parserCategoryType_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			categoryTypeDAO.save(entity);
+			System.out.println(" CATEGORY TYPE - SAVED "+ category.name_category);
 			responseObj = new Response<CategoryTypeModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
