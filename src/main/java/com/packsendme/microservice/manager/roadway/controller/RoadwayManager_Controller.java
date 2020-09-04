@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.service.BodyworkManager_Service;
-import com.packsendme.microservice.manager.roadway.service.CategoryManager_Service;
+import com.packsendme.microservice.manager.roadway.service.CategoryRuleManager_Service;
 import com.packsendme.microservice.manager.roadway.service.LocationManager_Service;
 import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
@@ -33,7 +33,7 @@ public class RoadwayManager_Controller {
 	private VehicleManager_Service vehiclesService;
 	
 	@Autowired
-	private CategoryManager_Service categoryService;	
+	private CategoryRuleManager_Service categoryService;	
 	
 	@Autowired
 	private BodyworkManager_Service bodyworkService;	

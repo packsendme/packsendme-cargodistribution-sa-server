@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseModel;
+import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.BodyworkDAO;
 import com.packsendme.microservice.manager.roadway.dto.BodyworkListDTO_Response;
@@ -24,7 +24,7 @@ public class BodyworkManager_Service {
 	@Autowired
 	private BodyworkDAO bodyworkDAO;
 	@Autowired
-	private ParseModel parserObj;
+	private ParseComponent parserObj;
 	@Autowired
 	private VehicleManager_Service vehicleService;
 

@@ -15,15 +15,17 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
-import com.packsendme.microservice.manager.roadway.component.ParseModel;
+import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.RoadwayDAO;
 import com.packsendme.microservice.manager.roadway.dto.RoadwayBREListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
+import com.packsendme.roadway.bre.model.category.CategoryType;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -32,7 +34,7 @@ public class RoadwayManager_Service {
 	@Autowired
 	private RoadwayDAO roadwayBRE_DAO;
 	@Autowired
-	private ParseModel parserObj;
+	private ParseComponent parserObj;
 
 	public ResponseEntity<?> findRoadwayAll() {
 		Response<RoadwayBREListDTO_Response> responseObj = null;
@@ -123,14 +125,14 @@ public class RoadwayManager_Service {
 			for(RoadwayModel roadway_entity : roadwayL) {
 				
 				if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
-					if(roadway_entity.categoryRule.name_category.equals(categoryModelNew.name_category)) {
+					if(roadway_entity.categoryRule.type_category.name_category.equals(categoryModelNew.type_category.name_category)) {
 						roadwayObj_Model = roadway_entity;
 						roadwayBRE_DAO.remove(roadwayObj_Model);
 						roadwayObj_Model = new RoadwayModel();
 					}
 				} 
 				else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-					if(roadway_entity.categoryRule.name_category.equals(categoryName_Old)) {
+					if(roadway_entity.categoryRule.type_category.name_category.equals(categoryName_Old)) {
 						roadwayObj_Model = roadway_entity;
 						roadwayObj_Model.categoryRule = null;
 						roadwayObj_Model.categoryRule = categoryModelNew;
