@@ -18,12 +18,12 @@ public class CategoryTypeListDTO_Response implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public List<CategoryTypeModel> categoryTypeL = new ArrayList<CategoryTypeModel>();
+	public List<CategoryTypeModel> categoriesType = new ArrayList<CategoryTypeModel>();
 
 	
-	public CategoryTypeListDTO_Response(List<CategoryTypeModel> categoryTypeL) {
+	public CategoryTypeListDTO_Response(List<CategoryTypeModel> categoriesType) {
 		super();
-		this.categoryTypeL = categoryTypeL;
+		this.categoriesType = categoriesType;
 	}
 
 	public CategoryTypeListDTO_Response() {
