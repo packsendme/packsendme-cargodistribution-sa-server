@@ -20,12 +20,14 @@ import com.packsendme.microservice.manager.roadway.service.CategoryTypeManager_S
 import com.packsendme.microservice.manager.roadway.service.LocationManager_Service;
 import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
+import com.packsendme.microservice.manager.roadway.service.VehicleTypeManager_Service;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;
 import com.packsendme.roadway.bre.model.location.LocationRule;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
+import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @RestController
 @RequestMapping("/roadway/manager")
@@ -50,6 +52,8 @@ public class RoadwayManager_Controller {
 	@Autowired
 	private LocationManager_Service locationService;	
 	
+	@Autowired
+	private VehicleTypeManager_Service vehiclesAdmService;
 	
 	/***************************************
 	 VEHICLE :: GET | POST | DELETE 
@@ -86,6 +90,40 @@ public class RoadwayManager_Controller {
 		return vehiclesService.updateVehicleCheck(id, vehicle);
 	}
 
+	/***************************************
+	 VEHICLE_TYPE :: GET | POST | DELETE 
+	 ***************************************/
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/vehicletype")
+	public ResponseEntity<?> getVehicleType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
+		return vehiclesAdmService.findVehiclesTypeAll();
+	}
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/vehicletype")
+	public ResponseEntity<?> postVehicleType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated  @RequestBody VehicleType vehicleType)
+	{	
+		return vehiclesAdmService.saveVehiclesType(vehicleType);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@DeleteMapping("/vehicletype")
+	public ResponseEntity<?> deleteVehicleType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
+	{	
+		return vehiclesAdmService.deleteVehiclesType(id);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PutMapping("/vehicletype")
+	public ResponseEntity<?> putVehicleType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
+			@Validated  @RequestBody VehicleType vehicleType)
+	{	
+		return vehiclesAdmService.updateVehicleType(id, vehicleType);
+	}
 	
 	/***************************************
 	 CATEGORY :: GET | POST | DELETE 
