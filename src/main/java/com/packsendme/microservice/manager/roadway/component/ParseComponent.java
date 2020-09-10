@@ -95,7 +95,7 @@ public class ParseComponent {
 		// Category-Vehicle
 		if(categoryBRE.vehicles.size() >= 1) {
 			for(VehicleRule v : categoryBRE.vehicles) {
-				vehicleModel = new VehicleRuleModel(v.vehicle_type, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people);
+				vehicleModel = new VehicleRuleModel(v.vehicle_type, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people_transport, v.people);
 				vehicleModelL.add(vehicleModel);
 				vehicleModel = null;
 			}
