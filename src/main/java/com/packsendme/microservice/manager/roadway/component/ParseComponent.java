@@ -45,6 +45,7 @@ public class ParseComponent {
 		entity.cargo_max = vehicle.cargo_max;
 		entity.axis_total = vehicle.axis_total;
 		entity.unity_measurement_weight = vehicle.unity_measurement_weight;
+		entity.people_transport = vehicle.people_transport; 
 		entity.people = vehicle.people;
 		return entity;
 	}
