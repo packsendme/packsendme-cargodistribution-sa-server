@@ -16,6 +16,7 @@ import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.VehicleDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleListDTO_Response;
+import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
@@ -151,7 +152,7 @@ public class VehicleManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> crudTrigger(String operationType, String bodyworkS_old, BodyworkRule bodywork) {
+	public ResponseEntity<?> crudTrigger(String operationType, String bodyworkS_old, BodyWorkModel bodywork) {
 		boolean statusCrud = false;
 		Response<VehicleRuleModel> responseObj = null;
 		List<String> bodyWorkL = new ArrayList<String>();
