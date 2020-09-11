@@ -223,10 +223,9 @@ public class RoadwayManager_Controller {
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@DeleteMapping("/bodywork")
 	public ResponseEntity<?> deleteBodywork(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated @RequestBody BodyworkRule bodyworkBRE)
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
 	{	
-		return bodyworkService.deleteBodywork(id, bodyworkBRE);
+		return bodyworkService.deleteBodywork(id);
 	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
