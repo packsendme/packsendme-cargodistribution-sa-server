@@ -15,6 +15,7 @@ import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
+import com.packsendme.microservice.manager.roadway.repository.TransportModel;
 import com.packsendme.microservice.manager.roadway.repository.UnityMeasurementModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
@@ -23,6 +24,7 @@ import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;
 import com.packsendme.roadway.bre.model.location.LocationRule;
+import com.packsendme.roadway.bre.model.transport.Transport;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleType;
@@ -210,6 +212,19 @@ public class ParseComponent {
 		}
 		entity.unitMeasurement = unityDTO.unitMeasurement;
 		entity.origin_country = unityDTO.origin_country;
+		return entity;
+	}
+	
+	/* ==============================================
+	 * T R A N S P O R T  - P A R S E R  
+	 * ==============================================
+	 */
+	
+	public TransportModel parserTransport_TO_Model(Transport tranportDTO, TransportModel entity, String typeOperation) {
+		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			entity = new TransportModel();
+		}
+		entity.name_transport = tranportDTO.name_transport;
 		return entity;
 	}
 }
