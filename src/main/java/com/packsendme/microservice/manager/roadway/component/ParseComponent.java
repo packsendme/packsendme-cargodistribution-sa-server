@@ -73,61 +73,67 @@ public class ParseComponent {
 		return categoryTypeModel;
 	}
 	
-	public CategoryRuleModel parserCategoryRule_TO_Model(CategoryRule categoryBRE, CategoryRuleModel categoryRuleModel, String typeOperation) {
+	public CategoryRuleModel parserCategory_TO_Model(CategoryRule categoryRuleBRE, CategoryRuleModel categoryRuleModel, String typeOperation) {
 		VehicleRuleModel vehicleModel = null;
 		CategoryTypeModel categoryTypeModel = null;
 		List<VehicleRuleModel> vehicleModelL = new ArrayList<VehicleRuleModel>();
 		List<LocationModel> locationL = new ArrayList<LocationModel>();
 		
-		Map<String, CategoryCosts> categoryCountryCosts_Map = new HashMap<String, CategoryCosts>();
-		Map<String,CategoryCostsModel> categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
-		Map<String,Map<String, CategoryCostsModel>> categoryCountryCostsModel_Map = new HashMap<String,Map<String, CategoryCostsModel>>(); 
-		CategoryCostsModel categoryCostsModel = new CategoryCostsModel();
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			categoryRuleModel = new CategoryRuleModel();
 		}
 		// Category-Type (Update in CategoryRule class - no trigger method)
-		categoryTypeModel = new CategoryTypeModel(categoryBRE.categoryType.name_category, categoryBRE.categoryType.transport_type, 
-				categoryBRE.categoryType.weight_min, categoryBRE.categoryType.weight_max, categoryBRE.categoryType.unity_measurement_weight_min, 
-				categoryBRE.categoryType.unity_measurement_weight_max);
+		categoryTypeModel = new CategoryTypeModel(categoryRuleBRE.categoryType.name_category, categoryRuleBRE.categoryType.transport_type, 
+				categoryRuleBRE.categoryType.weight_min, categoryRuleBRE.categoryType.weight_max, categoryRuleBRE.categoryType.unity_measurement_weight_min, 
+				categoryRuleBRE.categoryType.unity_measurement_weight_max);
 		
-		categoryRuleModel.type_category = categoryTypeModel;
+		categoryRuleModel.categoryType = categoryTypeModel;
 
 		// Category-Vehicle
-		if(categoryBRE.vehicles.size() >= 1) {
-			for(VehicleRule v : categoryBRE.vehicles) {
+		if(categoryRuleBRE.vehicles.size() >= 1) {
+			for(VehicleRule v : categoryRuleBRE.vehicles) {
 				vehicleModel = new VehicleRuleModel(v.vehicle_type, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people_transport, v.people);
 				vehicleModelL.add(vehicleModel);
 				vehicleModel = null;
 			}
 			categoryRuleModel.vehicles = vehicleModelL;
 		}
-		// Category-Costs
-		if(categoryBRE.categoryCosts.size() >= 1) {
-			for(Entry<String, Map<String, CategoryCosts>> entryCountry : categoryBRE.categoryCosts.entrySet()) {
+		
+		// Interation :: Category-Costs
+		CategoryCostsModel categoryCostsModel = new CategoryCostsModel();
+		ArrayList<CategoryCostsModel> categoriesCostsL = new ArrayList<CategoryCostsModel>();
+		Map<String, List<CategoryCostsModel>> categoryVehicleCostsModel_Map = new HashMap<String, List<CategoryCostsModel>>();
+		
+		if(categoryRuleBRE.categoryCosts.size() >= 1) {
+			for(Entry<String, List<CategoryCosts>> entryCountry : categoryRuleBRE.categoryCosts.entrySet()) {
 				String country_key = entryCountry.getKey();
-				categoryCountryCosts_Map =  categoryBRE.categoryCosts.get(country_key);
-				for(Map.Entry<String,CategoryCosts> entryVehicle : categoryCountryCosts_Map.entrySet()) {
-					String vehicle_key =  entryVehicle.getKey();
-					CategoryCosts costsObj = entryVehicle.getValue();
-					categoryCostsModel.weight_cost = costsObj.weight_cost;
-					categoryCostsModel.distance_cost = costsObj.distance_cost;
-					categoryCostsModel.worktime_cost = costsObj.worktime_cost;
-					categoryCostsModel.average_consumption_cost = costsObj.average_consumption_cost;
-					categoryCostsModel.rate_exchange = costsObj.rate_exchange;
-					categoryCostsModel.current_exchange = costsObj.current_exchange;
-					categoryVehicleCostsModel_Map.put(vehicle_key, categoryCostsModel);
+				List <CategoryCosts> categoryVehicleCostsL =  categoryRuleBRE.categoryCosts.get(country_key);
+				
+				for(CategoryCosts vehicleCosts : categoryVehicleCostsL) {
+					if(country_key.equals(vehicleCosts.countryName)) {
+						categoryCostsModel.countryName = vehicleCosts.countryName;
+						categoryCostsModel.vehicle = vehicleCosts.vehicle;
+						categoryCostsModel.weight_cost = vehicleCosts.weight_cost;
+						categoryCostsModel.distance_cost = vehicleCosts.distance_cost;
+						categoryCostsModel.worktime_cost = vehicleCosts.worktime_cost;
+						categoryCostsModel.average_consumption_cost = vehicleCosts.average_consumption_cost;
+						categoryCostsModel.rate_exchange = vehicleCosts.rate_exchange;
+						categoryCostsModel.current_exchange = vehicleCosts.current_exchange;
+						// List Model - VehicleCosts
+						categoriesCostsL.add(categoryCostsModel);
+					}
 					categoryCostsModel = new CategoryCostsModel();
 				}
-				categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
-				categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
+				categoryVehicleCostsModel_Map.put(country_key, categoriesCostsL);
+				categoriesCostsL = new ArrayList<CategoryCostsModel>();
 			}
-			categoryRuleModel.categoryCosts = categoryCountryCostsModel_Map;
+			categoryRuleModel.categoryCosts = categoryVehicleCostsModel_Map;
 		}
+		
 		// Category-Location
-		if(categoryBRE.locations.size() >= 1) {
-			for(LocationRule l : categoryBRE.locations) {
+		if(categoryRuleBRE.locations.size() >= 1) {
+			for(LocationRule l : categoryRuleBRE.locations) {
 				LocationModel locationModel = new LocationModel(l.countryName, l.cityName, l.stateName, l.codCountry);
 				locationL.add(locationModel);
 				locationModel = null;
@@ -182,7 +188,7 @@ public class ParseComponent {
 		roadwayModel.date_change = roadwayBRE.date_change;
 		roadwayModel.status = roadwayBRE.status;
 		
-		CategoryRuleModel categoryRuleModel = parserCategoryRule_TO_Model(roadwayBRE.category.categoryRule, roadwayModel.categoryRule, typeOperation);
+		CategoryRuleModel categoryRuleModel = parserCategory_TO_Model(roadwayBRE.category.categoryRule, roadwayModel.categoryRule, typeOperation);
 		roadwayModel.categoryRule = categoryRuleModel;
 		
 		return roadwayModel;

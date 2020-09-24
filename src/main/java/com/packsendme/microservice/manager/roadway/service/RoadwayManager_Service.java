@@ -125,14 +125,14 @@ public class RoadwayManager_Service {
 			for(RoadwayModel roadway_entity : roadwayL) {
 				
 				if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
-					if(roadway_entity.categoryRule.type_category.name_category.equals(categoryModelNew.type_category.name_category)) {
+					if(roadway_entity.categoryRule.categoryType.name_category.equals(categoryModelNew.categoryType.name_category)) {
 						roadwayObj_Model = roadway_entity;
 						roadwayBRE_DAO.remove(roadwayObj_Model);
 						roadwayObj_Model = new RoadwayModel();
 					}
 				} 
 				else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-					if(roadway_entity.categoryRule.type_category.name_category.equals(categoryName_Old)) {
+					if(roadway_entity.categoryRule.categoryType.name_category.equals(categoryName_Old)) {
 						roadwayObj_Model = roadway_entity;
 						roadwayObj_Model.categoryRule = null;
 						roadwayObj_Model.categoryRule = categoryModelNew;
