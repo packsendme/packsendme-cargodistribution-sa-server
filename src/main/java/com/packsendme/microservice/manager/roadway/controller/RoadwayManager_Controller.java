@@ -22,6 +22,7 @@ import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Servic
 import com.packsendme.microservice.manager.roadway.service.TransportManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleTypeManager_Service;
+import com.packsendme.roadway.bre.model.businessrule.CategoryBRE;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;

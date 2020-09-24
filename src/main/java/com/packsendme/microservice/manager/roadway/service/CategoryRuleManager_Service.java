@@ -23,6 +23,8 @@ import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
+import com.packsendme.roadway.bre.model.businessrule.CategoryBRE;
+import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;
 
@@ -55,7 +57,7 @@ public class CategoryRuleManager_Service {
 	public ResponseEntity<?> saveCategory(CategoryRule category) {
 		Response<CategoryRuleModel> responseObj = null;
 		try {
-			CategoryRuleModel entity = parserObj.parserCategoryRule_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
+			CategoryRuleModel entity = parserObj.parserCategory_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			categoryManagerDAO.save(entity);
 			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
@@ -96,8 +98,8 @@ public class CategoryRuleManager_Service {
 			Optional<CategoryRuleModel> categoryData = categoryManagerDAO.findOneById(id);
 			if(categoryData.isPresent()) {
 				CategoryRuleModel categoryEntity = categoryData.get(); 
-				String categoryName_old = categoryEntity.type_category.name_category; 
-				categoryEntity = parserObj.parserCategoryRule_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				String categoryName_old = categoryEntity.categoryType.name_category; 
+				categoryEntity = parserObj.parserCategory_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				categoryManagerDAO.update(categoryEntity);
 
 				// Trigger Method - Update Roadway-Entity
@@ -127,14 +129,14 @@ public class CategoryRuleManager_Service {
 		Response<CategoryRuleModel> responseObj = null;
 		try {
 			CategoryRuleModel categoryEntity = categoryManagerDAO.findOneByName(categoryTypeBRE.name_category);
-			String categoryName_old = categoryEntity.type_category.name_category; 
+			String categoryName_old = categoryEntity.categoryType.name_category; 
 			
 			if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
 				ResponseEntity<?> responseEntity = deleteCategory(categoryEntity.id);
 				return responseEntity;
 			}
 			else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-				categoryEntity.type_category = categoryTypeModel;
+				categoryEntity.categoryType = categoryTypeModel;
 				categoryManagerDAO.update(categoryEntity);
 				// Trigger Method - Update Roadway-Entity
 				ResponseEntity<?> responseEntity = roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
@@ -148,113 +150,67 @@ public class CategoryRuleManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
 	public ResponseEntity<?> crudTrigger(String operationType, String vehicleS_Old, VehicleRuleModel vehicleModelNew) {
+		Response<CategoryRuleModel> responseObj = null;
+		try {
+			if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
+				return crudTriggerDelete(vehicleS_Old, vehicleModelNew);
+			}
+			else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
+				return crudTriggerUpdate(vehicleS_Old, vehicleModelNew);
+			}
+			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	public ResponseEntity<?> crudTriggerDelete(String vehicleS_Old, VehicleRuleModel vehicleModelNew) {
 		List<VehicleRuleModel> catVehicleNewL = new ArrayList<VehicleRuleModel>();
+		List<CategoryCostsModel> catCostsL = new ArrayList<CategoryCostsModel>();
+		Map<String,List<CategoryCostsModel>> catCostsVehicleM = new HashMap<String, List<CategoryCostsModel>>();
+		
 		Response<CategoryRuleModel> responseObj = null;
 		boolean statusCrud = false;
-		Map<String,CategoryCostsModel> categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
-		Map<String,Map<String, CategoryCostsModel>> categoryCountryCostsModel_Map = new HashMap<String,Map<String, CategoryCostsModel>>(); 
 		
 		// Find Category relationship with Vehicle will be removed
 		try {
 			List<CategoryRuleModel> categoryL = categoryManagerDAO.findAll();
-			for(CategoryRuleModel category_old : categoryL) {
-				for(VehicleRuleModel catVehicleDB : category_old.vehicles) {
-					if(operationType.equals(RoadwayManagerConstants.DELETE_OP_ROADWAY)) {
-						if(!catVehicleDB.vehicle_type.equals(vehicleModelNew.vehicle_type)) {
-							catVehicleNewL.add(catVehicleDB);
-							
-							// Category-Costs
-							if(category_old.categoryCosts.size() >= 1) {
-								for(Entry<String, Map<String, CategoryCostsModel>> entryCountry : category_old.categoryCosts.entrySet()) {
-									String country_key = entryCountry.getKey();
-									Map<String, CategoryCostsModel> categoryCountryCosts_Map = category_old.categoryCosts.get(country_key);
-									for(Map.Entry<String,CategoryCostsModel> entryVehicle : categoryCountryCosts_Map.entrySet()) {
-										String vehicle_key =  entryVehicle.getKey();
-										if(!vehicle_key.equals(vehicleModelNew.vehicle_type)) {
-											CategoryCostsModel costsObj = entryVehicle.getValue();
-											categoryVehicleCostsModel_Map.put(vehicle_key, costsObj);
-										}
+			for(CategoryRuleModel categoryDB : categoryL) {
+				for(VehicleRuleModel catVehicleDB : categoryDB.vehicles) {
+					catVehicleNewL.add(catVehicleDB);
+					// Vehicle - Type (vehicle change == vehicle DDBB)
+					if(catVehicleDB.vehicle_type.equals(vehicleModelNew.vehicle_type)) {
+						statusCrud = true;
+						catVehicleNewL.remove(catVehicleDB);
+						// Costs - Vehicle
+						if(categoryDB.categoryCosts.size() >= 1) {
+							for(Entry<String, List<CategoryCostsModel>> entryCountry : categoryDB.categoryCosts.entrySet()) {
+								String country_key = entryCountry.getKey();
+								List <CategoryCostsModel> categoryVehicleCostsL =  categoryDB.categoryCosts.get(country_key);
+								for(CategoryCostsModel costsObj : categoryVehicleCostsL) {
+									catCostsL.add(costsObj);
+									if(costsObj.vehicle.equals(vehicleModelNew.vehicle_type)) {
+										catCostsL.remove(costsObj);
 									}
-									categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
-									categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
 								}
-							}
-						}
-						else {
-							statusCrud = true;
-						}
-
-					} 
-					else if(operationType.equals(RoadwayManagerConstants.UPDATE_OP_ROADWAY)) {
-						if(catVehicleDB.vehicle_type.equals(vehicleS_Old)) {
-							catVehicleNewL.add(vehicleModelNew);
-							statusCrud = true;
-							
-							// Category-Costs
-							if(category_old.categoryCosts.size() >= 1) {
-								for(Entry<String, Map<String, CategoryCostsModel>> entryCountry : category_old.categoryCosts.entrySet()) {
-									String country_key = entryCountry.getKey();
-									Map<String, CategoryCostsModel> categoryCountryCosts_Map = category_old.categoryCosts.get(country_key);
-									for(Map.Entry<String,CategoryCostsModel> entryVehicle : categoryCountryCosts_Map.entrySet()) {
-										String vehicle_key =  entryVehicle.getKey();
-										System.out.println("================================================");
-										System.out.println("categoryCosts UPDATE-Y vehicle_key   "+ vehicle_key);
-										System.out.println("categoryCosts UPDATE-Y vehicleS_Old   "+ vehicleS_Old);
-
-										if(vehicle_key.equals(vehicleS_Old)) {
-											CategoryCostsModel costsObj = entryVehicle.getValue();
-											categoryVehicleCostsModel_Map.put(vehicleModelNew.vehicle_type, costsObj);
-											System.out.println("categoryCosts KEY CHANGE   "+ vehicleModelNew.vehicle_type);
-										}
-									}
-									categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
-									categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
-								}
-							}
-						}
-						else {
-							catVehicleNewL.add(catVehicleDB);
-							// Category-Costs
-							if(category_old.categoryCosts.size() >= 1) {
-								for(Entry<String, Map<String, CategoryCostsModel>> entryCountry : category_old.categoryCosts.entrySet()) {
-									String country_key = entryCountry.getKey();
-									Map<String, CategoryCostsModel> categoryCountryCosts_Map = category_old.categoryCosts.get(country_key);
-									for(Map.Entry<String,CategoryCostsModel> entryVehicle : categoryCountryCosts_Map.entrySet()) {
-										String vehicle_key =  entryVehicle.getKey();
-										System.out.println("categoryCosts UPDATE-N vehicle_key   "+ vehicle_key);
-										System.out.println("categoryCosts UPDATE-N vehicleS_Old   "+ vehicleS_Old);
-
-										if(!vehicle_key.equals(vehicleS_Old)) {
-											CategoryCostsModel costsObj = entryVehicle.getValue();
-											categoryVehicleCostsModel_Map.put(vehicle_key, costsObj);
-											CategoryCostsModel costsNewVehicleObj = new CategoryCostsModel(0.0, 0.0, 0.0, 0.0, 0.0, "0.0");
-											categoryVehicleCostsModel_Map.put(vehicleModelNew.vehicle_type, costsNewVehicleObj);
-											System.out.println("categoryCosts NO CHANGE   "+ vehicle_key);
-										}
-									}
-									categoryCountryCostsModel_Map.put(country_key, categoryVehicleCostsModel_Map);
-									categoryVehicleCostsModel_Map = new HashMap<String, CategoryCostsModel>();
-								}
+								catCostsVehicleM.put(country_key, catCostsL);
+								catCostsL = new ArrayList<CategoryCostsModel>();
 							}
 						}
 					}
 				}
 				if (statusCrud == true) {
-					CategoryRuleModel categoryNew = category_old; 
-					String categoryName_old = category_old.type_category.name_category;
-					categoryManagerDAO.remove(category_old);
-					categoryNew.vehicles = null;
-					categoryNew.vehicles = catVehicleNewL;
-					categoryNew.categoryCosts = null;
-					categoryNew.categoryCosts = categoryCountryCostsModel_Map;
-					categoryManagerDAO.save(categoryNew);
-					System.out.println("================================================");
+					categoryDB.vehicles = catVehicleNewL;
+					categoryDB.categoryCosts = catCostsVehicleM;
+					categoryManagerDAO.update(categoryDB);
 
-					roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryNew);
+					//roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryNew);
 					catVehicleNewL = new ArrayList<VehicleRuleModel>();
+					catCostsVehicleM = new HashMap<String, List<CategoryCostsModel>>();
 				}
 			}
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
@@ -265,8 +221,63 @@ public class CategoryRuleManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	public ResponseEntity<?> crudTriggerUpdate(String vehicleS_Old, VehicleRuleModel vehicleModelNew) {
+		List<VehicleRuleModel> catVehicleNewL = new ArrayList<VehicleRuleModel>();
+		List<CategoryCostsModel> catCostsL = new ArrayList<CategoryCostsModel>();
+		Map<String,List<CategoryCostsModel>> catCostsVehicleM = new HashMap<String, List<CategoryCostsModel>>();
+		
+		Response<CategoryRuleModel> responseObj = null;
+		boolean statusCrud = false;
+		
+		// Find Category relationship with Vehicle will be removed
+		try {
+			List<CategoryRuleModel> categoryL = categoryManagerDAO.findAll();
+			for(CategoryRuleModel categoryDB : categoryL) {
+				for(VehicleRuleModel catVehicleDB : categoryDB.vehicles) {
+					catVehicleNewL.add(catVehicleDB);
+					// Vehicle - Type (vehicle change == vehicle DDBB)
+					if(catVehicleDB.vehicle_type.equals(vehicleModelNew.vehicle_type)) {
+						statusCrud = true;
+						catVehicleNewL.remove(catVehicleDB);
+						catVehicleNewL.add(vehicleModelNew);
+						// Costs - Vehicle
+						if(categoryDB.categoryCosts.size() >= 1) {
+							for(Entry<String, List<CategoryCostsModel>> entryCountry : categoryDB.categoryCosts.entrySet()) {
+								String country_key = entryCountry.getKey();
+								List <CategoryCostsModel> categoryVehicleCostsL =  categoryDB.categoryCosts.get(country_key);
+								for(CategoryCostsModel costsObj : categoryVehicleCostsL) {
+									catCostsL.add(costsObj);
+									if(costsObj.vehicle.equals(vehicleModelNew.vehicle_type)) {
+										catCostsL.remove(costsObj);
+										CategoryCostsModel costsNew = costsObj;
+										costsNew.vehicle = vehicleModelNew.vehicle_type;
+										catCostsL.add(costsNew);
+									}
+								}
+								catCostsVehicleM.put(country_key, catCostsL);
+								catCostsL = new ArrayList<CategoryCostsModel>();
+							}
+						}
+					}
+				}
+				if (statusCrud == true) {
+					categoryDB.vehicles = catVehicleNewL;
+					categoryDB.categoryCosts = catCostsVehicleM;
+					categoryManagerDAO.update(categoryDB);
 
-	
-	
+					//roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryNew);
+					catVehicleNewL = new ArrayList<VehicleRuleModel>();
+					catCostsVehicleM = new HashMap<String, List<CategoryCostsModel>>();
+				}
+			}
+			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 }

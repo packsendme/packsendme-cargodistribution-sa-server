@@ -24,21 +24,23 @@ public class CategoryRuleModel implements Serializable{
 	
 	@Id
 	public String id;
-	public CategoryTypeModel type_category;
+	public CategoryTypeModel categoryType;
 
 	// Another Dependencies JAR
 	public List<VehicleRuleModel> vehicles = new ArrayList<VehicleRuleModel>(); 
 	public List<LocationModel> locations = new ArrayList<LocationModel>();
-	public Map<String,Map<String, CategoryCostsModel>> categoryCosts = new HashMap<String,Map<String, CategoryCostsModel>>(); 
+	public Map<String, List<CategoryCostsModel>> categoryCosts = new HashMap<String, List<CategoryCostsModel>>(); 
 
-	public CategoryRuleModel(CategoryTypeModel type_category, List<VehicleRuleModel> vehicles,
-			List<LocationModel> locations, Map<String, Map<String, CategoryCostsModel>> categoryCosts) {
+	public CategoryRuleModel(CategoryTypeModel categoryType, List<VehicleRuleModel> vehicles,
+			List<LocationModel> locations, Map<String, List<CategoryCostsModel>> categoryCosts) {
 		super();
-		this.type_category = type_category;
+		this.categoryType = categoryType;
 		this.vehicles = vehicles;
 		this.locations = locations;
 		this.categoryCosts = categoryCosts;
 	}
+
+
 
 
 
