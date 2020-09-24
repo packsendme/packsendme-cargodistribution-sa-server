@@ -23,8 +23,6 @@ import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel
 import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
-import com.packsendme.roadway.bre.model.businessrule.CategoryBRE;
-import com.packsendme.roadway.bre.model.category.CategoryCosts;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;
 
