@@ -140,6 +140,10 @@ public class ParseComponent {
 			}
 			categoryRuleModel.locations = locationL;
 		}
+		System.out.println(" ===================================================");
+		System.out.println(" TOTAL SIZE "+ categoryRuleModel.categoryCosts.size());
+		System.out.println(" ===================================================");
+
 		return categoryRuleModel;
 	}
 	

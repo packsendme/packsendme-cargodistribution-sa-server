@@ -22,7 +22,6 @@ import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Servic
 import com.packsendme.microservice.manager.roadway.service.TransportManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleTypeManager_Service;
-import com.packsendme.roadway.bre.model.businessrule.CategoryBRE;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.category.CategoryRule;
 import com.packsendme.roadway.bre.model.category.CategoryType;
@@ -148,6 +147,7 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
 			@Validated  @RequestBody CategoryRule category)
 	{	
+		System.out.println(" postCategory "+ category.categoryCosts.size() );
 		return categoryService.saveCategory(category);
 	}
 	
