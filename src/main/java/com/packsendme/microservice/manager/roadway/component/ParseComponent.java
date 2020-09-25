@@ -104,11 +104,14 @@ public class ParseComponent {
 		CategoryCostsModel categoryCostsModel = new CategoryCostsModel();
 		ArrayList<CategoryCostsModel> categoriesCostsL = new ArrayList<CategoryCostsModel>();
 		Map<String, List<CategoryCostsModel>> categoryVehicleCostsModel_Map = new HashMap<String, List<CategoryCostsModel>>();
-		
+		//List<Map<String,List<CategoryCosts>>> categoryCosts
+		/*
 		if(categoryRuleBRE.categoryCosts.size() >= 1) {
-			for(Entry<String, List<CategoryCosts>> entryCountry : categoryRuleBRE.categoryCosts.entrySet()) {
+			for(Map<String,List<CategoryCosts>> costsMap : categoryRuleBRE.categoryCosts) {
+			
+			for(Entry<String, List<CategoryCosts>> entryCountry : costsMap.entrySet()){//categoryRuleBRE.categoryCosts.entrySet()) {
 				String country_key = entryCountry.getKey();
-				List <CategoryCosts> categoryVehicleCostsL =  categoryRuleBRE.categoryCosts.get(country_key);
+				List <CategoryCosts> categoryVehicleCostsL =   entryCountry.get(country_key); //categoryRuleBRE.categoryCosts.get(country_key);
 				
 				for(CategoryCosts vehicleCosts : categoryVehicleCostsL) {
 					if(country_key.equals(vehicleCosts.countryName)) {
@@ -142,7 +145,7 @@ public class ParseComponent {
 		}
 		System.out.println(" ===================================================");
 		System.out.println(" TOTAL SIZE "+ categoryRuleModel.categoryCosts.size());
-		System.out.println(" ===================================================");
+		System.out.println(" ===================================================");*/
 
 		return categoryRuleModel;
 	}
