@@ -145,8 +145,7 @@ public class RoadwayManager_Controller {
 	@PostMapping("/category")
 	public ResponseEntity<?> postCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
-			@Validated  @RequestBody CategoryRule category)
-	{	
+			@Validated  @RequestBody CategoryRule category){	
 		System.out.println(" postCategory "+ category.categoryCosts.size() );
 		return categoryService.saveCategory(category);
 	}

@@ -61,7 +61,7 @@ public class CategoryRuleManager_Service {
 			System.out.println(" vehicles "+ category.vehicles.size());
 			
 			CategoryRuleModel entity = parserObj.parserCategory_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
-			categoryManagerDAO.save(entity);
+			//categoryManagerDAO.save(entity);
 			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
