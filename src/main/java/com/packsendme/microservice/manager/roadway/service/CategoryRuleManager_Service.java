@@ -41,7 +41,9 @@ public class CategoryRuleManager_Service {
 	public ResponseEntity<?> findCategoryAll() {
 		Response<CategoryRuleListDTO_Response> responseObj = null;
 		try {
-			CategoryRuleListDTO_Response categoryListDTO_Response = new CategoryRuleListDTO_Response(categoryManagerDAO.findAll());
+			List<CategoryRuleModel> categoriesRulesModel_L = categoryManagerDAO.findAll();
+			List<CategoryRule> categoriesRulesBRE_L =  parserObj.parserCategoryModel_TO_BRE(categoriesRulesModel_L);
+			CategoryRuleListDTO_Response categoryListDTO_Response = new CategoryRuleListDTO_Response(categoriesRulesBRE_L);
 			responseObj = new Response<CategoryRuleListDTO_Response>(0,HttpExceptionPackSend.CREATED_CATEGORY.getAction(), categoryListDTO_Response);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
@@ -61,7 +63,7 @@ public class CategoryRuleManager_Service {
 			System.out.println(" vehicles "+ category.vehicles.size());
 			
 			CategoryRuleModel entity = parserObj.parserCategory_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
-			//categoryManagerDAO.save(entity);
+			categoryManagerDAO.save(entity);
 			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}

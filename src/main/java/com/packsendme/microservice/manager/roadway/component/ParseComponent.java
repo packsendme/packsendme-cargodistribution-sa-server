@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
@@ -32,6 +33,7 @@ import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 @Component
 public class ParseComponent {
 
+	 private static final ModelMapper modelMapper = new ModelMapper();
 	
 	/* ==============================================
 	 *  V E H I C L E  - P A R S E R  
@@ -73,6 +75,66 @@ public class ParseComponent {
 		return categoryTypeModel;
 	}
 	
+	public List<CategoryRule> parserCategoryModel_TO_BRE(List<CategoryRuleModel> categoriesRules) {
+		List<CategoryRule> categoryRuleBRE_L = new ArrayList<CategoryRule>();
+
+		for(CategoryRuleModel model : categoriesRules) {
+			CategoryRule categoryRuleBRE_Obj = new CategoryRule(); 
+			
+			// Category-Type (Convert:  CategoryType Model to CategoryType BRE)
+			CategoryType categoryTypeBRE = modelMapper.map(model.categoryType, CategoryType.class);
+			categoryRuleBRE_Obj.categoryType = categoryTypeBRE;
+
+
+			// Category-Vehicle
+			List<VehicleRule> vehicles_BRE = new ArrayList<VehicleRule>();
+			if(model.vehicles.size() >= 1) {
+				for(VehicleRuleModel v : model.vehicles) {
+					VehicleRule vehicleOjb_BRE = new VehicleRule(v.vehicle_type, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people_transport, v.people);
+					vehicles_BRE.add(vehicleOjb_BRE);
+					vehicleOjb_BRE = null;
+				}
+				categoryRuleBRE_Obj.vehicles = vehicles_BRE;
+			}
+			
+			// Category-Location (Convert: Model to BRE)
+			List<LocationRule> locations_BRE = new ArrayList<LocationRule>();
+			if(model.locations.size() >= 1) {
+				for(LocationModel l : model.locations) {
+					LocationRule locationObj_BRE = new LocationRule(l.countryName, l.cityName, l.stateName, l.codCountry);
+					locations_BRE.add(locationObj_BRE);
+					locationObj_BRE = null;
+				} 
+				categoryRuleBRE_Obj.locations = locations_BRE;
+			}
+
+			
+			// Category-Costs (Convert: Model to BRE)
+			List<CategoryCosts> categoryCostsL_BRE = new ArrayList<CategoryCosts>();
+			CategoryCosts catCostsObj_BRE = null;
+			if(model.categoryCosts.size() >= 1) {
+				for(Entry<String, List<CategoryCostsModel>> costsMap_Model:  model.categoryCosts.entrySet()) {
+					List<CategoryCostsModel> catCostsL_Model = costsMap_Model.getValue();
+					for(CategoryCostsModel costsModel_Obj : catCostsL_Model) {
+						catCostsObj_BRE = new CategoryCosts();
+						catCostsObj_BRE.weight_cost = costsModel_Obj.weight_cost;
+						catCostsObj_BRE.distance_cost = costsModel_Obj.distance_cost;
+						catCostsObj_BRE.worktime_cost = costsModel_Obj.worktime_cost;
+						catCostsObj_BRE.average_consumption_cost = costsModel_Obj.average_consumption_cost;
+						catCostsObj_BRE.rate_exchange = costsModel_Obj.rate_exchange;
+						catCostsObj_BRE.current_exchange = costsModel_Obj.current_exchange;
+						catCostsObj_BRE.countryName = costsModel_Obj.countryName;
+						categoryCostsL_BRE.add(catCostsObj_BRE);
+					}
+				}
+				categoryRuleBRE_Obj.categoryCosts = categoryCostsL_BRE;
+			}
+			categoryRuleBRE_L.add(categoryRuleBRE_Obj);
+			categoryRuleBRE_Obj = new CategoryRule();
+		}
+		return categoryRuleBRE_L;
+	}
+	
 	public CategoryRuleModel parserCategory_TO_Model(CategoryRule categoryRuleBRE, CategoryRuleModel categoryRuleModel, String typeOperation) {
 		VehicleRuleModel vehicleModel = null;
 		CategoryTypeModel categoryTypeModel = null;
@@ -101,37 +163,33 @@ public class ParseComponent {
 		}
 		
 		// Interation :: Category-Costs
-		CategoryCostsModel categoryCostsModel = new CategoryCostsModel();
-		ArrayList<CategoryCostsModel> categoriesCostsL = new ArrayList<CategoryCostsModel>();
-		Map<String, List<CategoryCostsModel>> categoryVehicleCostsModel_Map = new HashMap<String, List<CategoryCostsModel>>();
+		CategoryCostsModel costsModelObj = new CategoryCostsModel();
+		List<CategoryCostsModel> categoriesCostsL = new ArrayList<CategoryCostsModel>();
+		Map<String, List<CategoryCostsModel>> categoryCostsModel_Map = new HashMap<String, List<CategoryCostsModel>>();
 		//List<Map<String,List<CategoryCosts>>> categoryCosts
-		/*
+		
 		if(categoryRuleBRE.categoryCosts.size() >= 1) {
-			for(Map<String,List<CategoryCosts>> costsMap : categoryRuleBRE.categoryCosts) {
-			
-			for(Entry<String, List<CategoryCosts>> entryCountry : costsMap.entrySet()){//categoryRuleBRE.categoryCosts.entrySet()) {
-				String country_key = entryCountry.getKey();
-				List <CategoryCosts> categoryVehicleCostsL =   entryCountry.get(country_key); //categoryRuleBRE.categoryCosts.get(country_key);
-				
-				for(CategoryCosts vehicleCosts : categoryVehicleCostsL) {
-					if(country_key.equals(vehicleCosts.countryName)) {
-						categoryCostsModel.countryName = vehicleCosts.countryName;
-						categoryCostsModel.vehicle = vehicleCosts.vehicle;
-						categoryCostsModel.weight_cost = vehicleCosts.weight_cost;
-						categoryCostsModel.distance_cost = vehicleCosts.distance_cost;
-						categoryCostsModel.worktime_cost = vehicleCosts.worktime_cost;
-						categoryCostsModel.average_consumption_cost = vehicleCosts.average_consumption_cost;
-						categoryCostsModel.rate_exchange = vehicleCosts.rate_exchange;
-						categoryCostsModel.current_exchange = vehicleCosts.current_exchange;
-						// List Model - VehicleCosts
-						categoriesCostsL.add(categoryCostsModel);
+			for(LocationRule locObj : categoryRuleBRE.locations) {
+				for(CategoryCosts categorycostsBREObj : categoryRuleBRE.categoryCosts){
+					costsModelObj = new CategoryCostsModel();
+					if(locObj.countryName.equals(categorycostsBREObj.countryName)) {
+						costsModelObj.countryName = categorycostsBREObj.countryName;
+						costsModelObj.vehicle = categorycostsBREObj.vehicle;
+						costsModelObj.weight_cost = categorycostsBREObj.weight_cost;
+						costsModelObj.distance_cost = categorycostsBREObj.distance_cost;
+						costsModelObj.worktime_cost = categorycostsBREObj.worktime_cost;
+						costsModelObj.average_consumption_cost = categorycostsBREObj.average_consumption_cost;
+						costsModelObj.rate_exchange = categorycostsBREObj.rate_exchange;
+						costsModelObj.current_exchange = categorycostsBREObj.current_exchange;
+						categoriesCostsL.add(costsModelObj);
 					}
-					categoryCostsModel = new CategoryCostsModel();
 				}
-				categoryVehicleCostsModel_Map.put(country_key, categoriesCostsL);
-				categoriesCostsL = new ArrayList<CategoryCostsModel>();
+				if(categoriesCostsL.size() > 1) {
+					categoryCostsModel_Map.put(locObj.countryName, categoriesCostsL);
+					categoriesCostsL = new ArrayList<CategoryCostsModel>();
+				}
 			}
-			categoryRuleModel.categoryCosts = categoryVehicleCostsModel_Map;
+			categoryRuleModel.categoryCosts = categoryCostsModel_Map;
 		}
 		
 		// Category-Location
@@ -145,7 +203,7 @@ public class ParseComponent {
 		}
 		System.out.println(" ===================================================");
 		System.out.println(" TOTAL SIZE "+ categoryRuleModel.categoryCosts.size());
-		System.out.println(" ===================================================");*/
+		System.out.println(" ===================================================");
 
 		return categoryRuleModel;
 	}
