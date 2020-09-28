@@ -81,6 +81,8 @@ public class ParseComponent {
 		for(CategoryRuleModel model : categoriesRules) {
 			CategoryRule categoryRuleBRE_Obj = new CategoryRule(); 
 			
+			categoryRuleBRE_Obj.id = model.id;
+			
 			// Category-Type (Convert:  CategoryType Model to CategoryType BRE)
 			CategoryType categoryTypeBRE = modelMapper.map(model.categoryType, CategoryType.class);
 			categoryRuleBRE_Obj.categoryType = categoryTypeBRE;
@@ -118,6 +120,7 @@ public class ParseComponent {
 					for(CategoryCostsModel costsModel_Obj : catCostsL_Model) {
 						catCostsObj_BRE = new CategoryCosts();
 						catCostsObj_BRE.weight_cost = costsModel_Obj.weight_cost;
+						catCostsObj_BRE.vehicle = costsModel_Obj.vehicle;
 						catCostsObj_BRE.distance_cost = costsModel_Obj.distance_cost;
 						catCostsObj_BRE.worktime_cost = costsModel_Obj.worktime_cost;
 						catCostsObj_BRE.average_consumption_cost = costsModel_Obj.average_consumption_cost;
@@ -136,7 +139,6 @@ public class ParseComponent {
 	}
 	
 	public CategoryRuleModel parserCategory_TO_Model(CategoryRule categoryRuleBRE, CategoryRuleModel categoryRuleModel, String typeOperation) {
-		VehicleRuleModel vehicleModel = null;
 		CategoryTypeModel categoryTypeModel = null;
 		List<VehicleRuleModel> vehicleModelL = new ArrayList<VehicleRuleModel>();
 		List<LocationModel> locationL = new ArrayList<LocationModel>();
@@ -153,6 +155,7 @@ public class ParseComponent {
 		categoryRuleModel.categoryType = categoryTypeModel;
 
 		// Category-Vehicle
+		VehicleRuleModel vehicleModel = null;
 		if(categoryRuleBRE.vehicles.size() >= 1) {
 			for(VehicleRule v : categoryRuleBRE.vehicles) {
 				vehicleModel = new VehicleRuleModel(v.vehicle_type, v.bodywork_vehicle, v.cargo_max, v.axis_total, v.unity_measurement_weight, v.people_transport, v.people);
