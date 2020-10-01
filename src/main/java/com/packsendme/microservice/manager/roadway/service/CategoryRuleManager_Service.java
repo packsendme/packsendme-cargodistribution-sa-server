@@ -104,11 +104,11 @@ public class CategoryRuleManager_Service {
 			if(categoryData.isPresent()) {
 				CategoryRuleModel categoryEntity = categoryData.get(); 
 				String categoryName_old = categoryEntity.categoryType.name_category; 
-				categoryEntity = parserObj.parserCategory_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				categoryManagerDAO.update(categoryEntity);
+				CategoryRuleModel entity = parserObj.parserCategory_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				categoryManagerDAO.update(entity);
 
 				// Trigger Method - Update Roadway-Entity
-				roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
+				//roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
 				
 				responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);

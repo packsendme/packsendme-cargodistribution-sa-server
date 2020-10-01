@@ -165,11 +165,33 @@ public class ParseComponent {
 			categoryRuleModel.vehicles = vehicleModelL;
 		}
 		
+		System.out.println(" ===================================================");
+		System.out.println(" TOTAL SIZE => vehicles :: "+ categoryRuleModel.vehicles.size());
+		System.out.println(" ===================================================");
+
+		
+		// Category-Location
+		if(categoryRuleBRE.locations.size() >= 1) {
+			for(LocationRule l : categoryRuleBRE.locations) {
+				LocationModel locationModel = new LocationModel(l.countryName, l.cityName, l.stateName, l.codCountry);
+				locationL.add(locationModel);
+				locationModel = null;
+				System.out.println(" TOTAL locations :: "+ l.countryName);
+
+			}
+			categoryRuleModel.locations = locationL;
+			System.out.println(" ===================================================");
+			System.out.println(" TOTAL SIZE => locations :: "+ locationL.size());
+			System.out.println(" ===================================================");
+			
+		}
+		
 		// Interation :: Category-Costs
 		CategoryCostsModel costsModelObj = new CategoryCostsModel();
 		List<CategoryCostsModel> categoriesCostsL = new ArrayList<CategoryCostsModel>();
 		Map<String, List<CategoryCostsModel>> categoryCostsModel_Map = new HashMap<String, List<CategoryCostsModel>>();
 		//List<Map<String,List<CategoryCosts>>> categoryCosts
+		System.out.println(" ================= CategoryCosts ==================================");
 		
 		if(categoryRuleBRE.categoryCosts.size() >= 1) {
 			for(LocationRule locObj : categoryRuleBRE.locations) {
@@ -185,27 +207,22 @@ public class ParseComponent {
 						costsModelObj.rate_exchange = categorycostsBREObj.rate_exchange;
 						costsModelObj.current_exchange = categorycostsBREObj.current_exchange;
 						categoriesCostsL.add(costsModelObj);
+						
+						
+						System.out.println(" OBJ => CategoryCosts "+ costsModelObj.countryName);
+						System.out.println(" OBJ => CategoryCosts "+ costsModelObj.vehicle);
+						System.out.println(" OBJ => CategoryCosts "+ categoriesCostsL.size());
+
 					}
 				}
-				if(categoriesCostsL.size() > 1) {
-					categoryCostsModel_Map.put(locObj.countryName, categoriesCostsL);
-					categoriesCostsL = new ArrayList<CategoryCostsModel>();
-				}
+				System.out.println(" TOTAL SIZE => CategoryCosts "+ locObj.countryName);
+				System.out.println(" TOTAL SIZE => CategoryCosts "+ categoriesCostsL.size());
+
+				categoryCostsModel_Map.put(locObj.countryName, categoriesCostsL);
+				categoriesCostsL = new ArrayList<CategoryCostsModel>();
 			}
 			categoryRuleModel.categoryCosts = categoryCostsModel_Map;
 		}
-		
-		// Category-Location
-		if(categoryRuleBRE.locations.size() >= 1) {
-			for(LocationRule l : categoryRuleBRE.locations) {
-				LocationModel locationModel = new LocationModel(l.countryName, l.cityName, l.stateName, l.codCountry);
-				locationL.add(locationModel);
-				locationModel = null;
-			}
-			categoryRuleModel.locations = locationL;
-		}
-		System.out.println(" ===================================================");
-		System.out.println(" TOTAL SIZE "+ categoryRuleModel.categoryCosts.size());
 		System.out.println(" ===================================================");
 
 		return categoryRuleModel;
