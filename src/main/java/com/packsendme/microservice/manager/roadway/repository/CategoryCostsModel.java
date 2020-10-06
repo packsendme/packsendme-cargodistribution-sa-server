@@ -24,10 +24,12 @@ public class CategoryCostsModel implements Serializable {
 	public Double average_consumption_cost;
 	public Double rate_exchange;
 	public String current_exchange;
+	public Boolean statusChange;
 
 	
 	public CategoryCostsModel(String vehicle, String countryName, Double weight_cost, Double distance_cost,
-			Double worktime_cost, Double average_consumption_cost, Double rate_exchange, String current_exchange) {
+			Double worktime_cost, Double average_consumption_cost, Double rate_exchange, String current_exchange,
+			Boolean statusChange) {
 		super();
 		this.vehicle = vehicle;
 		this.countryName = countryName;
@@ -37,6 +39,7 @@ public class CategoryCostsModel implements Serializable {
 		this.average_consumption_cost = average_consumption_cost;
 		this.rate_exchange = rate_exchange;
 		this.current_exchange = current_exchange;
+		this.statusChange = statusChange;
 	}
 
 
