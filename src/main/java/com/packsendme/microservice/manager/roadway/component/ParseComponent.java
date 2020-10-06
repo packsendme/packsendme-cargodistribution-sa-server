@@ -127,6 +127,7 @@ public class ParseComponent {
 						catCostsObj_BRE.rate_exchange = costsModel_Obj.rate_exchange;
 						catCostsObj_BRE.current_exchange = costsModel_Obj.current_exchange;
 						catCostsObj_BRE.countryName = costsModel_Obj.countryName;
+						catCostsObj_BRE.statusChange = costsModel_Obj.statusChange;
 						categoryCostsL_BRE.add(catCostsObj_BRE);
 					}
 				}
@@ -206,6 +207,7 @@ public class ParseComponent {
 						costsModelObj.average_consumption_cost = categorycostsBREObj.average_consumption_cost;
 						costsModelObj.rate_exchange = categorycostsBREObj.rate_exchange;
 						costsModelObj.current_exchange = categorycostsBREObj.current_exchange;
+						costsModelObj.statusChange = categorycostsBREObj.statusChange;
 						categoriesCostsL.add(costsModelObj);
 						
 						
