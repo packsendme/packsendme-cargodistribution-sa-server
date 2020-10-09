@@ -81,7 +81,7 @@ public class CategoryRuleManager_Service {
 			if(categoryData.isPresent()) {
 				CategoryRuleModel categoryEntity = categoryData.get(); 
 				categoryManagerDAO.remove(categoryEntity);
-				roadwayManager.crudTrigger(RoadwayManagerConstants.DELETE_OP_ROADWAY, null, categoryEntity);
+				//roadwayManager.crudTrigger(RoadwayManagerConstants.DELETE_OP_ROADWAY, null, categoryEntity);
 				responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.DELETE_CATEGORY.getAction(), categoryData.get());
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
@@ -144,8 +144,8 @@ public class CategoryRuleManager_Service {
 				categoryEntity.categoryType = categoryTypeModel;
 				categoryManagerDAO.update(categoryEntity);
 				// Trigger Method - Update Roadway-Entity
-				ResponseEntity<?> responseEntity = roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
-				return responseEntity;
+				//ResponseEntity<?> responseEntity = roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
+				//return responseEntity;
 			}
 			return null;
 		}

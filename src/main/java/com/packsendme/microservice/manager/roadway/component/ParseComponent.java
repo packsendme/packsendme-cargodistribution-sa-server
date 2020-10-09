@@ -267,17 +267,20 @@ public class ParseComponent {
 	 */
 	
 	public RoadwayModel parserRoadway_TO_Model(RoadwayBRE roadwayBRE, RoadwayModel roadwayModel, String typeOperation) {
+		List<CategoryRuleModel> categoriesL = new ArrayList<CategoryRuleModel>();
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			roadwayModel = new RoadwayModel();
 		}
-		roadwayModel.rule_name = roadwayBRE.rule_name;
+		roadwayModel.type_bre = roadwayBRE.type_bre;
 		roadwayModel.date_creation = roadwayBRE.date_creation;
 		roadwayModel.date_change = roadwayBRE.date_change;
 		roadwayModel.status = roadwayBRE.status;
 		
-		CategoryRuleModel categoryRuleModel = parserCategory_TO_Model(roadwayBRE.category.categoryRule, roadwayModel.categoryRule, typeOperation);
-		roadwayModel.categoryRule = categoryRuleModel;
-		
+		for(CategoryRule catRule_obj :  roadwayBRE.categories) {
+			CategoryRuleModel categoryRuleModel = parserCategory_TO_Model(catRule_obj, null, typeOperation);
+			categoriesL.add(categoryRuleModel);
+		}
+		roadwayModel.categories = categoriesL; 
 		return roadwayModel;
 	}
 	

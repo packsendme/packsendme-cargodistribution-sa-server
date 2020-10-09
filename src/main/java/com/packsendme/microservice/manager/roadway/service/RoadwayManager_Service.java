@@ -114,7 +114,7 @@ public class RoadwayManager_Service {
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+	/*
 	public ResponseEntity<?> crudTrigger(String operationType, String categoryName_Old, CategoryRuleModel categoryModelNew) {
 		RoadwayModel roadwayObj_Model = new RoadwayModel();
 		Response<CategoryRuleModel> responseObj = null;
@@ -149,7 +149,7 @@ public class RoadwayManager_Service {
 			responseObj = new Response<CategoryRuleModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
 		}
-	}
+	}*/
 
 
 	
