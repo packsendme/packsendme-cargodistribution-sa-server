@@ -275,6 +275,7 @@ public class ParseComponent {
 		roadwayModel.date_creation = roadwayBRE.date_creation;
 		roadwayModel.date_change = roadwayBRE.date_change;
 		roadwayModel.status = roadwayBRE.status;
+		roadwayModel.version = roadwayBRE.version;
 		
 		for(CategoryRule catRule_obj :  roadwayBRE.categories) {
 			CategoryRuleModel categoryRuleModel = parserCategory_TO_Model(catRule_obj, null, typeOperation);
