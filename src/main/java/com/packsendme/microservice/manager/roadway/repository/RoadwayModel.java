@@ -27,9 +27,11 @@ public class RoadwayModel implements Serializable {
 	public String date_change;
 	public  List<CategoryRuleModel> categories = new ArrayList<CategoryRuleModel>();
 	public String status;
+	public String version;
+	
 
 	public RoadwayModel(String id, String type_bre, String date_creation, String date_change,
-			List<CategoryRuleModel> categories, String status) {
+			List<CategoryRuleModel> categories, String status, String version) {
 		super();
 		this.id = id;
 		this.type_bre = type_bre;
@@ -37,6 +39,7 @@ public class RoadwayModel implements Serializable {
 		this.date_change = date_change;
 		this.categories = categories;
 		this.status = status;
+		this.version = version;
 	}
 
 	public RoadwayModel() {
