@@ -1,6 +1,8 @@
 package com.packsendme.microservice.manager.roadway.repository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,26 +22,22 @@ public class RoadwayModel implements Serializable {
 	
 	@Id
 	public String id;
-	public String rule_name;
+	public String type_bre;
 	public String date_creation;
 	public String date_change;
+	public  List<CategoryRuleModel> categories = new ArrayList<CategoryRuleModel>();
 	public String status;
-	
-	public CategoryRuleModel categoryRule = new CategoryRuleModel();
 
-	
-
-	public RoadwayModel(String rule_name, String date_creation, String date_change, String status,
-			CategoryRuleModel categoryRule) {
+	public RoadwayModel(String id, String type_bre, String date_creation, String date_change,
+			List<CategoryRuleModel> categories, String status) {
 		super();
-		this.rule_name = rule_name;
+		this.id = id;
+		this.type_bre = type_bre;
 		this.date_creation = date_creation;
 		this.date_change = date_change;
+		this.categories = categories;
 		this.status = status;
-		this.categoryRule = categoryRule;
 	}
-
-
 
 	public RoadwayModel() {
 		super();
