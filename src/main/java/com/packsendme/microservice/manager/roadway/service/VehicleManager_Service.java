@@ -18,7 +18,6 @@ import com.packsendme.microservice.manager.roadway.dao.VehicleDAO;
 import com.packsendme.microservice.manager.roadway.dto.VehicleListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
-import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
 
 @Service

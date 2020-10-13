@@ -15,10 +15,7 @@ import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConst
 import com.packsendme.microservice.manager.roadway.dao.UnityMeasurementDAO;
 import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
 import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementListDTO_Response;
-import com.packsendme.microservice.manager.roadway.dto.VehicleTypeListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.UnityMeasurementModel;
-import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
-import com.packsendme.roadway.bre.model.vehicle.VehicleType;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
