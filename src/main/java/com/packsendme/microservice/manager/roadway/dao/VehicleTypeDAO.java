@@ -9,9 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.IVehicleManager_Repository;
 import com.packsendme.microservice.manager.roadway.repository.IVehicleTypeAdmin_Repository;
-import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.microservice.manager.roadway.repository.VehicleTypeModel;
 
 @Component

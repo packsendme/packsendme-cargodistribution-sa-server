@@ -15,17 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.service.BodyworkManager_Service;
-import com.packsendme.microservice.manager.roadway.service.CategoryRuleManager_Service;
-import com.packsendme.microservice.manager.roadway.service.CategoryTypeManager_Service;
+import com.packsendme.microservice.manager.roadway.service.CategoryManager_Service;
 import com.packsendme.microservice.manager.roadway.service.LocationManager_Service;
 import com.packsendme.microservice.manager.roadway.service.RoadwayManager_Service;
 import com.packsendme.microservice.manager.roadway.service.TransportManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleManager_Service;
 import com.packsendme.microservice.manager.roadway.service.VehicleTypeManager_Service;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
-import com.packsendme.roadway.bre.model.category.CategoryRule;
-import com.packsendme.roadway.bre.model.category.CategoryType;
-import com.packsendme.roadway.bre.model.location.LocationRule;
+import com.packsendme.roadway.bre.model.category.Category;
+import com.packsendme.roadway.bre.model.location.Location;
 import com.packsendme.roadway.bre.model.transport.Transport;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
@@ -40,10 +38,7 @@ public class RoadwayManager_Controller {
 	private VehicleManager_Service vehiclesService;
 	
 	@Autowired
-	private CategoryRuleManager_Service categoryService;	
-	
-	@Autowired
-	private CategoryTypeManager_Service categoryTypeService;
+	private CategoryManager_Service categoryService;	
 	
 	@Autowired
 	private BodyworkManager_Service bodyworkService;	
@@ -145,8 +140,7 @@ public class RoadwayManager_Controller {
 	@PostMapping("/category")
 	public ResponseEntity<?> postCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
-			@Validated  @RequestBody CategoryRule category){	
-		System.out.println(" postCategory "+ category.categoryCosts.size() );
+			@Validated  @RequestBody Category category){	
 		return categoryService.saveCategory(category);
 	}
 	
@@ -162,49 +156,12 @@ public class RoadwayManager_Controller {
 	@PutMapping("/category")
 	public ResponseEntity<?> putCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody CategoryRule category)
+			@Validated  @RequestBody Category category)
 	{	
 		return categoryService.updateCategory(id, category);
 	}
 	
 
-	/***************************************
-	 CATEGORY-TYPE :: GET | POST | DELETE 
-	***************************************/
-
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@GetMapping("/categorytype")
-	public ResponseEntity<?> getCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
-		return categoryTypeService.findCategoryTypeAll();
-	}
-
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@PostMapping("/categorytype")
-	public ResponseEntity<?> postCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
-			@Validated  @RequestBody CategoryType category)
-	{	
-		return categoryTypeService.saveCategoryType(category);
-	}
-	
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@DeleteMapping("/categorytype")
-	public ResponseEntity<?> deleteCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
-	{	
-		return categoryTypeService.deleteCategoryType(id);
-	}
-	
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@PutMapping("/categorytype")
-	public ResponseEntity<?> putCategoryType(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
-			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
-			@Validated  @RequestBody CategoryType category)
-	{	
-		return categoryTypeService.updateCategoryType(id, category);
-	}
-	
 	/***************************************
 	 BODYWORK (RELASHIONSHIP - VEHICLE) <--> GET | POST | DELETE 
 	***************************************/
@@ -335,7 +292,7 @@ public class RoadwayManager_Controller {
 	@PostMapping("/location")
 	public ResponseEntity<?> postLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, 
-			@Validated  @RequestBody LocationRule location)
+			@Validated  @RequestBody Location location)
 	{	
 		return locationService.saveLocation(location);
 	}
@@ -352,7 +309,7 @@ public class RoadwayManager_Controller {
 	@PutMapping("/location")
 	public ResponseEntity<?> updateLocation(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id,
-			@Validated  @RequestBody LocationRule location)
+			@Validated  @RequestBody Location location)
 	{	
 		return locationService.updateLocation(id, location);
 	}

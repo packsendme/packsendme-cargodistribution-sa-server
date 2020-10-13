@@ -5,8 +5,11 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ICategoryManager_Repository extends MongoRepository<CategoryRuleModel, String>{
+public interface ICategoryManager_Repository extends MongoRepository<CategoryModel, String>{
 
-	@Query("{'type_category.category_name' :  {$eq: ?0}}")
-	CategoryRuleModel findCategoryByName(String category_name);
+	@Query("{'category_name' :  {$eq: ?0}}")
+	CategoryModel findCategoryByName(String category_name);
+	
+	@Query("{'transport' :  {$eq: ?0}}")
+	CategoryModel findCategoryByTransport(String transport);
 }
