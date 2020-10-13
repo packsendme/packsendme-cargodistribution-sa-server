@@ -9,8 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
-import com.packsendme.microservice.manager.roadway.repository.IBodyworkManager_Repository;
 import com.packsendme.microservice.manager.roadway.repository.ILocationManager_Repository;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
 
