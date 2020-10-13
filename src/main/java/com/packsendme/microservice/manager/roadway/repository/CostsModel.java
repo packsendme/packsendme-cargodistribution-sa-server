@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter 
 @Setter 
 @Document
-public class CategoryCostsModel implements Serializable {
+public class CostsModel implements Serializable {
 	
 	/**
 	 * 
@@ -27,7 +27,7 @@ public class CategoryCostsModel implements Serializable {
 	public Boolean statusChange;
 
 	
-	public CategoryCostsModel(String vehicle, String countryName, Double weight_cost, Double distance_cost,
+	public CostsModel(String vehicle, String countryName, Double weight_cost, Double distance_cost,
 			Double worktime_cost, Double average_consumption_cost, Double rate_exchange, String current_exchange,
 			Boolean statusChange) {
 		super();
@@ -45,7 +45,7 @@ public class CategoryCostsModel implements Serializable {
 
 
 
-	public CategoryCostsModel() {
+	public CostsModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

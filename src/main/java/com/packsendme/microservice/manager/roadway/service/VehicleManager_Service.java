@@ -30,7 +30,7 @@ public class VehicleManager_Service {
 	@Autowired
 	private ParseComponent parserObj;
 	@Autowired
-	private CategoryRuleManager_Service categoryService;
+	private CategoryManager_Service categoryService;
 
 	
 	public ResponseEntity<?> findVehiclesAll() {

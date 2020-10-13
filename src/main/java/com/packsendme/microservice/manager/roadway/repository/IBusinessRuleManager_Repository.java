@@ -9,4 +9,5 @@ public interface IBusinessRuleManager_Repository extends MongoRepository<Roadway
 
 	@Query("{'category' :  {$eq: ?0}}")
 	RoadwayModel findBusinessRuleByCategory(String category);
+	
 }

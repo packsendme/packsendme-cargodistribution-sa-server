@@ -1,10 +1,5 @@
 package com.packsendme.microservice.manager.roadway.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +14,8 @@ import com.packsendme.microservice.manager.roadway.component.ParseComponent;
 import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConstants;
 import com.packsendme.microservice.manager.roadway.dao.RoadwayDAO;
 import com.packsendme.microservice.manager.roadway.dto.RoadwayBREListDTO_Response;
-import com.packsendme.microservice.manager.roadway.repository.CategoryCostsModel;
-import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
-import com.packsendme.microservice.manager.roadway.repository.CategoryTypeModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
-import com.packsendme.microservice.manager.roadway.repository.VehicleRuleModel;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
-import com.packsendme.roadway.bre.model.category.CategoryType;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -53,7 +43,7 @@ public class RoadwayManager_Service {
 	public ResponseEntity<?> saveRoadway(RoadwayBRE roadwayBRE) {
 		Response<RoadwayModel> responseObj = null;
 		try {
-			RoadwayModel  entity = parserObj.parserRoadway_TO_Model(roadwayBRE,null,RoadwayManagerConstants.ADD_OP_ROADWAY);
+			RoadwayModel  entity = parserObj.parserRoadwayBRE_TO_Model(roadwayBRE,null,RoadwayManagerConstants.ADD_OP_ROADWAY);
 			roadwayBRE_DAO.save(entity);
 			responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.CREATE_ROADWAYBRE.getAction(), entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
@@ -98,7 +88,7 @@ public class RoadwayManager_Service {
 			Optional<RoadwayModel> roadwayBREData = roadwayBRE_DAO.findOneById(id);
 			if(roadwayBREData.isPresent()) {
 				RoadwayModel roadwayBRE_Entity = roadwayBREData.get(); 
-				roadwayBRE_Entity = parserObj.parserRoadway_TO_Model(businessRuleBRE,roadwayBRE_Entity,RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+				roadwayBRE_Entity = parserObj.parserRoadwayBRE_TO_Model(businessRuleBRE,roadwayBRE_Entity,RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 				roadwayBRE_DAO.update(roadwayBRE_Entity);
 				responseObj = new Response<RoadwayModel>(0,HttpExceptionPackSend.UPDATE_ROADWAY.getAction(), roadwayBRE_Entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);

@@ -15,7 +15,7 @@ import com.packsendme.microservice.manager.roadway.component.RoadwayManagerConst
 import com.packsendme.microservice.manager.roadway.dao.LocationDAO;
 import com.packsendme.microservice.manager.roadway.dto.LocationListDTO_Response;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
-import com.packsendme.roadway.bre.model.location.LocationRule;
+import com.packsendme.roadway.bre.model.location.Location;
 
 @Service
 @ComponentScan({"com.packsendme.microservice.manager.roadway.dao","com.packsendme.microservice.manager.roadway.component"})
@@ -40,10 +40,10 @@ public class LocationManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> saveLocation(LocationRule location) {
+	public ResponseEntity<?> saveLocation(Location location) {
 		Response<LocationModel> responseObj = null;
 		try {
-			LocationModel entity = parserObj.parserLocation_TO_Model(location, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
+			LocationModel entity = parserObj.parserLocationBRE_TO_Model(location, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
 			responseObj = new Response<LocationModel>(0,HttpExceptionPackSend.CREATED_LOCATION.getAction(), entity);
 			if(locationDAO.findOneByName(entity.countryName) == null) {
 				locationDAO.save(entity);
@@ -87,7 +87,7 @@ public class LocationManager_Service {
 		}
 	}
 	
-	public ResponseEntity<?> updateLocation(String id, LocationRule locationRule) {
+	public ResponseEntity<?> updateLocation(String id, Location locationRule) {
 		Response<String> responseObj = null;
 		try {
 			// Check if exist same bodywork in Database
@@ -97,7 +97,7 @@ public class LocationManager_Service {
 				Optional<LocationModel> locationData = locationDAO.findOneById(id);
 				if(locationData.isPresent()) {
 					LocationModel locationEntity = locationData.get();
-					LocationModel locationEntityUp = parserObj.parserLocation_TO_Model(locationRule, locationEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+					LocationModel locationEntityUp = parserObj.parserLocationBRE_TO_Model(locationRule, locationEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
 					locationDAO.update(locationEntityUp);
 					responseObj = new Response<String>(0,HttpExceptionPackSend.UPDATE_LOCATION.getAction(), locationEntity.countryName);
 					return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);

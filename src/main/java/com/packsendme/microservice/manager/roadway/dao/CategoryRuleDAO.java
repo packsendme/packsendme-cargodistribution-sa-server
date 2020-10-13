@@ -9,19 +9,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.manager.roadway.repository.CategoryRuleModel;
+import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.ICategoryManager_Repository;
 
 @Component
 @ComponentScan({"com.packsendme.microservice.manager.roadway.repository"})
-public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
+public class CategoryRuleDAO implements IRoadwayDAO<CategoryModel> {
 
 	@Autowired
 	ICategoryManager_Repository roadwayManager_Rep; 
 	
 	
 	@Override
-	public CategoryRuleModel save(CategoryRuleModel entity) {
+	public CategoryModel save(CategoryModel entity) {
 		try {
 			return entity = roadwayManager_Rep.insert(entity);
 		}
@@ -32,7 +32,7 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
 	}
 
 	@Override
-	public Optional<CategoryRuleModel> findOneById(String id) {
+	public Optional<CategoryModel> findOneById(String id) {
 		try {
 			return roadwayManager_Rep.findById(id);
 		}
@@ -43,9 +43,9 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
 	}
 
 	@Override
-	public List<CategoryRuleModel> findAll() {
+	public List<CategoryModel> findAll() {
 		try {
-			List<CategoryRuleModel> entityL = new ArrayList<CategoryRuleModel>(); 
+			List<CategoryModel> entityL = new ArrayList<CategoryModel>(); 
 			entityL = roadwayManager_Rep.findAll();
 			return entityL;
 		}
@@ -56,7 +56,7 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
 	}
 
 	@Override
-	public Boolean remove(CategoryRuleModel entity) {
+	public Boolean remove(CategoryModel entity) {
 		try {
 			roadwayManager_Rep.delete(entity);
 			return true; 
@@ -68,9 +68,9 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
 	}
 
 	@Override
-	public CategoryRuleModel update(CategoryRuleModel entity) {
+	public CategoryModel update(CategoryModel entity) {
 		try {
-			CategoryRuleModel entityModel = roadwayManager_Rep.save(entity);
+			CategoryModel entityModel = roadwayManager_Rep.save(entity);
 			return entityModel; 
 		}
 		catch (Exception e) {
@@ -80,7 +80,7 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
 	}
 
 	@Override
-	public CategoryRuleModel findOneByName(String name) {
+	public CategoryModel findOneByName(String name) {
 		try {
 			return roadwayManager_Rep.findCategoryByName(name);
 		}
@@ -91,7 +91,7 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryRuleModel> {
 	}
 
 	@Override
-	public CategoryRuleModel findOneByIdAndName(String id, String name) {
+	public CategoryModel findOneByIdAndName(String id, String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
