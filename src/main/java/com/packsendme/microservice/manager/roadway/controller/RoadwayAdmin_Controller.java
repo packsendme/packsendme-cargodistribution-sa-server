@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
+import com.packsendme.microservice.manager.roadway.service.InitialsAdm_Service;
 import com.packsendme.microservice.manager.roadway.service.UnityMeasurementAdm_Service;
+import com.packsendme.roadway.bre.model.transport.Initials;
 
 @RestController
 @RequestMapping("/roadway/admin")
@@ -24,7 +26,10 @@ public class RoadwayAdmin_Controller {
 	@Autowired
 	private UnityMeasurementAdm_Service unityMeasurementAdmService;	
 	
-	
+
+	@Autowired
+	private InitialsAdm_Service initialsAdmService;	
+
 	/***************************************
 	 UNITY_MEASUREMENT :: GET | POST | DELETE 
 	***************************************/
@@ -62,4 +67,41 @@ public class RoadwayAdmin_Controller {
 		return unityMeasurementAdmService.updateUnityMeasurement(id, unityMeasurement);
 	}
 	
+	/***************************************
+	 INITIALS :: GET | POST | DELETE 
+	***************************************/
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/initials")
+	public ResponseEntity<?> getInitials(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
+		return initialsAdmService.findInitialsAll();
+	}
+
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/initials")
+	public ResponseEntity<?> postInitials(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
+			@Validated  @RequestBody Initials initials)
+	{	
+		return initialsAdmService.save(initials);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@DeleteMapping("/initials")
+	public ResponseEntity<?> deleteInitials(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id)
+	{	
+		return initialsAdmService.delete(id);
+	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PutMapping("/initials")
+	public ResponseEntity<?> putInitials(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
+			@Validated  @RequestBody Initials initials)
+	{	
+		return initialsAdmService.update(id, initials);
+	}
+
 }
