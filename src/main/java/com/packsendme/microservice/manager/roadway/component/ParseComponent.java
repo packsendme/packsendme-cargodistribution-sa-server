@@ -12,6 +12,7 @@ import com.packsendme.microservice.manager.roadway.dto.UnityMeasurementDTO;
 import com.packsendme.microservice.manager.roadway.repository.BodyWorkModel;
 import com.packsendme.microservice.manager.roadway.repository.CategoryModel;
 import com.packsendme.microservice.manager.roadway.repository.CostsModel;
+import com.packsendme.microservice.manager.roadway.repository.InitialsModel;
 import com.packsendme.microservice.manager.roadway.repository.LocationModel;
 import com.packsendme.microservice.manager.roadway.repository.RoadwayModel;
 import com.packsendme.microservice.manager.roadway.repository.TransportModel;
@@ -22,6 +23,7 @@ import com.packsendme.roadway.bre.model.businessrule.RoadwayBRE;
 import com.packsendme.roadway.bre.model.businessrule.RoadwayCosts;
 import com.packsendme.roadway.bre.model.category.Category;
 import com.packsendme.roadway.bre.model.location.Location;
+import com.packsendme.roadway.bre.model.transport.Initials;
 import com.packsendme.roadway.bre.model.transport.Transport;
 import com.packsendme.roadway.bre.model.vehicle.BodyworkRule;
 import com.packsendme.roadway.bre.model.vehicle.VehicleRule;
@@ -246,6 +248,19 @@ public class ParseComponent {
 			entity = new TransportModel();
 		}
 		entity.name_transport = tranportDTO.name_transport;
+		return entity;
+	}
+	
+	/* ==============================================
+	 * I N I T I A L E S  - P A R S E R  
+	 * ==============================================
+	 */
+	
+	public InitialsModel parserInitiales_TO_Model(Initials initials, InitialsModel entity, String typeOperation) {
+		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
+			entity = new InitialsModel();
+		}
+		entity.name = initials.name;
 		return entity;
 	}
 }
