@@ -248,6 +248,7 @@ public class ParseComponent {
 			entity = new TransportModel();
 		}
 		entity.name_transport = tranportDTO.name_transport;
+		entity.initials = tranportDTO.initials;
 		return entity;
 	}
 	

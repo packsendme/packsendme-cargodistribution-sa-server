@@ -21,10 +21,12 @@ public class TransportModel implements Serializable{
 	@Id
 	public String id;
 	public String name_transport;
+	public String initials;
 	
-	public TransportModel(String name_transport) {
+	public TransportModel(String name_transport,String initials) {
 		super();
 		this.name_transport = name_transport;
+		this.initials = initials;
 	}
 
 	public TransportModel() {
