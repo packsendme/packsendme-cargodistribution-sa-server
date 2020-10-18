@@ -51,10 +51,16 @@ public class CategoryManager_Service {
 	public ResponseEntity<?> saveCategory(Category category) {
 		Response<CategoryModel> responseObj = null;
 		try {
-			CategoryModel entity = parserObj.parserCategoryBRE_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
-			categoryManagerDAO.save(entity);
-			responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			if(categoryManagerDAO.findOneByName(category.name_category) == null) {
+				CategoryModel entity = parserObj.parserCategoryBRE_TO_Model(category, null, RoadwayManagerConstants.ADD_OP_ROADWAY);
+				categoryManagerDAO.save(entity);
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.CREATED_CATEGORY.getAction(), entity);
+				return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			}
+			else {
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), null);
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -89,21 +95,26 @@ public class CategoryManager_Service {
 	public ResponseEntity<?> updateCategory(String id, Category categoryBRE) {
 		Response<CategoryModel> responseObj = null;
 		try {
-			Optional<CategoryModel> categoryData = categoryManagerDAO.findOneById(id);
-			if(categoryData.isPresent()) {
-				CategoryModel categoryEntity = categoryData.get(); 
-				CategoryModel entity = parserObj.parserCategoryBRE_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
-				categoryManagerDAO.update(entity);
-
-				// Trigger Method - Update Roadway-Entity
-				//roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
-				
-				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
-				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
-			}
-			else {
-				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+			if(categoryManagerDAO.findOneByName(categoryBRE.name_category) == null) {
+				Optional<CategoryModel> categoryData = categoryManagerDAO.findOneById(id);
+				if(categoryData.isPresent()) {
+					CategoryModel categoryEntity = categoryData.get(); 
+					CategoryModel entity = parserObj.parserCategoryBRE_TO_Model(categoryBRE, categoryEntity, RoadwayManagerConstants.UPDATE_OP_ROADWAY);
+					categoryManagerDAO.update(entity);
+	
+					// Trigger Method - Update Roadway-Entity
+					//roadwayManager.crudTrigger(RoadwayManagerConstants.UPDATE_OP_ROADWAY, categoryName_old, categoryEntity);
+					
+					responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), categoryEntity);
+					return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+				}
+				else {
+					responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
+					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				}
+			}else {
+				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.FOUND_CATEGORY.getAction(), null);
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 		}
 		catch (Exception e) {

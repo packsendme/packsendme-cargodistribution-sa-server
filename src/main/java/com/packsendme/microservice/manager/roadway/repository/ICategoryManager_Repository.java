@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICategoryManager_Repository extends MongoRepository<CategoryModel, String>{
 
-	@Query("{'category_name' :  {$eq: ?0}}")
+	@Query("{'name_category' :  {$eq: ?0}}")
 	CategoryModel findCategoryByName(String category_name);
 	
 	@Query("{'transport' :  {$eq: ?0}}")
