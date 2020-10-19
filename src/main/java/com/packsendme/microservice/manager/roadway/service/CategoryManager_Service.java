@@ -108,7 +108,7 @@ public class CategoryManager_Service {
 				System.out.println(" preparedUpdateCategory ID == ID "+ catCheckModel.id );
 				return updateCategory(id, categoryBRE); 
 			}
-			else if( catCheckModel.id != id) {
+			else if(!catCheckModel.id.equals(id)) {
 				System.out.println(" preparedUpdateCategory ID != ID "+ catCheckModel.id );
 
 				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
