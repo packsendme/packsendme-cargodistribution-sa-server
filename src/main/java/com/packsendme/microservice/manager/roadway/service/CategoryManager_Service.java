@@ -95,7 +95,9 @@ public class CategoryManager_Service {
 	public ResponseEntity<?> updateCategory(String id, Category categoryBRE) {
 		Response<CategoryModel> responseObj = null;
 		try {
-			if(categoryManagerDAO.findOneByName(categoryBRE.name_category) == null) {
+			CategoryModel catCheckModel = categoryManagerDAO.findOneByName(categoryBRE.name_category);
+
+			if( catCheckModel.id == id) {
 				Optional<CategoryModel> categoryData = categoryManagerDAO.findOneById(id);
 				if(categoryData.isPresent()) {
 					CategoryModel categoryEntity = categoryData.get(); 
