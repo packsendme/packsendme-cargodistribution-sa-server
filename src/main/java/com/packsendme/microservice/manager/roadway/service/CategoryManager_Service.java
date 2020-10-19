@@ -97,12 +97,16 @@ public class CategoryManager_Service {
 		try {
 			CategoryModel catCheckModel = categoryManagerDAO.findOneByName(categoryBRE.name_category);
 			if(catCheckModel == null) {
+				System.out.println(" preparedUpdateCategory IS NULL ");
 				return updateCategory(id, categoryBRE); 
 			}
-			else if( catCheckModel.id == id) {
+			else if(catCheckModel.id == id) {
+				System.out.println(" preparedUpdateCategory ID == ID "+ catCheckModel.id );
 				return updateCategory(id, categoryBRE); 
 			}
 			else if( catCheckModel.id != id) {
+				System.out.println(" preparedUpdateCategory ID != ID "+ catCheckModel.id );
+
 				responseObj = new Response<CategoryModel>(0,HttpExceptionPackSend.UPDATE_CATEGORY.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
