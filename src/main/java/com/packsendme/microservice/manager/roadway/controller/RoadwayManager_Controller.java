@@ -158,7 +158,7 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp, @Validated @RequestParam("id") String id, 
 			@Validated  @RequestBody Category category)
 	{	
-		return categoryService.updateCategory(id, category);
+		return categoryService.preparedUpdateCategory(id, category);
 	}
 	
 
