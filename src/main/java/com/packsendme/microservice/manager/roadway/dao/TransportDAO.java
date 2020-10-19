@@ -98,5 +98,11 @@ public class TransportDAO implements IRoadwayDAO<TransportModel> {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public List<TransportModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	} 
 }

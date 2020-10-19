@@ -100,6 +100,12 @@ public class VehicleTypeDAO implements IRoadwayDAO<VehicleTypeModel> {
 		}
 	}
 
+	@Override
+	public List<VehicleTypeModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
  
 	
 }

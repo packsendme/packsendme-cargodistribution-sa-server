@@ -100,6 +100,12 @@ public class VehicleDAO implements IRoadwayDAO<VehicleRuleModel> {
 		}
 	}
 
+	@Override
+	public List<VehicleRuleModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
  
 	
 }

@@ -48,6 +48,22 @@ public class CategoryManager_Service {
 		}
 	}
 	
+	public ResponseEntity<?> findCategoriesByTransports(String name) {
+		Response<CategoryRuleListDTO_Response> responseObj = null;
+		try {
+			List<CategoryModel> categoriesRulesModel_L = categoryManagerDAO.findEntityByParameters(name);
+			List<Category> categoriesRulesBRE_L =  parserObj.parserCategoryModel_TO_BRE(categoriesRulesModel_L);
+			CategoryRuleListDTO_Response categoryListDTO_Response = new CategoryRuleListDTO_Response(categoriesRulesBRE_L);
+			responseObj = new Response<CategoryRuleListDTO_Response>(0,HttpExceptionPackSend.CREATED_CATEGORY.getAction(), categoryListDTO_Response);
+			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			responseObj = new Response<CategoryRuleListDTO_Response>(0,HttpExceptionPackSend.CREATED_VEHICLE.getAction(), null);
+			return new ResponseEntity<>(responseObj, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	public ResponseEntity<?> saveCategory(Category category) {
 		Response<CategoryModel> responseObj = null;
 		try {
@@ -97,15 +113,10 @@ public class CategoryManager_Service {
 		try {
 			CategoryModel catCheckModel = categoryManagerDAO.findOneByName(categoryBRE.name_category);
 
-			System.out.println(" preparedUpdateCategory ID "+ id );
-			System.out.println(" preparedUpdateCategory ID "+ catCheckModel.id );
-
-			if(catCheckModel == null) {
-				System.out.println(" preparedUpdateCategory IS NULL ");
+			if(catCheckModel == null){
 				return updateCategory(id, categoryBRE); 
 			}
 			else if(catCheckModel.id.equals(id)) {
-				System.out.println(" preparedUpdateCategory ID == ID "+ catCheckModel.id );
 				return updateCategory(id, categoryBRE); 
 			}
 			else if(!catCheckModel.id.equals(id)) {

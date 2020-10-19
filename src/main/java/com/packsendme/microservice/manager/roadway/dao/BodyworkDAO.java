@@ -100,6 +100,12 @@ public class BodyworkDAO implements IRoadwayDAO<BodyWorkModel> {
 			return null;
 		}
 	}
+
+	@Override
+	public List<BodyWorkModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
  

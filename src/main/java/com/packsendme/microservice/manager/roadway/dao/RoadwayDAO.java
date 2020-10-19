@@ -90,4 +90,10 @@ public class RoadwayDAO implements IRoadwayDAO<RoadwayModel> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<RoadwayModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

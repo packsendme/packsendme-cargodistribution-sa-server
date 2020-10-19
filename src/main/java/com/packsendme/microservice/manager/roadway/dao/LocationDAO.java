@@ -98,5 +98,11 @@ public class LocationDAO implements IRoadwayDAO<LocationModel> {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public List<LocationModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	} 
 }
