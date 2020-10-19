@@ -1,5 +1,7 @@
 package com.packsendme.microservice.manager.roadway.repository;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,5 +13,5 @@ public interface ICategoryManager_Repository extends MongoRepository<CategoryMod
 	CategoryModel findCategoryByName(String category_name);
 	
 	@Query("{'transport' :  {$eq: ?0}}")
-	CategoryModel findCategoryByTransport(String transport);
+	List<CategoryModel> findCategoryByTransport(String transport);
 }

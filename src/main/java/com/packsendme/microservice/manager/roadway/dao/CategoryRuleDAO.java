@@ -92,8 +92,24 @@ public class CategoryRuleDAO implements IRoadwayDAO<CategoryModel> {
 
 	@Override
 	public CategoryModel findOneByIdAndName(String id, String name) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return null;
+		}
+		catch (MongoClientException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<CategoryModel> findEntityByParameters(String name) {
+		try {
+			return roadwayManager_Rep.findCategoryByTransport(name);
+		}
+		catch (MongoClientException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	

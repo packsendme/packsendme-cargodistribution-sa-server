@@ -135,6 +135,14 @@ public class RoadwayManager_Controller {
 			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp) {	
 		return categoryService.findCategoryAll();
 	}
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/category/{transport}")
+	public ResponseEntity<?> getCategory(@RequestHeader("isoLanguageCode") String isoLanguageCode,@RequestHeader("isoCountryCode") String isoCountryCode,
+			@RequestHeader("isoCurrencyCode") String isoCurrencyCode,@RequestHeader("originApp") String originApp,
+			@Validated  @RequestParam ("transport") String transport) {	
+		return categoryService.findCategoriesByTransports(transport);
+	}
 
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/category")

@@ -98,5 +98,11 @@ public class InitialsDAO implements IRoadwayDAO<InitialsModel> {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public List<InitialsModel> findEntityByParameters(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	} 
 }
