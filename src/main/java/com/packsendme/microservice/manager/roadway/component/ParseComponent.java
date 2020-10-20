@@ -155,6 +155,7 @@ public class ParseComponent {
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			roadwayModel = new RoadwayModel();
 		}
+		roadwayModel.name_bre = roadwayBRE.name_bre;
 		roadwayModel.transport = roadwayBRE.transport;
 		roadwayModel.date_creation = roadwayBRE.date_creation;
 		roadwayModel.date_change = roadwayBRE.date_change;

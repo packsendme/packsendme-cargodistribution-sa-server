@@ -2,6 +2,7 @@ package com.packsendme.microservice.manager.roadway.repository;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,10 @@ public class RoadwayModel implements Serializable {
 	
 	@Id
 	public String id;
+	public String name_bre;
 	public String transport;
-	public String date_creation;
-	public String date_change;
+	public Date date_creation;
+	public Date date_change;
 	public String status;
 	public String version;
 	
@@ -36,11 +38,12 @@ public class RoadwayModel implements Serializable {
 
 	
 	
-	public RoadwayModel(String id, String transport, String date_creation, String date_change, String status,
+	public RoadwayModel(String id, String name_bre, String transport, Date date_creation, Date date_change, String status,
 			String version, List<CategoryModel> categories, List<LocationModel> locations,
 			Map<String, List<CostsModel>> costs) {
 		super();
 		this.id = id;
+		this.name_bre = name_bre; 
 		this.transport = transport;
 		this.date_creation = date_creation;
 		this.date_change = date_change;
