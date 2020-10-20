@@ -1,8 +1,11 @@
 package com.packsendme.microservice.manager.roadway.component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
@@ -151,7 +154,8 @@ public class ParseComponent {
 	 * ==============================================
 	 */
 	
-	public RoadwayModel parserRoadwayBRE_TO_Model(RoadwayBRE roadwayBRE, RoadwayModel roadwayModel, String typeOperation) {
+	public RoadwayModel parserRoadwayBRE_TO_Model(RoadwayBRE roadwayBRE, RoadwayModel roadwayModel, String typeOperation) throws ParseException {
+		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			roadwayModel = new RoadwayModel();
 		}
