@@ -27,8 +27,8 @@ public class RoadwayModel implements Serializable {
 	public String id;
 	public String name_bre;
 	public String transport;
-	public String date_creation;
-	public String date_change;
+	public Date date_creation;
+	public Date date_change;
 	public String status;
 	public String version;
 	
@@ -38,7 +38,7 @@ public class RoadwayModel implements Serializable {
 
 	
 	
-	public RoadwayModel(String id, String name_bre, String transport, String date_creation, String date_change, String status,
+	public RoadwayModel(String id, String name_bre, String transport, Date date_creation, Date date_change, String status,
 			String version, List<CategoryModel> categories, List<LocationModel> locations,
 			Map<String, List<CostsModel>> costs) {
 		super();

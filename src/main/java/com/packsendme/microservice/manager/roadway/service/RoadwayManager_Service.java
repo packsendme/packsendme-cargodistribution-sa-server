@@ -1,5 +1,6 @@
 package com.packsendme.microservice.manager.roadway.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,9 @@ public class RoadwayManager_Service {
 	public ResponseEntity<?> findRoadwayAll() {
 		Response<RoadwayBREListDTO_Response> responseObj = null;
 		try {
-			RoadwayBREListDTO_Response roadwayBREListDTO_Response = new RoadwayBREListDTO_Response(roadwayBRE_DAO.findAll());
+			
+			List<RoadwayBRE> roadwaybre_L = parserObj.parserRoadwayModel_TO_BRE(roadwayBRE_DAO.findAll());
+			RoadwayBREListDTO_Response roadwayBREListDTO_Response = new RoadwayBREListDTO_Response(roadwaybre_L);
 			responseObj = new Response<RoadwayBREListDTO_Response>(0,HttpExceptionPackSend.CREATED_ROADWAYBRE.getAction(), roadwayBREListDTO_Response);
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
