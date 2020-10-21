@@ -237,7 +237,7 @@ public class ParseComponent {
 		
 		for(RoadwayModel roadwayModel_Obj : roadway_Model_L) {
 			RoadwayBRE roadwayBRE = new RoadwayBRE(); 
-
+			roadwayBRE.id = roadwayModel_Obj.id;
 			roadwayBRE.name_bre = roadwayModel_Obj.name_bre;
 			roadwayBRE.transport = roadwayModel_Obj.transport;
 			roadwayBRE.date_creation = roadwayModel_Obj.date_creation; //dateFormat.format(roadwayModel_Obj.date_creation);
