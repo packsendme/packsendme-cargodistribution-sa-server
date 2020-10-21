@@ -1,11 +1,9 @@
 package com.packsendme.microservice.manager.roadway.component;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
@@ -134,6 +132,19 @@ public class ParseComponent {
 		return entity;
 	}
 	
+	public List<Location> parserLocationModel_To_BRE(List<LocationModel> locationModel_L) {
+		List<Location> locationL = new ArrayList<Location>();
+		for(LocationModel l : locationModel_L) {
+			Location locationBRE = new Location();
+			locationBRE.countryName = l.countryName;
+			locationBRE.cityName = l.cityName;
+			locationBRE.stateName = l.stateName;
+			locationBRE.codCountry = l.codCountry;
+			locationL.add(locationBRE);
+		}
+		return locationL;
+	}
+	
 	/* ==============================================
 	 *  B O D Y  W O R K   - P A R S E R  
 	 * ==============================================
@@ -214,6 +225,63 @@ public class ParseComponent {
 			roadwayModel.costs = categoryCostsModel_Map;
 		}
 		return roadwayModel;
+	}
+	
+	public List<RoadwayBRE> parserRoadwayModel_TO_BRE(List<RoadwayModel> roadway_Model_L) throws ParseException {
+		
+		List<RoadwayBRE> roadwayBRE_L = new ArrayList<RoadwayBRE>(); 
+		
+		for(RoadwayModel roadwayModel_Obj : roadway_Model_L) {
+			RoadwayBRE roadwayBRE = new RoadwayBRE(); 
+
+			roadwayBRE.name_bre = roadwayModel_Obj.name_bre;
+			roadwayBRE.transport = roadwayModel_Obj.transport;
+			roadwayBRE.date_creation = roadwayModel_Obj.date_creation;
+			roadwayBRE.date_change = roadwayModel_Obj.date_change;
+			roadwayBRE.status = roadwayModel_Obj.status;
+			roadwayBRE.version = roadwayModel_Obj.version;
+			
+			// CATEGORY-Entity
+			List<Category> categoriesL = new ArrayList<Category>();
+			if(roadwayModel_Obj.categories.size() >= 1) {
+				categoriesL = parserCategoryModel_TO_BRE(roadwayModel_Obj.categories);
+			}
+			roadwayBRE.categories = categoriesL;
+	
+			
+			// LOCATION-Entity
+			List<Location> locationL = new ArrayList<Location>();
+			if(roadwayModel_Obj.locations.size() >= 1) {
+				locationL = parserLocationModel_To_BRE(roadwayModel_Obj.locations);
+			}
+			roadwayBRE.locations = locationL;
+			
+					
+			// COSTS-Entity
+			RoadwayCosts costs_BRE = new RoadwayCosts();
+			List<RoadwayCosts> costs_BRE_L = new ArrayList<RoadwayCosts>();
+			if(roadwayModel_Obj.costs.size() >= 1) {
+				for(Map.Entry<String, List<CostsModel>> entryCosts : roadwayModel_Obj.costs.entrySet()) {
+					List<CostsModel> costsModel_L = entryCosts.getValue();
+					for(CostsModel costs_Model : costsModel_L){
+						costs_BRE = new RoadwayCosts();
+						costs_BRE.countryName = costs_Model.countryName;
+						costs_BRE.vehicle = costs_Model.vehicle;
+						costs_BRE.weight_cost = costs_Model.weight_cost;
+						costs_BRE.distance_cost = costs_Model.distance_cost;
+						costs_BRE.worktime_cost = costs_Model.worktime_cost;
+						costs_BRE.average_consumption_cost = costs_Model.average_consumption_cost;
+						costs_BRE.rate_exchange = costs_Model.rate_exchange;
+						costs_BRE.current_exchange = costs_Model.current_exchange;
+						costs_BRE.statusChange = costs_Model.statusChange;
+						costs_BRE_L.add(costs_BRE);
+					}
+				}
+			}
+			roadwayBRE.costs = costs_BRE_L;
+			roadwayBRE_L.add(roadwayBRE);
+		}
+		return roadwayBRE_L;
 	}
 	
 	/* ==============================================
