@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Getter 
 @Setter
-@Document(collection = "RoadwayBRE_SA")
+@Document(collection = "roadway_bre_sa")
 public class RoadwayModel implements Serializable {
 	
 	/**
