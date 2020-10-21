@@ -175,8 +175,8 @@ public class ParseComponent {
 		}
 		roadwayModel.name_bre = roadwayBRE.name_bre;
 		roadwayModel.transport = roadwayBRE.transport;
-		roadwayModel.date_creation = dateFormat.parse(roadwayBRE.date_creation);
-		roadwayModel.date_change = dateFormat.parse(roadwayBRE.date_change);
+		roadwayModel.date_creation = roadwayBRE.date_creation; //dateFormat.parse(roadwayBRE.date_creation);
+		roadwayModel.date_change = roadwayBRE.date_change; //dateFormat.parse(roadwayBRE.date_change);
 		roadwayModel.status = roadwayBRE.status;
 		roadwayModel.version = roadwayBRE.version;
 		
@@ -240,8 +240,8 @@ public class ParseComponent {
 
 			roadwayBRE.name_bre = roadwayModel_Obj.name_bre;
 			roadwayBRE.transport = roadwayModel_Obj.transport;
-			roadwayBRE.date_creation = dateFormat.format(roadwayModel_Obj.date_creation);
-			roadwayBRE.date_change = dateFormat.format(roadwayModel_Obj.date_change);
+			roadwayBRE.date_creation = roadwayModel_Obj.date_creation; //dateFormat.format(roadwayModel_Obj.date_creation);
+			roadwayBRE.date_change = roadwayModel_Obj.date_change;// dateFormat.format(roadwayModel_Obj.date_change);
 			roadwayBRE.status = roadwayModel_Obj.status;
 			roadwayBRE.version = roadwayModel_Obj.version;
 			
