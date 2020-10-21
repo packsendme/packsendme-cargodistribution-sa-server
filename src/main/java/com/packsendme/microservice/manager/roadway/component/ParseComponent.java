@@ -1,6 +1,8 @@
 package com.packsendme.microservice.manager.roadway.component;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -166,14 +168,15 @@ public class ParseComponent {
 	 */
 	
 	public RoadwayModel parserRoadwayBRE_TO_Model(RoadwayBRE roadwayBRE, RoadwayModel roadwayModel, String typeOperation) throws ParseException {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		if(typeOperation.equals(RoadwayManagerConstants.ADD_OP_ROADWAY)) {
 			roadwayModel = new RoadwayModel();
 		}
 		roadwayModel.name_bre = roadwayBRE.name_bre;
 		roadwayModel.transport = roadwayBRE.transport;
-		roadwayModel.date_creation = roadwayBRE.date_creation;
-		roadwayModel.date_change = roadwayBRE.date_change;
+		roadwayModel.date_creation = dateFormat.parse(roadwayBRE.date_creation);
+		roadwayModel.date_change = dateFormat.parse(roadwayBRE.date_change);
 		roadwayModel.status = roadwayBRE.status;
 		roadwayModel.version = roadwayBRE.version;
 		
@@ -230,14 +233,15 @@ public class ParseComponent {
 	public List<RoadwayBRE> parserRoadwayModel_TO_BRE(List<RoadwayModel> roadway_Model_L) throws ParseException {
 		
 		List<RoadwayBRE> roadwayBRE_L = new ArrayList<RoadwayBRE>(); 
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		for(RoadwayModel roadwayModel_Obj : roadway_Model_L) {
 			RoadwayBRE roadwayBRE = new RoadwayBRE(); 
 
 			roadwayBRE.name_bre = roadwayModel_Obj.name_bre;
 			roadwayBRE.transport = roadwayModel_Obj.transport;
-			roadwayBRE.date_creation = roadwayModel_Obj.date_creation;
-			roadwayBRE.date_change = roadwayModel_Obj.date_change;
+			roadwayBRE.date_creation = dateFormat.format(roadwayModel_Obj.date_creation);
+			roadwayBRE.date_change = dateFormat.format(roadwayModel_Obj.date_change);
 			roadwayBRE.status = roadwayModel_Obj.status;
 			roadwayBRE.version = roadwayModel_Obj.version;
 			
